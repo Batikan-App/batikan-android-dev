@@ -66,7 +66,7 @@ fun CameraScreen(navController: NavController) {
                     val imageCaptureInstance = ImageCapture.Builder().build()
                     imageCapture = imageCaptureInstance
 
-                    preview.setSurfaceProvider(previewView.surfaceProvider)
+                    preview.surfaceProvider = previewView.surfaceProvider
                     cameraProvider.bindToLifecycle(
                         context as androidx.lifecycle.LifecycleOwner,
                         cameraSelector,
@@ -113,7 +113,7 @@ fun CameraScreen(navController: NavController) {
             Button(
                 onClick = { navController.navigateUp() },
                 modifier = Modifier
-                    .align(Alignment.TopStart)
+                    .align(Alignment.BottomStart)
                     .padding(16.dp)
             ) {
                 Text("Kembali")

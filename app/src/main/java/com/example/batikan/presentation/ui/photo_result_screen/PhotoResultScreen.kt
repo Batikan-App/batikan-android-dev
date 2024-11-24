@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,9 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.batikan.presentation.ui.composables.ButtonUi
+import com.example.batikan.presentation.ui.theme.DisplayXsSemiBold
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.White
 import java.io.File
@@ -36,8 +35,19 @@ import java.io.File
 fun PhotoResultScreen(navController: NavController, photoUri: String?) {
     val uri = photoUri?.toUri()
 
+    Row(
+        modifier = Modifier
+            .padding(top = 96.dp, start = 16.dp)
+    ) {
+        Text(
+            text = "Telusuri Motif Batik",
+            style = DisplayXsSemiBold
+        )
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         uri?.let {
+
             Image(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -47,7 +57,7 @@ fun PhotoResultScreen(navController: NavController, photoUri: String?) {
                 contentDescription = "Hasil Foto",
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .fillMaxSize()
+                    .size(600.dp)
             )
         }
 
@@ -68,7 +78,7 @@ fun PhotoResultScreen(navController: NavController, photoUri: String?) {
                 Text("Lanjutkan")
             }
             OutlinedButton(
-                onClick = { navController.navigateUp() },
+                onClick = { navController.navigate("camera_screen") },
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .size(width = 400.dp, height = 50.dp),

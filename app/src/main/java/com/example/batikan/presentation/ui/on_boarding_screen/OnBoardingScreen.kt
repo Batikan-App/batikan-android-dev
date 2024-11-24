@@ -30,6 +30,73 @@ import com.example.batikan.presentation.ui.composables.IndicatorUI
 import com.example.batikan.presentation.ui.theme.PlayfairDisplayXsSemiBold
 import com.example.batikan.presentation.ui.theme.Primary600
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import com.example.batikan.R
+import com.example.batikan.presentation.ui.theme.TextSmallRegular
+
+@Composable
+fun OnboardingGraphUI(onboardingModel: OnboardingModel) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(Color(0xFF5C0A3B), Color(0xFFA81854))
+                )
+            )
+    ) {
+        // Header Section
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.batikan),
+                contentDescription = "Batikan Logo",
+                modifier = Modifier
+                    .size(150.dp)
+            )
+            Text(
+                text = "Lewati semua",
+                fontWeight = FontWeight.Bold,
+                style = TextSmallRegular,
+                fontSize = 14.sp,
+                color = Color.White,
+                textAlign = TextAlign.End,
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterVertically)
+                    .padding(top = 20.dp)
+            )
+        }
+
+        // Image Section
+        Column(
+            modifier = Modifier
+                .padding(top = 160.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.image1), // Ganti dengan gambar Anda
+                contentDescription = "Model Image",
+                modifier = Modifier
+                    .size(width = 280.dp, height = 400.dp)
+                    .padding(top = 20.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
+}
 
 @Composable
 fun OnboardingScreen(onFinished: () -> Unit) {

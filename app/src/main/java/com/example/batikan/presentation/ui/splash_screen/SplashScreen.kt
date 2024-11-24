@@ -1,28 +1,20 @@
-package com.example.batikan.presentation.ui.screens
+package com.example.batikan.presentation.ui.splash_screen
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.batikan.R
-import com.example.batikan.presentation.MainActivity
 import com.example.batikan.presentation.ui.theme.BatikanTheme
-import kotlinx.coroutines.delay
 
 
 @Composable
-private fun _SplashScreen() {
+fun SplashScreen() {
 //        LaunchedEffect(key1 = true, block = {
 //            delay(2000)
 //            startActivity(Intent(this@SplashScreen, MainActivity::class.java))
@@ -39,5 +31,13 @@ private fun _SplashScreen() {
             modifier = Modifier
                 .fillMaxSize()
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewSplashScreen() {
+    BatikanTheme {
+        SplashScreen()
     }
 }

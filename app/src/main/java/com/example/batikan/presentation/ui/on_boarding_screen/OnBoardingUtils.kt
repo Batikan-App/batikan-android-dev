@@ -15,5 +15,4 @@ class OnboardingUtils(private val context: Context) {
             .putBoolean("completed", true)
             .apply()
     }
-
 }
