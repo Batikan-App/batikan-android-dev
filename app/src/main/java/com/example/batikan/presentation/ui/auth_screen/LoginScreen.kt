@@ -163,14 +163,14 @@ fun LoginScreen() {
 @Composable
 fun TextFieldPrimary(
     args: String,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     var text by remember { mutableStateOf("Masukkan $args") }
 
     OutlinedTextField(
         modifier = modifier,
         value = text,
-        onValueChange = {text = it}
+        onValueChange = {text = it},
     )
 }
 

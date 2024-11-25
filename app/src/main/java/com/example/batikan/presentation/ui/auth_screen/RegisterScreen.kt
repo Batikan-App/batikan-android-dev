@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +38,7 @@ import com.example.batikan.presentation.ui.theme.Primary600
 
 @Composable
 fun RegisterScreen() {
+    var isButtonClicked by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
