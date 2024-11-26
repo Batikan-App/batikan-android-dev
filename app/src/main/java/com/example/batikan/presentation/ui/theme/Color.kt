@@ -30,7 +30,7 @@ val Secondary300 = Color(0xFFFEE271)
 val Secondary50 = Color(0xFFFFFBE8)
 
 // Text Colors
-val TextPrimary = Primary600
+val TextPrimary = Color(0xFF101828)
 val TextSecondary = Color(0xFF334054)
 val TextTertiary = Color(0xFF465467)
 val TextQuatenary = Color(0xFF667085)
