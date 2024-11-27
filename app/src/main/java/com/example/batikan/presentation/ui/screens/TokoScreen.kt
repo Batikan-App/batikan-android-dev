@@ -50,9 +50,7 @@ class TokoScreen : ComponentActivity() {
                         Product(R.drawable.batik_new, "Batik D", "$35")
                     )
                 )
-
             }
-
             }
         }
     }
@@ -109,7 +107,7 @@ fun TokoContent(
                     modifier = Modifier.padding(start = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                BatikScanCard(modifier = Modifier.padding(start = 30.dp))
+//                BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = )
             }
 
             item () {

@@ -1,5 +1,6 @@
 package com.example.batikan.presentation.ui.screens
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,30 +26,6 @@ import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.composables.VisualTryOnCard
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 
-class ScanResultScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BatikanTheme {
-                ScanResultContent(
-                    result = ScanResult(
-                        name = "Batik Papua",
-                        aboutMotif = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
-                        origin = "Papua Barat"
-                    ),
-                    similiarProduct = listOf(
-                        Product(R.drawable.batik_new, "Batik A", "$20"),
-                        Product(R.drawable.batik_new, "Batik B", "$25"),
-                        Product(R.drawable.batik_new, "Batik C", "$30"),
-                        Product(R.drawable.batik_new, "Batik D", "$35")
-                    )
-                )
-            }
-        }
-    }
-}
-
 data class ScanResult(
     val name: String,
     val aboutMotif: String,
@@ -59,8 +36,8 @@ data class ScanResult(
 fun ScanResultContent(
     similiarProduct: List<Product>,
     result: ScanResult,
-    modifier: Modifier = Modifier
-
+    modifier: Modifier = Modifier,
+    photoUri: String?
 ){
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -86,7 +63,8 @@ fun ScanResultContent(
                     origin = result.origin,
                     imageResource = R.drawable.batik_new,
                     onActionClick = {},
-                    modifier = Modifier.padding(start = 30.dp)
+                    modifier = Modifier.padding(start = 30.dp),
+                    photoUri = photoUri
                 )
             }
 
@@ -122,24 +100,24 @@ fun ScanResultContent(
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun ScanResultScreenPreview(){
-    BatikanTheme {
-        ScanResultContent(
-            result = ScanResult(
-                name = "Batik Papua",
-                aboutMotif = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
-                origin = "Papua Barat"
-            ),
-            similiarProduct = listOf(
-                Product(R.drawable.batik_new, "Batik A", "$20"),
-                Product(R.drawable.batik_new, "Batik B", "$25"),
-                Product(R.drawable.batik_new, "Batik C", "$30"),
-                Product(R.drawable.batik_new, "Batik D", "$35")
-            )
-
-        )
-    }
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun ScanResultScreenPreview(){
+//    BatikanTheme {
+//        ScanResultContent(
+//            result = ScanResult(
+//                name = "Batik Papua",
+//                aboutMotif = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
+//                origin = "Papua Barat"
+//            ),
+//            similiarProduct = listOf(
+//                Product(R.drawable.batik_new, "Batik A", "$20"),
+//                Product(R.drawable.batik_new, "Batik B", "$25"),
+//                Product(R.drawable.batik_new, "Batik C", "$30"),
+//                Product(R.drawable.batik_new, "Batik D", "$35")
+//            )
+//
+//        )
+//    }
+//}

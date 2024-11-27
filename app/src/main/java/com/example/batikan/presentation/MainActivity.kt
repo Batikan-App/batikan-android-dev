@@ -11,6 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.batikan.R
+import com.example.batikan.presentation.ui.composables.Product
+import com.example.batikan.presentation.ui.screens.CameraScreen
+import com.example.batikan.presentation.ui.screens.HomeScreenContent
+import com.example.batikan.presentation.ui.screens.ScanResult
+import com.example.batikan.presentation.ui.screens.ScanResultContent
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayLgBold
 import com.example.batikan.presentation.ui.theme.Primary600
@@ -21,34 +30,44 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BatikanTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "home_screen") {
+                    composable(route = "home_screen") {
+                        HomeScreenContent(
+                            navController,
+                            userName = "John Doe",
+                            products = listOf(
+                                Product(R.drawable.batik_new, "Batik A", "$20"),
+                                Product(R.drawable.batik_new, "Batik B", "$25"),
+                                Product(R.drawable.batik_new, "Batik C", "$30"),
+                                Product(R.drawable.batik_new, "Batik D", "$35")
+                            )
+                        )
+                    }
+
+                    composable(route = "camera_screen") {
+                        CameraScreen(navController)
+                    }
+
+                    composable(route = "scan_result_screen?photoUri={photoUri}") { backStackEntry ->
+                        val photoUri = backStackEntry.arguments?.getString("photoUri")
+                        ScanResultContent(
+                            photoUri = photoUri,
+                            result = ScanResult(
+                                name = "Batik Papua",
+                                aboutMotif = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
+                                origin = "Papua Barat"
+                            ),
+                            similiarProduct = listOf(
+                                Product(R.drawable.batik_new, "Batik A", "$20"),
+                                Product(R.drawable.batik_new, "Batik B", "$25"),
+                                Product(R.drawable.batik_new, "Batik C", "$30"),
+                                Product(R.drawable.batik_new, "Batik D", "$35")
+                            )
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        style = DisplayLgBold,
-        color = Primary600,
-        modifier = modifier
-    )
-}
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-    )
-@Composable
-fun GreetingPreview() {
-    BatikanTheme {
-        Greeting("Android")
     }
 }
