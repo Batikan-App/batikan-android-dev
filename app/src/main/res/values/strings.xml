@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Batikan</string>
+    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="title_new_product">Koleksi terbaru kami</string>
+    <string name="description_new_product">Motif dan jenis batik keluaran terbaru dari kami yang mungkin sesuai dengan selera Anda</string>
+    <string name="scan_title">Scan Batikmu</string>
+    <string name="description_card_scan">Cukup arahkan ke kamera dan kami akan bantu nyari batiknya</string>
+    <string name="title_activity_toko_screen">TokoScreen</string>
+    <string name="title_activity_detail_product_screen">DetailProductScreen</string>
+    <string name="title_activity_scan_result_screen">ScanResultScreen</string>
+    <string name="title_activity_cart_screen">CartScreen</string>
+    <string name="title_activity_payment_detail_screen">PaymentDetailScreen</string>
+    <string name="visual_try_on_title">Visual Try-On</string>
+    <string name="visual_try_on_description">Coba batik yang kamu suka secara virtual</string>
 </resources>
