@@ -6,15 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -26,56 +23,52 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.batikan.R
-import com.example.batikan.presentation.ui.composables.CartItemRow
 import com.example.batikan.presentation.ui.theme.BatikanTheme
-import com.example.batikan.presentation.ui.theme.Primary200
 import com.example.batikan.presentation.ui.theme.Primary50
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
-import com.example.batikan.presentation.ui.theme.TextQuatenary
-import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 
 
-data class CartItem(
-    val id: String,
-    val name: String,
-    val imageResources: Int,
-    val price: Int,
-    val count: Int,
-    val isChecked: Boolean = true
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartContent (
+fun UpdateProfileContent(
+    navController: NavController,
     modifier: Modifier = Modifier,
-    cartItems: List<CartItem>,
-    onItemCheckedChange: (String, Boolean) -> Unit,
-    onItemCountChange: (String, Int) -> Unit,
-    navController: NavController
+    name: String,
+    email: String,
+    phoneNumber: String
 ) {
-    Scaffold (
+    var name by remember { mutableStateOf(name)}
+    var email by remember { mutableStateOf(email)}
+    var phoneNumber by remember { mutableStateOf(phoneNumber)}
+
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Keranjang",
+                        text = "Ubah Profile",
                         style = TextMdSemiBold,
                         color = TextPrimary
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -86,7 +79,7 @@ fun CartContent (
             )
         },
         bottomBar = {
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Primary50)
@@ -94,31 +87,18 @@ fun CartContent (
                     .padding(vertical = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
 
-            ) {
-                Column ( ) {
-                    Text(
-                        text = "Total",
-                        style = TextSmallRegular,
-                        color = TextQuatenary
-                    )
-                    Text(
-                        text = "Rp. ${cartItems.sumOf { it.price * it.count }}",
-                        style = TextMdSemiBold,
-                        color = TextPrimary
-                    )
-
-                }
+                ) {
 
                 Button(
-                    onClick = {  },
+                    onClick = { },
                     modifier = modifier
-                        .width(110.dp)
+                        .fillMaxWidth()
                         .height(40.dp),
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(containerColor = Primary600)
                 ) {
                     Text(
-                        text = "Bayar",
+                        text = "Simpan",
                         style = TextSmallSemiBold,
                         color = White
                     )
@@ -126,7 +106,6 @@ fun CartContent (
 
 
             }
-
         }
     ) { innerPadding ->
         LazyColumn (
@@ -135,48 +114,43 @@ fun CartContent (
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            items(cartItems) { cartItem ->
-                CartItemRow(
-                    cartItem = cartItem,
-                    onCheckedChange = { isChecked ->
-                        onItemCheckedChange(cartItem.id, isChecked)
-                    },
-                    onCountChange = { newCount ->
-                        onItemCountChange(cartItem.id, newCount)
-                    }
+            item {
+                TextFieldWithTitle(
+                    title = "Nama",
+                    value = name,
+                    onValueChange = { name = it }
                 )
-
             }
 
+            item {
+                TextFieldWithTitle(
+                    title = "Email",
+                    value = email,
+                    onValueChange = { email = it }
+                )
+            }
+
+            item {
+                TextFieldWithTitle(
+                    title = "Nomor Telephone",
+                    value = phoneNumber,
+                    onValueChange = { phoneNumber = it }
+                )
+            }
         }
+
+
     }
 }
 
 //@Preview(showBackground = true)
 //@Composable
-//fun CartScreenPreview() {
+//fun UpdateProfileScreenPreview() {
 //    BatikanTheme {
-//        CartContent(
-//            cartItems = listOf(
-//                CartItem(
-//                    id = "1",
-//                    name = "Batik Pekalongan",
-//                    price = 200000,
-//                    count = 1,
-//                    isChecked = false,
-//                    imageResources = R.drawable.batik_new
-//                ),
-//                CartItem(
-//                    id = "2",
-//                    name = "Batik Papua",
-//                    price = 250000,
-//                    count = 2,
-//                    isChecked = true,
-//                    imageResources = R.drawable.batik_new
-//                )
-//            ),
-//            onItemCheckedChange = { _, _ -> },
-//            onItemCountChange = { _, _ -> },
+//        UpdateProfileContent(
+//            name = "John Doe",
+//            email = "johnn@batikan.com",
+//            phoneNumber = "081234567890"
 //        )
 //    }
 //}

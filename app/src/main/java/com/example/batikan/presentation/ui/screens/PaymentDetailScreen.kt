@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -37,15 +40,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.Primary50
 import com.example.batikan.presentation.ui.theme.Primary600
+import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextQuatenary
@@ -61,7 +69,7 @@ import com.example.batikan.presentation.ui.theme.White
 fun PaymentDetailContent(
     modifier: Modifier = Modifier,
     cartItems: List<CartItem>,
-    onBackClicked: () -> Unit
+    navController: NavController
 
 
 ) {
@@ -84,7 +92,7 @@ fun PaymentDetailContent(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onBackClicked() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -130,6 +138,12 @@ fun PaymentDetailContent(
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            items(cartItems) { cartItem ->
+                CartItemPaymentRow(
+                    cartItem = cartItem
+                )
+            }
+
             item {
                 TextFieldWithTitle(
                     title = "Nama",
@@ -236,33 +250,74 @@ fun TextFieldWithTitle(
     }
 }
 
-
-
-
-@Preview(showBackground = true)
 @Composable
-fun PaymentDetailScreenPreview() {
-    BatikanTheme {
-        PaymentDetailContent(
-            cartItems = listOf(
-                CartItem(
-                    id = "1",
-                    name = "Batik Pekalongan",
-                    price = 200000,
-                    count = 1,
-                    isChecked = false,
-                    imageResources = R.drawable.batik_new
-                ),
-                CartItem(
-                    id = "2",
-                    name = "Batik Papua",
-                    price = 250000,
-                    count = 2,
-                    isChecked = true,
-                    imageResources = R.drawable.batik_new
+fun CartItemPaymentRow (
+    modifier: Modifier = Modifier,
+    cartItem: CartItem,
+) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 30.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Image(
+                painter = painterResource(id = cartItem.imageResources),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(width = 90.dp, height = 90.dp)
+            )
+            Column () {
+                Text(
+                    text = cartItem.name,
+                    style = TextMdMedium,
+                    color = TextPrimary
                 )
-            ),
-            onBackClicked = {}
-        )
+                Text(
+                    text = "${cartItem.count} item",
+                    style = TextSmallRegular,
+                    color = TextSecondary
+                )
+            }
+        }
+        Text(
+            text = "Rp. ${cartItem.price}",
+            style = TextSmallRegular,
+            color = TextSecondary,
+
+            )
     }
 }
+
+
+//@Preview(showBackground = true)
+//@Composable
+//fun PaymentDetailScreenPreview() {
+//    BatikanTheme {
+//        PaymentDetailContent(
+//            cartItems = listOf(
+//                CartItem(
+//                    id = "1",
+//                    name = "Batik Pekalongan",
+//                    price = 200000,
+//                    count = 1,
+//                    isChecked = false,
+//                    imageResources = R.drawable.batik_new
+//                ),
+//                CartItem(
+//                    id = "2",
+//                    name = "Batik Papua",
+//                    price = 250000,
+//                    count = 2,
+//                    isChecked = true,
+//                    imageResources = R.drawable.batik_new
+//                )
+//            )
+//        )
+//    }
+//}

@@ -20,9 +20,13 @@ import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
 import com.example.batikan.presentation.ui.screens.LoginScreen
+import com.example.batikan.presentation.ui.screens.ProfileContent
 import com.example.batikan.presentation.ui.screens.ScanResult
 import com.example.batikan.presentation.ui.screens.ScanResultContent
+import com.example.batikan.presentation.ui.screens.Shipping
 import com.example.batikan.presentation.ui.screens.TokoContent
+import com.example.batikan.presentation.ui.screens.TrackingContent
+import com.example.batikan.presentation.ui.screens.UpdateProfileContent
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayLgBold
 import com.example.batikan.presentation.ui.theme.Primary600
@@ -37,7 +41,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BatikanTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "login_screen") {
+                NavHost(navController = navController, startDestination = "home_screen") {
                     composable(route = "login_screen") {
                         LoginScreen(navController, dataStoreManager = DataStoreManager)
                     }
@@ -73,13 +77,15 @@ class MainActivity : ComponentActivity() {
                                 Product(R.drawable.batik_new, "Batik B", "$25"),
                                 Product(R.drawable.batik_new, "Batik C", "$30"),
                                 Product(R.drawable.batik_new, "Batik D", "$35")
-                            )
+                            ),
+                            navController = navController
                         )
                     }
 //                BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = )
 
                     composable(route = "toko_screen") {
                         TokoContent(
+                            navController,
                             featuredProducts = listOf(
                                 Product(R.drawable.batik_new, "Batik A", "$20"),
                                 Product(R.drawable.batik_new, "Batik B", "$25"),
@@ -91,6 +97,42 @@ class MainActivity : ComponentActivity() {
                                 Product(R.drawable.batik_new, "Batik B", "$25"),
                                 Product(R.drawable.batik_new, "Batik C", "$30"),
                                 Product(R.drawable.batik_new, "Batik D", "$35")
+                            )
+                        )
+                    }
+
+                    composable(route = "profile_screen") {
+                        ProfileContent(
+                            navController
+                        )
+                    }
+
+                    composable(route = "update_profile_screen"){
+                        UpdateProfileContent(
+                            navController = navController,
+                            name = "John Doe",
+                            email = "johnn@batikan.com",
+                            phoneNumber = "081234567890"
+                        )
+                    }
+
+                    composable(route = "tracking_screen"){
+                        TrackingContent(
+                            navController = navController,
+                            modifier = Modifier,
+                            shippingItems = listOf(
+                                Shipping(
+                                    ImageResource = R.drawable.batik_new,
+                                    title = "Batik Pekalongan",
+                                    status = "Dikirim",
+                                    number = "1234567890"
+                                ),
+                                Shipping(
+                                    ImageResource = R.drawable.batik_new,
+                                    title = "Batik Papua",
+                                    status = "Sampai",
+                                    number = "23133213232133"
+                                )
                             )
                         )
                     }

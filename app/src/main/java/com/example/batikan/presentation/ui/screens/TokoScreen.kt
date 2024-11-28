@@ -19,8 +19,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BatikScanCard
+import com.example.batikan.presentation.ui.composables.BottomNavBar
 import com.example.batikan.presentation.ui.composables.FilterChipGroup
 import com.example.batikan.presentation.ui.composables.PageTitle
 import com.example.batikan.presentation.ui.composables.Product
@@ -32,6 +34,7 @@ import com.example.batikan.presentation.ui.theme.BatikanTheme
 
 @Composable
 fun TokoContent(
+    navController: NavController,
     featuredProducts: List<Product>,
     originProduct: List<Product>
 ){
@@ -39,7 +42,7 @@ fun TokoContent(
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
-        bottomBar = {}
+        bottomBar = {BottomNavBar(navController = navController)}
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -108,23 +111,23 @@ fun TokoContent(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TokoScreenPreview() {
-    BatikanTheme {
-        TokoContent(
-            featuredProducts = listOf(
-                Product(R.drawable.batik_new, "Batik A", "$20"),
-                Product(R.drawable.batik_new, "Batik B", "$25"),
-                Product(R.drawable.batik_new, "Batik C", "$30"),
-                Product(R.drawable.batik_new, "Batik D", "$35")
-            ),
-            originProduct = listOf(
-                Product(R.drawable.batik_new, "Batik A", "$20"),
-                Product(R.drawable.batik_new, "Batik B", "$25"),
-                Product(R.drawable.batik_new, "Batik C", "$30"),
-                Product(R.drawable.batik_new, "Batik D", "$35")
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TokoScreenPreview() {
+//    BatikanTheme {
+//        TokoContent(
+//            featuredProducts = listOf(
+//                Product(R.drawable.batik_new, "Batik A", "$20"),
+//                Product(R.drawable.batik_new, "Batik B", "$25"),
+//                Product(R.drawable.batik_new, "Batik C", "$30"),
+//                Product(R.drawable.batik_new, "Batik D", "$35")
+//            ),
+//            originProduct = listOf(
+//                Product(R.drawable.batik_new, "Batik A", "$20"),
+//                Product(R.drawable.batik_new, "Batik B", "$25"),
+//                Product(R.drawable.batik_new, "Batik C", "$30"),
+//                Product(R.drawable.batik_new, "Batik D", "$35")
+//            )
+//        )
+//    }
+//}
