@@ -17,9 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.core.net.toUri
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextLgSemiBold
@@ -34,19 +38,27 @@ fun CardScanResult(
     name: String,
     origin: String,
     imageResource: Int,
+    photoUri: String?,
     onActionClick: () -> Unit
 ){
+    val uri = photoUri?.toUri()
     Row (
         modifier = modifier
             .fillMaxWidth()
     ){
-        Image(
-            painter = painterResource( id = imageResource),
-            contentDescription = "Image ",
-            modifier = Modifier
-                .size(80.dp),
-            contentScale = ContentScale.Crop
-        )
+        uri?.let {
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(it)
+                        .build()
+                ),
+                contentDescription = "Hasil scan ",
+                modifier = Modifier
+                    .size(80.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
 
         Spacer(Modifier.width(12.dp))
 

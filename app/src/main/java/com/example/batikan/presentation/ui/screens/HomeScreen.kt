@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BatikScanCard
 import com.example.batikan.presentation.ui.composables.GreetingSection
@@ -24,29 +25,9 @@ import com.example.batikan.presentation.ui.composables.ProductCardList
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 
-class HomeScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BatikanTheme {
-                HomeScreenContent(
-                    userName = "John Doe",
-                    products = listOf(
-                        Product(R.drawable.batik_new, "Batik A", "$20"),
-                        Product(R.drawable.batik_new, "Batik B", "$25"),
-                        Product(R.drawable.batik_new, "Batik C", "$30"),
-                        Product(R.drawable.batik_new, "Batik D", "$35")
-                    )
-                )
-            }
-        }
-    }
-}
-
-
 @Composable
 fun HomeScreenContent(
+    navController: NavController,
     userName: String,
     products: List<Product>
 ){
@@ -73,12 +54,13 @@ fun HomeScreenContent(
 
             item {
                 SectionTitle(
+                    onActionClick = {},
                     title = "Tahu motifnya tapi susah nyari?",
                     description = "Scan aja motif batiknya!",
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                BatikScanCard(modifier = Modifier.padding(horizontal = 30.dp))
+                BatikScanCard(modifier = Modifier.padding(horizontal = 30.dp), navController = navController)
 
             }
 
@@ -87,7 +69,7 @@ fun HomeScreenContent(
                     title = "Produk keren hari ini",
                     description = "Tentukan pilihan batikmu!",
                     actionText = "Lihat semua",
-                    onActionClick = {},
+                    onActionClick = { navController.navigate("toko_screen") },
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -98,18 +80,19 @@ fun HomeScreenContent(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    BatikanTheme {
-        HomeScreenContent(
-            userName = "John Doe",
-            products = listOf(
-                Product(R.drawable.batik_new, "Batik A", "$20"),
-                Product(R.drawable.batik_new, "Batik B", "$25"),
-                Product(R.drawable.batik_new, "Batik C", "$30"),
-                Product(R.drawable.batik_new, "Batik D", "$35")
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    BatikanTheme {
+//        HomeScreenContent(
+//            navController = ,
+//            userName = "John Doe",
+//            products = listOf(
+//                Product(R.drawable.batik_new, "Batik A", "$20"),
+//                Product(R.drawable.batik_new, "Batik B", "$25"),
+//                Product(R.drawable.batik_new, "Batik C", "$30"),
+//                Product(R.drawable.batik_new, "Batik D", "$35")
+//            )
+//        )
+//    }
+//}

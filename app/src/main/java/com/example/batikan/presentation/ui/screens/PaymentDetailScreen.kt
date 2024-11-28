@@ -55,15 +55,6 @@ import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 
-class PaymentDetailScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -2,6 +2,7 @@ package com.example.batikan.presentation.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
@@ -30,6 +32,7 @@ import com.example.batikan.presentation.ui.theme.White
 
 @Composable
 fun BatikScanCard(
+    navController: NavController,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Primary600,
     imageResource: Int = R.drawable.scan,
@@ -49,6 +52,9 @@ fun BatikScanCard(
                 .background(color = backgroundColor)
                 .padding(vertical = 20.dp)
                 .padding(horizontal = 20.dp)
+                .clickable(onClick = {
+                    navController.navigate("camera_screen")
+                })
 
         ){
             Image(
