@@ -30,33 +30,6 @@ import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 
-class TokoScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BatikanTheme {
-                TokoContent(
-                    featuredProducts = listOf(
-                        Product(R.drawable.batik_new, "Batik A", "$20"),
-                        Product(R.drawable.batik_new, "Batik B", "$25"),
-                        Product(R.drawable.batik_new, "Batik C", "$30"),
-                        Product(R.drawable.batik_new, "Batik D", "$35")
-                    ),
-                    originProduct = listOf(
-                        Product(R.drawable.batik_new, "Batik A", "$20"),
-                        Product(R.drawable.batik_new, "Batik B", "$25"),
-                        Product(R.drawable.batik_new, "Batik C", "$30"),
-                        Product(R.drawable.batik_new, "Batik D", "$35")
-                    )
-                )
-            }
-            }
-        }
-    }
-
-
-
 @Composable
 fun TokoContent(
     featuredProducts: List<Product>,

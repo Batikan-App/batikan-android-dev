@@ -69,7 +69,7 @@ fun HomeScreenContent(
                     title = "Produk keren hari ini",
                     description = "Tentukan pilihan batikmu!",
                     actionText = "Lihat semua",
-                    onActionClick = {},
+                    onActionClick = { navController.navigate("toko_screen") },
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))

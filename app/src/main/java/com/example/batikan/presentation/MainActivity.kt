@@ -15,15 +15,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.batikan.R
+import com.example.batikan.data.local.DataStoreManager
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
+import com.example.batikan.presentation.ui.screens.LoginScreen
 import com.example.batikan.presentation.ui.screens.ScanResult
 import com.example.batikan.presentation.ui.screens.ScanResultContent
+import com.example.batikan.presentation.ui.screens.TokoContent
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayLgBold
 import com.example.batikan.presentation.ui.theme.Primary600
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +37,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             BatikanTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "home_screen") {
+                NavHost(navController = navController, startDestination = "login_screen") {
+                    composable(route = "login_screen") {
+                        LoginScreen(navController, dataStoreManager = DataStoreManager)
+                    }
+
                     composable(route = "home_screen") {
                         HomeScreenContent(
                             navController,
@@ -59,6 +69,24 @@ class MainActivity : ComponentActivity() {
                                 origin = "Papua Barat"
                             ),
                             similiarProduct = listOf(
+                                Product(R.drawable.batik_new, "Batik A", "$20"),
+                                Product(R.drawable.batik_new, "Batik B", "$25"),
+                                Product(R.drawable.batik_new, "Batik C", "$30"),
+                                Product(R.drawable.batik_new, "Batik D", "$35")
+                            )
+                        )
+                    }
+//                BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = )
+
+                    composable(route = "toko_screen") {
+                        TokoContent(
+                            featuredProducts = listOf(
+                                Product(R.drawable.batik_new, "Batik A", "$20"),
+                                Product(R.drawable.batik_new, "Batik B", "$25"),
+                                Product(R.drawable.batik_new, "Batik C", "$30"),
+                                Product(R.drawable.batik_new, "Batik D", "$35")
+                            ),
+                            originProduct = listOf(
                                 Product(R.drawable.batik_new, "Batik A", "$20"),
                                 Product(R.drawable.batik_new, "Batik B", "$25"),
                                 Product(R.drawable.batik_new, "Batik C", "$30"),
