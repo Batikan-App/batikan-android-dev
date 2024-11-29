@@ -1,6 +1,7 @@
 package com.example.batikan.presentation.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,9 +13,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BatikScanCard
@@ -25,13 +30,26 @@ import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.composables.ProductCardList
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
+import com.example.batikan.presentation.viewmodel.BatikViewModel
 
 @Composable
 fun HomeScreenContent(
     navController: NavController,
     userName: String,
-    products: List<Product>
+    viewModel: BatikViewModel = hiltViewModel()
 ){
+    val productList by viewModel.productList.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchBatik()
+    }
+
+    // Debug log
+    Log.d("HomeScreen", "Product List Size: ${productList.size}")
+    productList.forEach { product ->
+        Log.d("HomeScreen", "Product: $product")
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -64,7 +82,6 @@ fun HomeScreenContent(
                 )
                 Spacer(Modifier.height(8.dp))
                 BatikScanCard(modifier = Modifier.padding(horizontal = 30.dp), navController = navController)
-
             }
 
             item {
@@ -76,9 +93,8 @@ fun HomeScreenContent(
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                ProductCardList(productList = products)
+                ProductCardList(productList = productList)
             }
-
         }
     }
 }
