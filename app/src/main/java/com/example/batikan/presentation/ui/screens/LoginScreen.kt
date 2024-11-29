@@ -51,13 +51,12 @@ import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayXsBold
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.viewmodel.LoginState
-import com.example.batikan.presentation.viewmodel.LoginViewModel
+import com.example.batikan.presentation.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel(),
-    dataStoreManager: DataStoreManager
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
@@ -179,10 +178,6 @@ fun LoginScreen(
                             popUpTo("login_screen") {
                                 inclusive = true
                             }
-                        }
-
-                        dataStoreManager.getToken(context).collect { token ->
-                            Log.d("DataStore", "Token: $token")
                         }
                     }
                 }

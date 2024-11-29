@@ -41,21 +41,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             BatikanTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "home_screen") {
+                NavHost(navController = navController, startDestination = "login_screen") {
+
                     composable(route = "login_screen") {
-                        LoginScreen(navController, dataStoreManager = DataStoreManager)
+                        LoginScreen(navController)
                     }
 
                     composable(route = "home_screen") {
                         HomeScreenContent(
                             navController,
                             userName = "John Doe",
-                            products = listOf(
-                                Product(R.drawable.batik_new, "Batik A", "$20"),
-                                Product(R.drawable.batik_new, "Batik B", "$25"),
-                                Product(R.drawable.batik_new, "Batik C", "$30"),
-                                Product(R.drawable.batik_new, "Batik D", "$35")
-                            )
                         )
                     }
 
@@ -86,18 +81,18 @@ class MainActivity : ComponentActivity() {
                     composable(route = "toko_screen") {
                         TokoContent(
                             navController,
-                            featuredProducts = listOf(
-                                Product(R.drawable.batik_new, "Batik A", "$20"),
-                                Product(R.drawable.batik_new, "Batik B", "$25"),
-                                Product(R.drawable.batik_new, "Batik C", "$30"),
-                                Product(R.drawable.batik_new, "Batik D", "$35")
-                            ),
-                            originProduct = listOf(
-                                Product(R.drawable.batik_new, "Batik A", "$20"),
-                                Product(R.drawable.batik_new, "Batik B", "$25"),
-                                Product(R.drawable.batik_new, "Batik C", "$30"),
-                                Product(R.drawable.batik_new, "Batik D", "$35")
-                            )
+//                            featuredProducts = listOf(
+//                                Product(R.drawable.batik_new, "Batik A", "$20"),
+//                                Product(R.drawable.batik_new, "Batik B", "$25"),
+//                                Product(R.drawable.batik_new, "Batik C", "$30"),
+//                                Product(R.drawable.batik_new, "Batik D", "$35")
+//                            ),
+//                            originProduct = listOf(
+//                                Product(R.drawable.batik_new, "Batik A", "$20"),
+//                                Product(R.drawable.batik_new, "Batik B", "$25"),
+//                                Product(R.drawable.batik_new, "Batik C", "$30"),
+//                                Product(R.drawable.batik_new, "Batik D", "$35")
+//                            )
                         )
                     }
 
