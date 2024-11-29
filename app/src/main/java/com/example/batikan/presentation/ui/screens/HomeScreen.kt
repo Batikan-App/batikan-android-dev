@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BatikScanCard
+import com.example.batikan.presentation.ui.composables.BottomNavBar
 import com.example.batikan.presentation.ui.composables.GreetingSection
 import com.example.batikan.presentation.ui.composables.NewProductCard
 import com.example.batikan.presentation.ui.composables.Product
@@ -33,7 +34,9 @@ fun HomeScreenContent(
 ){
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = {}
+        bottomBar = {
+            BottomNavBar(navController = navController)
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

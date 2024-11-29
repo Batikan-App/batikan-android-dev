@@ -26,4 +26,10 @@ sealed class Route(
     object TokoScreen: Route(route = "tokoScreen")
 
     object WelcomeScreen: Route(route = "welcomeSCreen")
+
+    object ProfileScreen: Route(route = "profileScreen")
+
+    object UpdateProfileScreen: Route(route = "updateProfileScreen")
+
+    object TrackingScreen: Route(route = "trackingScreen")
 }

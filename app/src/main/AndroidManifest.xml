@@ -5,22 +5,39 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
     <application
+        android:name=".BatikanApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:name=".BatikanApp"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Batikan"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.ui.screens.TrackingScreen"
+            android:exported="false"
+            android:label="@string/title_activity_tracking_screen"
+            android:theme="@style/Theme.Batikan" />
+        <activity
+            android:name=".presentation.ui.screens.UpdateProfileScreen"
+            android:exported="false"
+            android:label="@string/title_activity_update_profile_screen"
+            android:theme="@style/Theme.Batikan" />
+        <activity
+            android:name=".presentation.ui.screens.ProfileScreen"
+            android:exported="false"
+            android:label="@string/title_activity_profile_screen"
+            android:theme="@style/Theme.Batikan" />
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"

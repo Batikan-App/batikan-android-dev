@@ -12,4 +12,7 @@
     <string name="title_activity_payment_detail_screen">PaymentDetailScreen</string>
     <string name="visual_try_on_title">Visual Try-On</string>
     <string name="visual_try_on_description">Coba batik yang kamu suka secara virtual</string>
+    <string name="title_activity_profile_screen">ProfileScreen</string>
+    <string name="title_activity_update_profile_screen">UpdateProfileScreen</string>
+    <string name="title_activity_tracking_screen">TrackingScreen</string>
 </resources>

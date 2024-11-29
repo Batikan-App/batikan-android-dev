@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +35,7 @@ import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.Secondary500
 import com.example.batikan.presentation.ui.theme.TextLgMedium
 import com.example.batikan.presentation.ui.theme.TextLgSemiBold
+import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallMedium
@@ -82,6 +87,55 @@ fun GreetingSection(
     }
 }
 
+@Composable
+fun ProfileCard (
+    modifier: Modifier = Modifier,
+    imageResource: Int,
+    name: String,
+    email: String,
+    phoneNumber: String,
+    onActionClick: () -> Unit
+) {
+    Row (
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Row ( horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Image(
+                painter = painterResource(id = imageResource),
+                contentDescription = "profile image",
+                modifier = Modifier.size(width = 36.dp , height = 36.dp)
+            )
+            Column (
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = name,
+                    style = TextMdSemiBold,
+                    color = TextPrimary
+                )
+                Text(
+                    text = email,
+                    style = TextSmallRegular,
+                    color = TextSecondary
+                )
+                Text(
+                    text = phoneNumber,
+                    style = TextSmallRegular,
+                    color = TextSecondary
+                )
+            }
+        }
+
+        IconButton(
+            onClick = onActionClick
+        ) {
+            Icon(imageVector = Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(24.dp))
+        }
+
+    }
+}
 
 @Composable
 fun SectionTitle(

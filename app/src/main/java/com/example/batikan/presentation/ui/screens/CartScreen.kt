@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.CartItemRow
 import com.example.batikan.presentation.ui.theme.BatikanTheme
@@ -43,40 +44,6 @@ import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 
-class CartScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BatikanTheme {
-                CartContent(
-                    cartItems = listOf(
-                        CartItem(
-                            id = "1",
-                            name = "Batik Pekalongan",
-                            price = 200000,
-                            count = 1,
-                            isChecked = false,
-                            imageResources = R.drawable.batik_new
-                        ),
-                        CartItem(
-                            id = "2",
-                            name = "Batik Papua",
-                            price = 250000,
-                            count = 2,
-                            isChecked = true,
-                            imageResources = R.drawable.batik_new
-                        )
-                    ),
-                    onItemCheckedChange = { _, _ -> },
-                    onItemCountChange = { _, _ -> },
-                    onBackClicked = {}
-
-                )
-            }
-        }
-    }
-}
 
 data class CartItem(
     val id: String,
@@ -94,7 +61,7 @@ fun CartContent (
     cartItems: List<CartItem>,
     onItemCheckedChange: (String, Boolean) -> Unit,
     onItemCountChange: (String, Int) -> Unit,
-    onBackClicked: () -> Unit
+    navController: NavController
 ) {
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -108,7 +75,7 @@ fun CartContent (
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onBackClicked() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -185,33 +152,31 @@ fun CartContent (
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CartScreenPreview() {
-    BatikanTheme {
-        CartContent(
-            cartItems = listOf(
-                CartItem(
-                    id = "1",
-                    name = "Batik Pekalongan",
-                    price = 200000,
-                    count = 1,
-                    isChecked = false,
-                    imageResources = R.drawable.batik_new
-                ),
-                CartItem(
-                    id = "2",
-                    name = "Batik Papua",
-                    price = 250000,
-                    count = 2,
-                    isChecked = true,
-                    imageResources = R.drawable.batik_new
-                )
-            ),
-            onItemCheckedChange = { _, _ -> },
-            onItemCountChange = { _, _ -> },
-            onBackClicked = {}
-
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CartScreenPreview() {
+//    BatikanTheme {
+//        CartContent(
+//            cartItems = listOf(
+//                CartItem(
+//                    id = "1",
+//                    name = "Batik Pekalongan",
+//                    price = 200000,
+//                    count = 1,
+//                    isChecked = false,
+//                    imageResources = R.drawable.batik_new
+//                ),
+//                CartItem(
+//                    id = "2",
+//                    name = "Batik Papua",
+//                    price = 250000,
+//                    count = 2,
+//                    isChecked = true,
+//                    imageResources = R.drawable.batik_new
+//                )
+//            ),
+//            onItemCheckedChange = { _, _ -> },
+//            onItemCountChange = { _, _ -> },
+//        )
+//    }
+//}
