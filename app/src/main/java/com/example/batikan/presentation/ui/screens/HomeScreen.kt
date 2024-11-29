@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BatikScanCard
@@ -23,7 +26,37 @@ import com.example.batikan.presentation.ui.composables.NewProductCard
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.composables.ProductCardList
 import com.example.batikan.presentation.ui.composables.SectionTitle
-import com.example.batikan.presentation.ui.theme.BatikanTheme
+import com.example.batikan.presentation.viewmodel.HomeViewModel
+
+@Composable
+fun HomeScreen(
+    navController: NavController,
+    viewModel: HomeViewModel,
+    userName: String
+) {
+    val batikList by viewModel.batikList.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchBatikList()
+    }
+
+    if (isLoading) {
+        // TODO
+    } else {
+        HomeScreenContent(
+            navController = navController,
+            userName = userName,
+            products = batikList.map {
+                Product(
+                    imageResource = R.drawable.batik_new,
+                    title = it.data.name,
+                    price = "${it.data.price}"
+                )
+            }
+        )
+    }
+}
 
 @Composable
 fun HomeScreenContent(
@@ -31,6 +64,8 @@ fun HomeScreenContent(
     userName: String,
     products: List<Product>
 ){
+
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {}

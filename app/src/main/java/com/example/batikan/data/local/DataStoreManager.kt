@@ -1,9 +1,12 @@
 package com.example.batikan.data.local
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore("user_preferences")
@@ -15,6 +18,12 @@ object DataStoreManager {
     }
 
     fun getToken(context: Context) = context.dataStore.data.map { it[TOKEN_KEY] ?: "" }
+
+    suspend fun getAuthToken(dataStore: DataStore<Preferences>): String {
+        return dataStore.data.map { preferences ->
+            preferences[stringPreferencesKey("auth_token")] ?: ""
+        }.first()
+    }
 }
 
 //private val Context.dataStore by preferencesDataStore("user_prefs")

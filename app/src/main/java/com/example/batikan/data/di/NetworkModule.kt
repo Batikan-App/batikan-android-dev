@@ -1,6 +1,7 @@
 package com.example.batikan.data.di
 
 import com.example.batikan.data.remote.ApiService
+import com.example.batikan.data.remote.BatikApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +34,6 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+    fun provideBatikApiService(retrofit: Retrofit): BatikApiService = retrofit.create(BatikApiService::class.java)
 }

@@ -43,8 +43,7 @@ class LoginViewModel @Inject constructor(
     }
 }
 
-sealed class LoginState {
-    object Idle : LoginState()
+sealed class LoginState {    object Idle : LoginState()
     object Loading : LoginState()
     data class Success(val token: String) : LoginState()
     data class Error(val message: String) : LoginState()

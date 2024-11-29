@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +19,7 @@ import com.example.batikan.R
 import com.example.batikan.data.local.DataStoreManager
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.screens.CameraScreen
+import com.example.batikan.presentation.ui.screens.HomeScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
 import com.example.batikan.presentation.ui.screens.LoginScreen
 import com.example.batikan.presentation.ui.screens.ScanResult
@@ -26,6 +28,7 @@ import com.example.batikan.presentation.ui.screens.TokoContent
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayLgBold
 import com.example.batikan.presentation.ui.theme.Primary600
+import com.example.batikan.presentation.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
@@ -43,15 +46,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(route = "home_screen") {
-                        HomeScreenContent(
+                        val homeViewModel: HomeViewModel = hiltViewModel()
+                        HomeScreen(
                             navController,
                             userName = "John Doe",
-                            products = listOf(
-                                Product(R.drawable.batik_new, "Batik A", "$20"),
-                                Product(R.drawable.batik_new, "Batik B", "$25"),
-                                Product(R.drawable.batik_new, "Batik C", "$30"),
-                                Product(R.drawable.batik_new, "Batik D", "$35")
-                            )
+                            viewModel = homeViewModel
                         )
                     }
 
