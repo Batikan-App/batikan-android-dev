@@ -41,7 +41,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             BatikanTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "home_screen") {
+                NavHost(navController = navController, startDestination = "login_screen") {
+
                     composable(route = "login_screen") {
                         LoginScreen(navController, dataStoreManager = DataStoreManager)
                     }
