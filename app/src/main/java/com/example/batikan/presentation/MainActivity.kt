@@ -20,6 +20,7 @@ import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
 import com.example.batikan.presentation.ui.screens.LoginScreen
+import com.example.batikan.presentation.ui.screens.LogoAnimationScreenContent
 import com.example.batikan.presentation.ui.screens.ProfileContent
 import com.example.batikan.presentation.ui.screens.RegisterScreen
 import com.example.batikan.presentation.ui.screens.ScanResult
@@ -42,7 +43,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             BatikanTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "login_screen") {
+                NavHost(navController = navController, startDestination = "logo_screen") {
+
+                    composable(route = "logo_screen"){
+                        LogoAnimationScreenContent( navController =  navController)
+                    }
 
                     composable(route = "login_screen") {
                         LoginScreen(navController)
