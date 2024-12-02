@@ -49,7 +49,7 @@ fun LogoAnimationScreenContent(
         LaunchedEffect(progress) {
             if (progress == 1f) {
                 isPlaying = false
-                navController.navigate("login_screen") {
+                navController.navigate("onboarding_screen") {
                     popUpTo("splash_screen") { inclusive = true }
                 }
             }

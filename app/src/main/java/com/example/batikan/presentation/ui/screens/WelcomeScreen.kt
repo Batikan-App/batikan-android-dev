@@ -1,5 +1,6 @@
 package com.example.batikan.presentation.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,13 +32,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayXsRegular
 import com.example.batikan.presentation.ui.theme.Primary600
 
 @Composable
-fun BatikanWelcomeScreen() {
+fun BatikanWelcomeScreen(navController: NavController) {
+    BackHandler {
+        navController.popBackStack()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -93,10 +99,11 @@ fun BatikanWelcomeScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = {/*TODO: Handle login */},
+                    onClick = {navController.navigate("login_screen")},
                     colors = ButtonDefaults.buttonColors(containerColor = Primary600),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .size(width = 330.dp, 50.dp)
                         .height(48.dp)
                         .padding(bottom = 8.dp),
                     shape = RectangleShape
@@ -109,9 +116,10 @@ fun BatikanWelcomeScreen() {
                 }
 
                 OutlinedButton(
-                    onClick = {/*TODO: implement handle buat akun */},
+                    onClick = { navController.navigate("register_screen") },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .size(width = 330.dp, 50.dp)
                         .height(48.dp)
                         .padding(top = 8.dp),
                     shape = RectangleShape
@@ -126,14 +134,5 @@ fun BatikanWelcomeScreen() {
 
             Spacer(modifier = Modifier.weight(1f))
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-
-private fun PreviewLastOnBoardingScreen() {
-    BatikanTheme {
-        BatikanWelcomeScreen()
     }
 }
