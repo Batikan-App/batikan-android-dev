@@ -168,13 +168,16 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = { viewModel.login(email, password) },
+                onClick = {
+                    if (isFormValid) { viewModel.login(email, password) }
+                          },
                 colors = ButtonDefaults.buttonColors(containerColor = if(isFormValid) Primary600 else Color(0xFF98A2B3)),
                 modifier = Modifier
                     .size(width = 330.dp, 50.dp)
                     .height(48.dp)
                     .padding(bottom = 8.dp) ,
-                shape = RoundedCornerShape(6.dp)
+                shape = RoundedCornerShape(6.dp),
+                enabled = isFormValid
             ) {
                 Text(
                     text = "Masuk kembali",
@@ -219,20 +222,3 @@ fun LoginScreen(
         }
     }
 }
-
-//    TextField(
-//    value = password,
-//    onValueChange = { password = it },
-//    label = { Text("Password") },
-//    visualTransformation = PasswordVisualTransformation()
-//    )x`x`
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun PreviewLoginScreen() {
-//    BatikanTheme {
-//        LoginScreen(
-//
-//        )
-//    }
-//}
