@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.batikan.R
 import com.example.batikan.data.local.DataStoreManager
 import com.example.batikan.presentation.ui.composables.Product
+import com.example.batikan.presentation.ui.screens.BatikanWelcomeScreen
 import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
 import com.example.batikan.presentation.ui.screens.LoginScreen
@@ -29,6 +30,7 @@ import com.example.batikan.presentation.ui.screens.Shipping
 import com.example.batikan.presentation.ui.screens.TokoContent
 import com.example.batikan.presentation.ui.screens.TrackingContent
 import com.example.batikan.presentation.ui.screens.UpdateProfileContent
+import com.example.batikan.presentation.ui.screens.on_boarding_screen.OnboardingScreen
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayLgBold
 import com.example.batikan.presentation.ui.theme.Primary600
@@ -47,6 +49,21 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "logo_screen"){
                         LogoAnimationScreenContent( navController =  navController)
+                    }
+
+                    composable(route = "onboarding_screen") {
+                        OnboardingScreen(
+                            navController = navController,
+                            onFinished = {
+                                navController.navigate("welcome_screen") {
+                                    popUpTo("onboarding_screen")
+                                }
+                            }
+                        )
+                    }
+
+                    composable(route = "welcome_screen") {
+                        BatikanWelcomeScreen(navController)
                     }
 
                     composable(route = "login_screen") {
