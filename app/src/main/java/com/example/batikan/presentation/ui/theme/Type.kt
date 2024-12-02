@@ -25,6 +25,12 @@ fun googleFont(familyName: String, weight: FontWeight) = FontFamily(
     )
 )
 
+val PlayfairDisplayXsSemiBold = TextStyle(
+    fontFamily = googleFont("Playfair Display", FontWeight.W600),
+    fontSize = 24.sp,
+    letterSpacing = (-0.02).em
+)
+
 
 // Display 2xl
 val Display2xlRegular = TextStyle(
