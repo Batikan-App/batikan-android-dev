@@ -21,6 +21,7 @@ import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
 import com.example.batikan.presentation.ui.screens.LoginScreen
 import com.example.batikan.presentation.ui.screens.ProfileContent
+import com.example.batikan.presentation.ui.screens.RegisterScreen
 import com.example.batikan.presentation.ui.screens.ScanResult
 import com.example.batikan.presentation.ui.screens.ScanResultContent
 import com.example.batikan.presentation.ui.screens.Shipping
@@ -45,6 +46,10 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "login_screen") {
                         LoginScreen(navController)
+                    }
+
+                    composable(route = "register_screen") {
+                        RegisterScreen(navController)
                     }
 
                     composable(route = "home_screen") {

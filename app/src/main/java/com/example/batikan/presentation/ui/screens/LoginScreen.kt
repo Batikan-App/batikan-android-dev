@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +66,8 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val isFormValid = email.isNotBlank() && password.isNotBlank()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -114,7 +118,14 @@ fun LoginScreen(
                 Modifier.padding(bottom = 8.dp)
             )
 
-            OutlinedTextField(value = email, onValueChange = { email = it }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                )
+            )
         }
 
         Column(
@@ -129,7 +140,10 @@ fun LoginScreen(
                 value = password,
                 onValueChange = { password = it },
                 modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                )
             )
         }
 
@@ -155,7 +169,7 @@ fun LoginScreen(
         ) {
             Button(
                 onClick = { viewModel.login(email, password) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF98A2B3)),
+                colors = ButtonDefaults.buttonColors(containerColor = if(isFormValid) Primary600 else Color(0xFF98A2B3)),
                 modifier = Modifier
                     .size(width = 330.dp, 50.dp)
                     .height(48.dp)
@@ -188,7 +202,7 @@ fun LoginScreen(
 
             OutlinedButton(
                 border = BorderStroke(width = 1.dp, color = Primary600),
-                onClick = {/*TODO: Handle register */},
+                onClick = { navController.navigate("register_screen") },
                 modifier = Modifier
                     .size(width = 330.dp, 50.dp)
                     .height(48.dp)
