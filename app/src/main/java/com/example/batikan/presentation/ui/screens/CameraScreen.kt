@@ -30,7 +30,8 @@ import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.Q)
+import java.io.File
+
 @Composable
 fun CameraScreen(navController: NavController) {
     val context = LocalContext.current
@@ -38,7 +39,6 @@ fun CameraScreen(navController: NavController) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
-    // Request Camera Permission
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
@@ -83,60 +83,35 @@ fun CameraScreen(navController: NavController) {
                     )
                     previewView
                 }
-                // TODO: Rebuild surfaceProvider to have null values if user click back button to take picture again
             )
 
-            // Tombol ambil foto
             Button(
                 onClick = {
-                    val contentValues = ContentValues().apply {
-                        put(MediaStore.MediaColumns.DISPLAY_NAME, "Batik_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}")
-                        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-                        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Batikan")
-                    }
+                    // Membuat nama file untuk gambar
+                    val fileName = "Batik_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
+                    val photoFile = File(context.cacheDir, fileName)
 
-                    // Buat URI untuk menyimpan foto
-//                    val photoUri = context.contentResolver.insert(
-//                        MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-//                        contentValues
-//                    )
+                    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-                    val photoUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
-                    Log.d("CameraScreen", "PhotoUri: $photoUri")
-
-                    if (photoUri != null) {
-                        Log.d("CameraScreen", "PhotoUri: $photoUri")
-                        val outputOptions = ImageCapture.OutputFileOptions.Builder(
-                            context.contentResolver,
-                            photoUri,
-                            contentValues
-                        ).build()
-
-                        imageCapture?.takePicture(
-                            outputOptions,
-                            ContextCompat.getMainExecutor(context),
-                            object : ImageCapture.OnImageSavedCallback {
-                                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                    val savedUri = outputFileResults.savedUri ?: photoUri
-                                    val encodedUri = URLEncoder.encode(savedUri.toString(), "UTF-8")
-                                    Toast.makeText(context, "Foto disimpan", Toast.LENGTH_SHORT).show()
-                                    Log.d("CameraScreen", "Image saved successfully")
-                                    navController.navigate("photo_result_screen?photoUri=${encodedUri}")
-                                    Log.d("CameraScreen", "Navigating to photo_result_screen with photoUri=$encodedUri")
-                                }
-
-                                override fun onError(exception: ImageCaptureException) {
-                                    exception.printStackTrace()
-                                    Toast.makeText(context, "Foto gagal disimpan", Toast.LENGTH_SHORT).show()
-                                    Log.e("CameraScreen", "Image capture failed: ${exception.message}", exception)
-                                }
+                    imageCapture?.takePicture(
+                        outputOptions,
+                        ContextCompat.getMainExecutor(context),
+                        object : ImageCapture.OnImageSavedCallback {
+                            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                                val savedUri = Uri.fromFile(photoFile)
+                                val encodedUri = URLEncoder.encode(savedUri.toString(), "UTF-8")
+                                Toast.makeText(context, "Foto disimpan", Toast.LENGTH_SHORT).show()
+                                Log.d("CameraScreen", "Image saved successfully")
+                                navController.navigate("photo_result_screen?photoUri=${encodedUri}")
                             }
-                        )
-                    } else {
-                        Log.e("CameraScreen", "Failed to create URI for saving photo.")
-                        println("Gagal membuat URI untuk menyimpan foto.")
-                    }
+
+                            override fun onError(exception: ImageCaptureException) {
+                                exception.printStackTrace()
+                                Toast.makeText(context, "Foto gagal disimpan", Toast.LENGTH_SHORT).show()
+                                Log.e("CameraScreen", "Image capture failed: ${exception.message}", exception)
+                            }
+                        }
+                    )
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -145,7 +120,6 @@ fun CameraScreen(navController: NavController) {
                 Text("Ambil Foto")
             }
 
-            // Tombol kembali
             Button(
                 onClick = { navController.navigateUp() },
                 modifier = Modifier
@@ -156,7 +130,6 @@ fun CameraScreen(navController: NavController) {
             }
         }
     } else {
-        // Pesan jika izin kamera belum diberikan
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = "Izinkan akses kamera untuk menggunakan fitur ini.",

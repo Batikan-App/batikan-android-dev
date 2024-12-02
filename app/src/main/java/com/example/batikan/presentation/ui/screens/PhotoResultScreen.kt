@@ -42,18 +42,7 @@ fun PhotoResultScreen(
 ) {
     val context = LocalContext.current
     val decodedUri = photoUri?.let { Uri.parse(URLDecoder.decode(it, "UTF-8")) }
-    Log.d("PhotoResultScreen", "Ini decoded uri yang awal: $decodedUri")
-//    val uri = photoUri?.toUri() // sementara ini yang dipakai untuk nampilin gambar
-
-    /**
-     * TODO: Perbaiki cara baca file, biar URL/File yang dikirim itu bisa dibaca dan tidak 400 bad request
-     */
-
-    // Masalah ada di sini nih
-//    val inputStream = decodedUri?.let { context.contentResolver.openInputStream(it) }
     val photoFile = decodedUri?.let { File(it.path ?: "") }
-
-//    val uri = photoUri?.toUri()
 
     Row(
         modifier = Modifier
@@ -66,14 +55,9 @@ fun PhotoResultScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        decodedUri?.let {
-
+        photoFile?.let {
             Image(
-                painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(it)
-                        .build()
-                ),
+                painter = rememberAsyncImagePainter(it),
                 contentDescription = "Hasil Foto",
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -88,11 +72,7 @@ fun PhotoResultScreen(
         ) {
             Button(
                 onClick = {
-                    if (decodedUri != null) {
-                        photoFile?.let(onProceed)
-                    } else {
-                        Toast.makeText(context,"File tidak ditemukan", Toast.LENGTH_SHORT).show()
-                    }
+                    photoFile?.let(onProceed)
                 },
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
@@ -118,6 +98,7 @@ fun PhotoResultScreen(
         }
     }
 }
+
 
 //@Preview(showBackground = true)
 //@Composable
