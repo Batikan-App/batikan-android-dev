@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
-import com.example.batikan.data.local.DataStoreManager
+import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayXsBold
 import com.example.batikan.presentation.ui.theme.Primary600

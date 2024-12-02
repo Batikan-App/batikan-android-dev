@@ -3,9 +3,7 @@ package com.example.batikan.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.batikan.data.local.DataStoreManager
-import com.example.batikan.data.remote.AuthApiService
-import com.example.batikan.data.remote.LoginRequest
+import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.domain.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

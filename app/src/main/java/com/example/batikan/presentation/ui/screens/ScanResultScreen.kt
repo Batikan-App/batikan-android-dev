@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.AboutBatik
@@ -35,103 +38,124 @@ import com.example.batikan.presentation.ui.composables.VisualTryOnCard
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
+import com.example.batikan.presentation.viewmodel.BatikViewModel
+import com.example.batikan.presentation.viewmodel.ScanResultState
 
-data class ScanResult(
-    val name: String,
-    val aboutMotif: String,
-    val origin: String
-)
+//data class ScanResult(
+//    val name: String,
+//    val aboutMotif: String,
+//    val origin: String
+//)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanResultContent(
     similiarProduct: List<Product>,
-    result: ScanResult,
+//    result: ScanResult,
     modifier: Modifier = Modifier,
     photoUri: String?,
+    uiState: ScanResultState,
     navController: NavController
-){
-    Scaffold (
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Pembayaran",
-                        style = TextMdSemiBold,
-                        color = TextPrimary
+) {
+    when (uiState) {
+        is ScanResultState.Idle -> {
+            Text("Menunggu proses scan...", modifier = Modifier.fillMaxSize())
+        }
+        is ScanResultState.Loading -> {
+            CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+        }
+        is ScanResultState.Success -> {
+            val response = uiState.response
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = "Hasil Scan Batik",
+                                style = TextMdSemiBold,
+                                color = TextPrimary
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.navigateUp() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null,
+                                    tint = TextPrimary
+                                )
+                            }
+                        }
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = TextPrimary
+                bottomBar = {}
+            ) { innerPadding ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    item {
+                        PageTitle(
+                            title = "Hasil Scan Batik",
+                            description = "Hasil scan batikmu",
+                            modifier = Modifier.padding(start = 30.dp)
+                        )
+                    }
+
+                    item {
+                        CardScanResult(
+                            name = response.data.data.name,
+                            origin = response.data.data.origin,
+                            imageResource = R.drawable.batik_new,
+                            onActionClick = {},
+                            modifier = Modifier.padding(start = 30.dp),
+                            photoUri = photoUri
+                        )
+                    }
+
+                    item {
+                        AboutBatik(
+                            description = response.data.data.desc,
+                            modifier = Modifier.padding(horizontal = 30.dp)
+                        )
+                    }
+
+                    item {
+                        SectionTitle(
+                            title = "Visual Try-On",
+                            description = "Coba batik yang kamu suka secara virtual",
+                            modifier = Modifier.padding(start = 30.dp)
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        VisualTryOnCard(
+                            modifier = Modifier.padding(horizontal = 30.dp)
+                        )
+                    }
+
+                    item {
+                        ProductSection(
+                            title = "Produk terkait",
+                            description = "Beli batik",
+                            productList = similiarProduct,
+                            modifier = modifier.padding(start = 30.dp)
                         )
                     }
                 }
-            )
-        },
-        bottomBar = {}
-    ) { innerPadding ->
-        LazyColumn (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            item {
-                PageTitle(
-                    title = "Hasil Scan Batik",
-                    description = "Hasil scan batikmu",
-                    modifier = Modifier.padding(start = 30.dp)
-                )
-            }
-
-            item {
-                CardScanResult(
-                    name = result.name,
-                    origin = result.origin,
-                    imageResource = R.drawable.batik_new,
-                    onActionClick = {},
-                    modifier = Modifier.padding(start = 30.dp),
-                    photoUri = photoUri
-                )
-            }
-
-            item {
-                AboutBatik(
-                    description = result.aboutMotif,
-                    modifier = Modifier.padding(horizontal = 30.dp)
-                )
-            }
-
-            item {
-                SectionTitle(
-                    title = "Visual Try-On",
-                    description = "Coba batik yang kamu suka secara virtual",
-                    modifier = Modifier.padding(start = 30.dp)
-                )
-                Spacer(Modifier.height(8.dp))
-                VisualTryOnCard(
-                    modifier = Modifier.padding(horizontal = 30.dp)
-                )
-            }
-
-            item {
-                ProductSection(
-                    title = "Produk terkait",
-                    description = "Beli batik",
-                    productList = similiarProduct,
-                    modifier = modifier.padding(start = 30.dp)
-
-                )
             }
         }
+        is ScanResultState.Error -> {
+            Text(
+                text = "Error: ${uiState.message}",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
-
 }
+
+
 //
 //@Preview(showBackground = true)
 //@Composable

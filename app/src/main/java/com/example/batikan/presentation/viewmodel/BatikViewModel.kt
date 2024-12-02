@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.batikan.R
-import com.example.batikan.data.remote.Batik
+import com.example.batikan.data.model.batik_product.BatikList
+import com.example.batikan.data.model.batik_scan.BatikScanResponse
 import com.example.batikan.domain.repositories.BatikRepository
 import com.example.batikan.presentation.ui.composables.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +25,9 @@ class BatikViewModel @Inject constructor(
 
     private val _productList = MutableStateFlow<List<Product>>(emptyList())
     val productList: StateFlow<List<Product>> get() = _productList
+
+    private val _scanResultState = MutableStateFlow<ScanResultState>(ScanResultState.Idle)
+    val scanResultState: StateFlow<ScanResultState> get() = _scanResultState
 
     fun fetchBatik() {
         viewModelScope.launch {
@@ -46,7 +51,7 @@ class BatikViewModel @Inject constructor(
         }
     }
 
-    private fun mapBatikToProduct(batikItems: List<Batik>): List<Product> {
+    private fun mapBatikToProduct(batikItems: List<BatikList>): List<Product> {
         return batikItems.map { item ->
             Product(
                 imageResource = R.drawable.batik_new,
@@ -55,11 +60,41 @@ class BatikViewModel @Inject constructor(
             )
         }
     }
+
+    // Fungsi untuk scan batik
+    fun scanBatik(imageFile: File) {
+        viewModelScope.launch {
+            Log.d("BatikViewModelScan", "Scanning Batik image ...")
+            _scanResultState.value = ScanResultState.Loading
+
+            try {
+                val resultScan = batikRepository(imageFile = imageFile)
+                Log.d("BatikViewModelScan", "Scan success: $resultScan")
+
+                _scanResultState.value = when {
+                    resultScan.isSuccess -> ScanResultState.Success(resultScan.getOrNull()!!)
+                    else -> ScanResultState.Error(
+                        resultScan.exceptionOrNull()?.message ?: "Unknown Error"
+                    )
+                }
+            } catch (e: Exception) {
+                Log.d("BatikViewModel", "Exception: ${e.message}")
+                _scanResultState.value = ScanResultState.Error("Error: ${e.message}")
+            }
+        }
+    }
+}
+
+sealed class ScanResultState {
+    object Idle : ScanResultState()
+    object Loading : ScanResultState()
+    data class Success(val response: BatikScanResponse): ScanResultState()
+    data class Error(val message: String) : ScanResultState()
 }
 
 sealed class BatikState {
     object Idle : BatikState()
     object Loading : BatikState()
-    data class Success(val data: List<Batik>) : BatikState()
+    data class Success(val data: List<BatikList>) : BatikState()
     data class Error(val message: String) : BatikState()
 }

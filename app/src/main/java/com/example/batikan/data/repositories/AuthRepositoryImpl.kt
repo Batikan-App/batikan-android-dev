@@ -1,8 +1,8 @@
 package com.example.batikan.data.repositories
 
-import com.example.batikan.data.remote.AuthApiService
-import com.example.batikan.data.remote.LoginRequest
-import com.example.batikan.data.remote.LoginResponse
+import com.example.batikan.data.datasource.remote.AuthApiService
+import com.example.batikan.data.model.auth.LoginRequest
+import com.example.batikan.data.model.auth.LoginResponse
 import retrofit2.Response
 import javax.inject.Inject
 

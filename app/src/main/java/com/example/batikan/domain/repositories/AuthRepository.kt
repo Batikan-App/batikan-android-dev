@@ -1,7 +1,7 @@
 package com.example.batikan.domain.repositories
 
 import com.example.batikan.data.repositories.AuthRepositoryImpl
-import com.example.batikan.data.remote.LoginResponse
+import com.example.batikan.data.model.auth.LoginResponse
 import retrofit2.Response
 import javax.inject.Inject
 

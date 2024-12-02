@@ -1,11 +1,10 @@
 package com.example.batikan.data.di
 
 import android.content.Context
-import androidx.datastore.dataStore
-import com.example.batikan.data.local.DataStoreManager
-import com.example.batikan.data.remote.AuthApiService
-import com.example.batikan.data.remote.AuthInterceptor
-import com.example.batikan.data.remote.BatikApiService
+import com.example.batikan.data.datasource.local.DataStoreManager
+import com.example.batikan.data.datasource.remote.AuthApiService
+import com.example.batikan.data.datasource.remote.AuthInterceptor
+import com.example.batikan.data.datasource.remote.BatikApiService
 import com.example.batikan.data.repositories.AuthRepositoryImpl
 import com.example.batikan.data.repositories.BatikRepositoryImpl
 import com.example.batikan.domain.repositories.AuthRepository
@@ -15,7 +14,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -84,7 +82,8 @@ object NetworkModule {
      */
     @Provides
     @Singleton
-    fun provideBatikApiService(retrofit: Retrofit): BatikApiService = retrofit.create(BatikApiService::class.java)
+    fun provideBatikApiService(retrofit: Retrofit): BatikApiService = retrofit.create(
+        BatikApiService::class.java)
 
     @Provides
     @Singleton
