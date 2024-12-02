@@ -1,11 +1,17 @@
 package com.example.batikan.presentation.ui.screens
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -20,9 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import java.io.File
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
+
+import java.io.File
 
 @Composable
 fun CameraScreen(navController: NavController) {
@@ -30,9 +38,7 @@ fun CameraScreen(navController: NavController) {
     var hasCameraPermission by remember { mutableStateOf(false) }
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
-    var photoUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Request Camera Permission
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
@@ -60,6 +66,8 @@ fun CameraScreen(navController: NavController) {
                     val previewView = PreviewView(ctx)
                     val cameraProvider = cameraProviderFuture.get()
 
+                    cameraProvider.unbindAll()
+
                     val preview = Preview.Builder().build()
                     val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -77,27 +85,30 @@ fun CameraScreen(navController: NavController) {
                 }
             )
 
-            // Tombol ambil foto
             Button(
                 onClick = {
-                    val photoFile = File(
-                        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                        "Batik_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
-                    )
+                    // Membuat nama file untuk gambar
+                    val fileName = "Batik_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
+                    val photoFile = File(context.cacheDir, fileName)
+
                     val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
                     imageCapture?.takePicture(
                         outputOptions,
                         ContextCompat.getMainExecutor(context),
                         object : ImageCapture.OnImageSavedCallback {
                             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                photoUri = Uri.fromFile(photoFile)
-                                photoUri?.let { uri ->
-                                    navController.navigate("scan_result_screen?photoUri=${uri}")
-                                }
+                                val savedUri = Uri.fromFile(photoFile)
+                                val encodedUri = URLEncoder.encode(savedUri.toString(), "UTF-8")
+                                Toast.makeText(context, "Foto disimpan", Toast.LENGTH_SHORT).show()
+                                Log.d("CameraScreen", "Image saved successfully")
+                                navController.navigate("photo_result_screen?photoUri=${encodedUri}")
                             }
 
                             override fun onError(exception: ImageCaptureException) {
                                 exception.printStackTrace()
+                                Toast.makeText(context, "Foto gagal disimpan", Toast.LENGTH_SHORT).show()
+                                Log.e("CameraScreen", "Image capture failed: ${exception.message}", exception)
                             }
                         }
                     )
@@ -109,7 +120,6 @@ fun CameraScreen(navController: NavController) {
                 Text("Ambil Foto")
             }
 
-            // Tombol kembali
             Button(
                 onClick = { navController.navigateUp() },
                 modifier = Modifier
@@ -120,7 +130,6 @@ fun CameraScreen(navController: NavController) {
             }
         }
     } else {
-        // Pesan jika izin kamera belum diberikan
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = "Izinkan akses kamera untuk menggunakan fitur ini.",
