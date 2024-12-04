@@ -60,7 +60,7 @@ class AuthViewModel @Inject constructor(
                 val response = authRepository.logout()
                 if (response.isSuccessful) {
                     val body = response.body()
-                    if(body != null) {
+                    if (body != null) {
                         dataStoreManager.deleteToken()
                         Log.d("Logout", "Token deleted")
                         _logoutState.value = LogoutState.Success(body.message)
@@ -75,6 +75,8 @@ class AuthViewModel @Inject constructor(
             } catch (e: HttpException) {
                 _logoutState.value = LogoutState.Error("Network error: ${e.message()}")
             }
+        }
+    }
 
     fun register(name: String, email: String, phone	: String, password: String, verify_password: String){
         viewModelScope.launch {
@@ -92,7 +94,6 @@ class AuthViewModel @Inject constructor(
             } catch (e: HttpException) {
                 _registerState.value = RegisterState.Error("Network error: ${e.message()}")
             }
-
         }
     }
 }
@@ -112,9 +113,9 @@ sealed class RegisterState {
 }
 
 sealed class LogoutState {
-    object Idle: LogoutState()
-    object Loading: LogoutState()
-    data class Success(val message: String): LogoutState()
-    data class Error(val message: String): LogoutState()
+    object Idle : LogoutState()
+    object Loading : LogoutState()
+    data class Success(val message: String) : LogoutState()
+    data class Error(val message: String) : LogoutState()
 }
 
