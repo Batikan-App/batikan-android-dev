@@ -22,7 +22,6 @@ class AuthViewModel @Inject constructor(
     private val _logoutState = MutableStateFlow<LogoutState>(LogoutState.Idle)
     private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
 
-
     val loginState: StateFlow<LoginState> get() = _loginState
     val logoutState: StateFlow<LogoutState> get() = _logoutState
     val registerState: StateFlow<RegisterState> get() = _registerState
