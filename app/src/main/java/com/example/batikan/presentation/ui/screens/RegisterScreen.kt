@@ -17,10 +17,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,17 +38,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayXsBold
 import com.example.batikan.presentation.ui.theme.Primary600
+import com.example.batikan.presentation.ui.theme.TextSmallRegular
+import com.example.batikan.presentation.viewmodel.AuthViewModel
+import com.example.batikan.presentation.viewmodel.LoginState
+import com.example.batikan.presentation.viewmodel.RegisterState
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    ) {
+    viewModel: AuthViewModel = hiltViewModel()
+) {
     var isButtonClicked by remember { mutableStateOf(false) }
+
+    val registerState by viewModel.registerState.collectAsState()
 
     var name by remember { mutableStateOf("")}
     var email by remember { mutableStateOf("")}
@@ -53,7 +64,13 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("")}
     var passwordVerify by remember { mutableStateOf("")}
 
-    val isFormValid = name.isNotBlank() && email.isNotBlank() && phoneNumber.isNotBlank() && password.isNotBlank() && passwordVerify.isNotBlank()
+    var isFormValid = name.isNotBlank() && email.isNotBlank() && phoneNumber.isNotBlank() && password.isNotBlank() && passwordVerify.isNotBlank()
+
+    var isEmailValid by remember { mutableStateOf(true) }
+    var isPhoneValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
+    var isVerifyPasswordValid by remember { mutableStateOf(true) }
+
 
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
@@ -127,12 +144,24 @@ fun RegisterScreen(
 
                 OutlinedTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        email = it
+                        isEmailValid = email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"))
+                    },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = !isEmailValid,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
                     )
                 )
+            }
+            if (!isEmailValid) {
+                Text(
+                    text = "Format Email tidak valid",
+                    color = Primary600,
+                    style = TextSmallRegular,
+                    modifier = Modifier.padding(start = 16.dp)
+                    )
             }
 
             Column(
@@ -145,13 +174,27 @@ fun RegisterScreen(
 
                 OutlinedTextField(
                     value = phoneNumber,
-                    onValueChange = { phoneNumber = it },
+                    onValueChange = {
+                        phoneNumber = it
+                        isPhoneValid = phoneNumber.matches(Regex("^\\d{10,15}\$"))
+                    },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = !isPhoneValid,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
                     )
                 )
             }
+
+            if (!isPhoneValid) {
+                Text(
+                    text = "Nomor Telepohone harus 10 - 15 digit",
+                    color = Primary600,
+                    style = TextSmallRegular,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+
 
             Column(
                 modifier = Modifier.padding(16.dp).fillMaxWidth()
@@ -163,12 +206,27 @@ fun RegisterScreen(
 
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        password = it
+                        isPasswordValid = password.matches(
+                            Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,}\$")
+                        )
+                                    },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = !isPasswordValid,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
                     )
+                )
+            }
+
+            if (!isPasswordValid) {
+                Text(
+                    text = "Password harus berisi huruf, angka, dan simbol",
+                    color = Primary600,
+                    style = TextSmallRegular,
+                    modifier = Modifier.padding(start = 16.dp)
                 )
             }
 
@@ -182,12 +240,25 @@ fun RegisterScreen(
 
                 OutlinedTextField(
                     value = passwordVerify,
-                    onValueChange = { passwordVerify = it },
+                    onValueChange = {
+                        passwordVerify = it
+                        isVerifyPasswordValid = passwordVerify == password
+                    },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = !isVerifyPasswordValid,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done
                     )
+                )
+            }
+
+            if (!isVerifyPasswordValid) {
+                Text(
+                    text = "Password tidak sama",
+                    color = Primary600,
+                    style = TextSmallRegular,
+                    modifier = Modifier.padding(start = 16.dp)
                 )
             }
 
@@ -200,7 +271,9 @@ fun RegisterScreen(
             ) {
                 Button(
                     onClick = {
-                        if (isFormValid) { /*TODO: Handle Register */ }
+                        if (isFormValid) {
+                            viewModel.register(name, email, phoneNumber, password, passwordVerify)
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = if(isFormValid) Primary600 else Color(0xFF98A2B3)),
                     modifier = Modifier
@@ -215,6 +288,22 @@ fun RegisterScreen(
                         color = Color.White,
                         fontSize = 16.sp
                     )
+                }
+
+                when (registerState) {
+                    is RegisterState.Loading -> CircularProgressIndicator()
+                    is RegisterState.Success -> {
+                        LaunchedEffect(Unit) {
+                            // Navigate to home
+                            navController.navigate("login_screen") {
+                                popUpTo("register_screen") {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    }
+                    is RegisterState.Error -> Text((registerState as RegisterState.Error).message, color = Color.Red)
+                    else -> {}
                 }
 
                 OutlinedButton(

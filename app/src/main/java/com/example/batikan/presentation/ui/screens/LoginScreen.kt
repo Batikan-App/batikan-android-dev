@@ -52,6 +52,7 @@ import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayXsBold
 import com.example.batikan.presentation.ui.theme.Primary600
+import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.viewmodel.LoginState
 import com.example.batikan.presentation.viewmodel.AuthViewModel
 
@@ -67,7 +68,10 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val isFormValid = email.isNotBlank() && password.isNotBlank()
+    var isFormValid = email.isNotBlank() && password.isNotBlank()
+
+    var isEmailValid by remember { mutableStateOf(true) }
+
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -120,11 +124,23 @@ fun LoginScreen(
 
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    isEmailValid = email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"))
+                },
                 modifier = Modifier.fillMaxWidth(),
+                isError = !isEmailValid,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
                 )
+            )
+        }
+        if (!isEmailValid) {
+            Text(
+                text = "Format Email tidak valid",
+                color = Primary600,
+                style = TextSmallRegular,
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
 

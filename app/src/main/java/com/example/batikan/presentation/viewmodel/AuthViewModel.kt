@@ -21,6 +21,9 @@ class AuthViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> get() = _loginState
 
+    private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
+    val registerState: StateFlow<RegisterState> get() = _registerState
+
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
@@ -44,7 +47,25 @@ class AuthViewModel @Inject constructor(
             } catch (e: HttpException) {
                 _loginState.value = LoginState.Error("Network error: ${e.message()}")
             }
+        }
+    }
 
+    fun register(name: String, email: String, phone	: String, password: String, verify_password: String){
+        viewModelScope.launch {
+            _registerState.value = RegisterState.Loading
+            try {
+                val response = authRepository.register(name, email, phone, password, verify_password)
+                if (response.isSuccessful) {
+                    Log.d("Register", "Register success")
+                    _registerState.value = RegisterState.Success(message = "Register success")
+                } else {
+                    Log.d("Register", "Register failed: ${response}")
+                    _registerState.value = RegisterState.Error("Register failed: ${response.message()}")
+                }
+
+            } catch (e: HttpException) {
+                _registerState.value = RegisterState.Error("Network error: ${e.message()}")
+            }
 
         }
     }
@@ -55,5 +76,12 @@ sealed class LoginState {
     object Loading : LoginState()
     data class Success(val token: String) : LoginState()
     data class Error(val message: String) : LoginState()
+}
+
+sealed class RegisterState {
+    object Idle: RegisterState()
+    object Loading: RegisterState()
+    data class Success(val message: String) : RegisterState()
+    data class Error(val message: String) : RegisterState()
 }
 
