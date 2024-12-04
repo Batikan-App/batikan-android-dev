@@ -169,8 +169,7 @@ fun LoginScreen(
         ) {
             Button(
                 onClick = {
-                    if (isFormValid) { viewModel.login(email, password) }
-                          },
+                    if (isFormValid) { viewModel.login(email, password) } },
                 colors = ButtonDefaults.buttonColors(containerColor = if(isFormValid) Primary600 else Color(0xFF98A2B3)),
                 modifier = Modifier
                     .size(width = 330.dp, 50.dp)

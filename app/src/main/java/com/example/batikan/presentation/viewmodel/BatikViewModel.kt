@@ -71,6 +71,7 @@
                 _scanResultState.value = ScanResultState.Loading
 
                 try {
+
                     val resultScan = batikRepository(imageFile = imageFile)
                     Log.d("BatikViewModelScan", "Scan success: $resultScan")
 
