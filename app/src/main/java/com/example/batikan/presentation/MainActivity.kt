@@ -1,8 +1,10 @@
 package com.example.batikan.presentation
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,9 +26,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.batikan.R
 import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.presentation.ui.composables.Product
+import com.example.batikan.presentation.ui.helpers.resizeImageFile
 import com.example.batikan.presentation.ui.screens.BatikanWelcomeScreen
 import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
@@ -43,24 +52,43 @@ import com.example.batikan.presentation.ui.screens.TrackingContent
 import com.example.batikan.presentation.ui.screens.UpdateProfileContent
 import com.example.batikan.presentation.ui.screens.on_boarding_screen.OnboardingScreen
 import com.example.batikan.presentation.ui.theme.BatikanTheme
-import com.example.batikan.presentation.ui.theme.DisplayLgBold
-import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var dataStoreManager: DataStoreManager
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             BatikanTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "logo_screen") {
 
+                val tokenState = remember { mutableStateOf<String?>(null) }
+
+                // Ambil token saat komponen pertama kali dibuat
+                LaunchedEffect(Unit) {
+                    tokenState.value = dataStoreManager.getToken()
+                }
+
+                // Tentukan startDestination berdasarkan token
+                val startDestination = if (tokenState.value.isNullOrEmpty()) {
+                    "logo_screen"
+                } else {
+                    "home_screen"
+                }
+
+                NavHost(navController = navController,
+                    startDestination = startDestination
+                ) {
                     composable(route = "logo_screen"){
                         LogoAnimationScreenContent( navController =  navController)
                     }
@@ -123,7 +151,9 @@ class MainActivity : ComponentActivity() {
                         LaunchedEffect(photoUri) {
                             photoUri?.let {
                                 val imageFile = File(Uri.parse(it).path ?: "")
-                                batikViewModel.scanBatik(imageFile)
+                                val resizedimageFile = resizeImageFile(imageFile)
+
+                                batikViewModel.scanBatik(resizedimageFile)
                             }
                         }
 

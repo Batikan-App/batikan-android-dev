@@ -14,13 +14,18 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BottomNavBar
@@ -28,14 +33,19 @@ import com.example.batikan.presentation.ui.composables.ButtonWithIcon
 import com.example.batikan.presentation.ui.composables.ProfileCard
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
+import com.example.batikan.presentation.viewmodel.AuthViewModel
+import com.example.batikan.presentation.viewmodel.LoginState
+import com.example.batikan.presentation.viewmodel.LogoutState
 
 
 @Composable
 fun ProfileContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-
+    viewModel: AuthViewModel = hiltViewModel(),
     ) {
+    val logoutState by viewModel.logoutState.collectAsState()
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         bottomBar = { BottomNavBar(navController = navController) }
@@ -109,7 +119,9 @@ fun ProfileContent(
 
             item {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        viewModel.logout()
+                    },
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
@@ -122,6 +134,17 @@ fun ProfileContent(
                         color = Primary600,
                         style = TextMdSemiBold
                     )
+                }
+                when (logoutState) {
+                    is LogoutState.Loading -> CircularProgressIndicator()
+                    is LogoutState.Success -> {
+                        LaunchedEffect(Unit) {
+                            // Navigate to welcome screen
+                            navController.navigate("welcome_screen")
+                        }
+                    }
+                    is LogoutState.Error -> Text((logoutState as LoginState.Error).message, color = Color.Red)
+                    else -> {}
                 }
 
             }

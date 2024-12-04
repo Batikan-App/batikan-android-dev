@@ -2,6 +2,7 @@ package com.example.batikan.domain.repositories
 
 import com.example.batikan.data.repositories.AuthRepositoryImpl
 import com.example.batikan.data.model.auth.LoginResponse
+import com.example.batikan.data.model.auth.LogoutResponse
 import com.example.batikan.data.model.auth.RegisterResponse
 import retrofit2.Response
 import javax.inject.Inject
@@ -13,5 +14,9 @@ class AuthRepository @Inject constructor(private val authRepository: AuthReposit
 
     suspend fun register(name: String, email: String, phone: String, password: String, verify_password: String): Response<RegisterResponse> {
         return authRepository.register(name, email, phone, password, verify_password)
+    }
+
+    suspend fun logout(): Response<LogoutResponse> {
+        return authRepository.logout()
     }
 }

@@ -19,9 +19,12 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
-    val loginState: StateFlow<LoginState> get() = _loginState
-
+    private val _logoutState = MutableStateFlow<LogoutState>(LogoutState.Idle)
     private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
+
+
+    val loginState: StateFlow<LoginState> get() = _loginState
+    val logoutState: StateFlow<LogoutState> get() = _logoutState
     val registerState: StateFlow<RegisterState> get() = _registerState
 
     fun login(email: String, password: String) {
@@ -49,6 +52,29 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    fun logout() {
+        viewModelScope.launch {
+            _logoutState.value = LogoutState.Loading
+            try {
+                val response = authRepository.logout()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if(body != null) {
+                        dataStoreManager.deleteToken()
+                        Log.d("Logout", "Token deleted")
+                        _logoutState.value = LogoutState.Success(body.message)
+                    } else {
+                        Log.d("Logout", "Token is not found")
+                        _logoutState.value = LogoutState.Error("Token is not found")
+                    }
+                } else {
+                    Log.d("Logout", "Logout failed: ${response.message()}")
+                    _logoutState.value = LogoutState.Error("Logout failed: ${response.message()}")
+                }
+            } catch (e: HttpException) {
+                _logoutState.value = LogoutState.Error("Network error: ${e.message()}")
+            }
 
     fun register(name: String, email: String, phone	: String, password: String, verify_password: String){
         viewModelScope.launch {
@@ -83,5 +109,12 @@ sealed class RegisterState {
     object Loading: RegisterState()
     data class Success(val message: String) : RegisterState()
     data class Error(val message: String) : RegisterState()
+}
+
+sealed class LogoutState {
+    object Idle: LogoutState()
+    object Loading: LogoutState()
+    data class Success(val message: String): LogoutState()
+    data class Error(val message: String): LogoutState()
 }
 

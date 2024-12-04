@@ -2,6 +2,7 @@ package com.example.batikan.data.datasource.local
 
 import android.content.Context
 import android.util.Log
+import androidx.core.content.contentValuesOf
 import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -32,12 +33,18 @@ class DataStoreManager(private val context: Context) {
         return preferences[TOKEN_KEY] ?: ""  // Kembalikan token atau string kosong jika tidak ditemukan
     }
 
-//    fun getToken(): Flow<String?> {
-//        return context.dataStore.data.map { preferences ->
-//            preferences[TOKEN_KEY]
-//        }
-//    }
+    // Alternatif jika ingin Flow-based
+    fun getTokenFlow(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[TOKEN_KEY]
+        }
+    }
 
+    suspend fun deleteToken() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(TOKEN_KEY)
+        }
+    }
 }
 
 //suspend fun saveToken(context: Context, token: String) {
