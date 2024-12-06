@@ -34,9 +34,11 @@ class AuthViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     val body = response.body()
                     val token = response.body()?.token
+                    val tokenExp = System.currentTimeMillis() + 24 * 60 * 60 * 1000 // 24 jam dari sekarang
                     if (body != null && !token.isNullOrEmpty()) {
-                        dataStoreManager.saveToken(token)
+                        dataStoreManager.saveToken(token, tokenExp)
                         Log.d("Login", "Token saved: $token")
+                        Log.d("Login", "Exp Time: $tokenExp")
                         _loginState.value = LoginState.Success(body.token)
                     } else {
                         Log.d("Login", "Token is null or empty")

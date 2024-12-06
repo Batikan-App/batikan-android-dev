@@ -71,12 +71,20 @@ class MainActivity : ComponentActivity() {
 
             BatikanTheme {
                 val navController = rememberNavController()
-
                 val tokenState = remember { mutableStateOf<String?>(null) }
 
                 // Ambil token saat komponen pertama kali dibuat
                 LaunchedEffect(Unit) {
-                    tokenState.value = dataStoreManager.getToken()
+                    val token = dataStoreManager.getToken()
+                    val tokenExp = dataStoreManager.getTokenExp()
+                    val currentTime = System.currentTimeMillis()
+
+                    if (token.isNotEmpty() && tokenExp != null && currentTime < tokenExp) {
+                        tokenState.value = token
+                    } else {
+                        tokenState.value = null // Token tidak valid
+                        dataStoreManager.deleteToken()
+                    }
                 }
 
                 // Tentukan startDestination berdasarkan token
@@ -163,12 +171,6 @@ class MainActivity : ComponentActivity() {
                         ScanResultContent(
                             photoUri = photoUri,
                             uiState = uiState,
-                            similiarProduct = listOf(
-                                Product(R.drawable.batik_new, "Batik A", "$20"),
-                                Product(R.drawable.batik_new, "Batik B", "$25"),
-                                Product(R.drawable.batik_new, "Batik C", "$30"),
-                                Product(R.drawable.batik_new, "Batik D", "$35")
-                            ),
                             navController = navController,
                         )
                     }

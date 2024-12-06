@@ -36,14 +36,12 @@ class DetailProductScreen : ComponentActivity() {
             BatikanTheme {
                 ProductDetailContent(
                     product = ProductDetail(
-                        imageResource = R.drawable.batik_new,
+                        imageResource = "String",
                         name = "Batik Papua",
                         price = "$20",
-                        productDescription = "Kain batik tulis papua 4x4 m",
                         motifDescription = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
                         stockCount = 10,
                         soldCount = 5,
-                        type = "Kain",
                         origin = "Bandung"
                     ),
                     onAddToCart = {}
@@ -56,14 +54,12 @@ class DetailProductScreen : ComponentActivity() {
 
 
 data class ProductDetail(
-    val imageResource: Int,
+    val imageResource: String,
     val name: String,
     val price: String,
-    val productDescription: String,
     val motifDescription: String,
     val stockCount: Int,
     val soldCount: Int,
-    val type: String,
     val origin: String
 )
 
@@ -90,7 +86,7 @@ fun ProductDetailContent(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item {
-                ProductPreview(imageResource = product.imageResource)
+                ProductPreview(imageResource = R.)
                 ProductNamePrice(
                     name = product.name,
                     price = product.price
@@ -101,15 +97,12 @@ fun ProductDetailContent(
                 ProductStatistic(
                     stock = product.stockCount,
                     sold = product.soldCount,
-                    type = product.type,
                     modifier = Modifier.padding(horizontal = 30.dp)
-
                 )
             }
 
             item {
                 ProductDetail(
-                    productDescription = product.productDescription,
                     motifDescription = product.motifDescription,
                     batikOrigin = product.origin,
                     modifier = Modifier.padding(horizontal = 30.dp)
@@ -128,14 +121,12 @@ fun DetailProductScreenPreview(){
     BatikanTheme {
         ProductDetailContent(
             product = ProductDetail(
-                imageResource = R.drawable.batik_new,
+                imageResource = "String",
                 name = "Batik Papua",
                 price = "$20",
-                productDescription = "Kain batik tulis papua 4x4 m",
                 motifDescription = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
                 stockCount = 10,
                 soldCount = 5,
-                type = "Kain",
                 origin = "Bandung"
             ),
             onAddToCart = {}

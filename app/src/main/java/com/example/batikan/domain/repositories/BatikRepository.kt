@@ -17,4 +17,8 @@ class BatikRepository @Inject constructor(
     suspend operator fun invoke(imageFile: File): Result<BatikScanResponse> {
         return batikRepositoryImpl.scanBatik(imageFile)
     }
+
+    suspend fun getBatikDetail(batikId: String): List<BatikList> {
+        return batikRepositoryImpl.getBatikDetail()
+    }
 }
