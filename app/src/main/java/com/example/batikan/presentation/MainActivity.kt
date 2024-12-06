@@ -126,8 +126,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "home_screen") {
                         HomeScreenContent(
-                            navController,
-                            userName = "John Doe",
+                            navController
                         )
                     }
 
@@ -202,10 +201,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "update_profile_screen"){
                         UpdateProfileContent(
-                            navController = navController,
-                            name = "John Doe",
-                            email = "johnn@batikan.com",
-                            phoneNumber = "081234567890"
+                            navController = navController
                         )
                     }
 

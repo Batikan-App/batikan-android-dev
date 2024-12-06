@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,14 +24,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.Primary50
@@ -39,6 +44,10 @@ import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
+import com.example.batikan.presentation.viewmodel.RegisterState
+import com.example.batikan.presentation.viewmodel.UpdateState
+import com.example.batikan.presentation.viewmodel.UserState
+import com.example.batikan.presentation.viewmodel.UserViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,13 +55,18 @@ import com.example.batikan.presentation.ui.theme.White
 fun UpdateProfileContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    name: String,
-    email: String,
-    phoneNumber: String
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
-    var name by remember { mutableStateOf(name)}
-    var email by remember { mutableStateOf(email)}
-    var phoneNumber by remember { mutableStateOf(phoneNumber)}
+    var name by remember { mutableStateOf("")}
+    var email by remember { mutableStateOf("")}
+    var phoneNumber by remember { mutableStateOf("")}
+
+    val profileState by userViewModel.userState.collectAsState()
+    val updateState by userViewModel.updateState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        userViewModel.fetchUserProfile()
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -79,6 +93,21 @@ fun UpdateProfileContent(
             )
         },
         bottomBar = {
+            when (updateState) {
+                is UpdateState.Loading -> CircularProgressIndicator()
+                is UpdateState.Success -> {
+                    LaunchedEffect(Unit) {
+                        // Navigate to profile
+                        navController.navigate("profile_screen") {
+                            popUpTo("update_profile_screen") {
+                                inclusive = true
+                            }
+                        }
+                    }
+                }
+                is UpdateState.Error -> Text((updateState as RegisterState.Error).message, color = Color.Red)
+                else -> {}
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,9 +117,8 @@ fun UpdateProfileContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
 
                 ) {
-
                 Button(
-                    onClick = { },
+                    onClick = { userViewModel.updateProfile(name, email, phoneNumber) },
                     modifier = modifier
                         .fillMaxWidth()
                         .height(40.dp),
@@ -108,6 +136,31 @@ fun UpdateProfileContent(
             }
         }
     ) { innerPadding ->
+        when (profileState) {
+            is UserState.Loading -> {
+                CircularProgressIndicator()
+
+            }
+            is UserState.Success -> {
+                val user = (profileState as UserState.Success).data
+                name = user.name
+                email = user.email
+                phoneNumber = user.phone
+            }
+            is UserState.Error -> {
+                Text(
+                    text = (profileState as UserState.Error).message,
+                    color = Color.Red,
+                    style = TextMdSemiBold
+                )
+            }
+            else -> {
+                Text(
+                    text = "Data profil belum dimuat",
+                    style = TextMdSemiBold
+                )
+            }
+        }
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
