@@ -59,18 +59,18 @@
             }
         }
 
-        fun fetchBatikDetail(batikId: String) {
-            viewModelScope.launch {
-                Log.d("BatikDetail", "Fetching batik detail data ...")
-                _batikDetailState.value = BatikDetailState.Loading
-
-                try {
-                    val batikDetailItem = batikRepository.getBatikDetail(batikId)
-
-                    val mappedBatikDetail =
-                }
-            }
-        }
+//        fun fetchBatikDetail(batikId: String) {
+//            viewModelScope.launch {
+//                Log.d("BatikDetail", "Fetching batik detail data ...")
+//                _batikDetailState.value = BatikDetailState.Loading
+//
+//                try {
+//                    val batikDetailItem = batikRepository.getBatikDetail(batikId)
+//
+//                    val mappedBatikDetail =
+//                }
+//            }
+//        }
 
         // TODO: di sini img dari data class Product masih integer, jadi agak rancu typing datanya
         // tipe data img dari model data di data layer juga harus diubah ke List<String> biar bisa muncul,
