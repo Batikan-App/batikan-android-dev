@@ -24,7 +24,7 @@ import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.CheckoutButton
 import com.example.batikan.presentation.ui.composables.ProductDetail
 import com.example.batikan.presentation.ui.composables.ProductNamePrice
-import com.example.batikan.presentation.ui.composables.ProductPreview
+//import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 
@@ -86,7 +86,7 @@ fun ProductDetailContent(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item {
-                ProductPreview(imageResource = R.)
+//                ProductPreview(imageResource = R.)
                 ProductNamePrice(
                     name = product.name,
                     price = product.price
