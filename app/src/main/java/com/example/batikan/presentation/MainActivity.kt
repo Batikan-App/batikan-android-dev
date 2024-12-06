@@ -208,21 +208,7 @@ class MainActivity : ComponentActivity() {
                     composable(route = "tracking_screen"){
                         TrackingContent(
                             navController = navController,
-                            modifier = Modifier,
-                            shippingItems = listOf(
-                                Shipping(
-                                    ImageResource = R.drawable.batik_new,
-                                    title = "Batik Pekalongan",
-                                    status = "Dikirim",
-                                    number = "1234567890"
-                                ),
-                                Shipping(
-                                    ImageResource = R.drawable.batik_new,
-                                    title = "Batik Papua",
-                                    status = "Sampai",
-                                    number = "23133213232133"
-                                )
-                            )
+                            modifier = Modifier
                         )
                     }
                 }

@@ -1,5 +1,6 @@
 package com.example.batikan.domain.repositories
 
+import com.example.batikan.data.model.order.OrderResponse
 import com.example.batikan.data.model.user.UpdateProfileResponse
 import com.example.batikan.data.model.user.User
 import com.example.batikan.data.repositories.UserRepositoryImpl
@@ -15,5 +16,9 @@ class UserRepository @Inject constructor(
 
     suspend fun updateProfile(name: String, email: String, phone: String): Response<UpdateProfileResponse> {
         return userRepositoryImpl.updateProfile(name, email, phone)
+    }
+
+    suspend fun getUserOrders(): OrderResponse {
+        return userRepositoryImpl.getUserOrders()
     }
 }

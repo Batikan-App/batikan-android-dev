@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.batikan.data.model.batik_product.BatikList
+import com.example.batikan.data.model.order.Orders
 import com.example.batikan.data.model.user.User
 import com.example.batikan.domain.repositories.UserRepository
 import com.example.batikan.presentation.viewmodel.BatikState
@@ -12,17 +13,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Idle)
+    private val _orderState = MutableStateFlow<OrderState>(OrderState.Idle)
 
     val userState: StateFlow<UserState> get() = _userState
     val updateState: StateFlow<UpdateState> get() = _updateState
+    val orderState: StateFlow<OrderState> get() = _orderState
 
 
     fun fetchUserProfile() {
@@ -64,6 +68,39 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+
+    fun getUserOrders() {
+        viewModelScope.launch {
+            _orderState.value = OrderState.Loading
+            Log.d("UserViewModel Order", "Fetching user orders...")
+            try {
+                val response = userRepository.getUserOrders()
+                if (response.status == "success") {
+                    Log.d("UserViewModel Order", "API Response: Orders fetched successfully")
+                    Log.d("UserViewModel Order", "API Response: $response")
+                    val orders = response.data?.order
+                    if (response.data?.order == null) {
+                        Log.d("UserViewModel Order", "Null, Response Data: $orders")
+                        _orderState.value = OrderState.Empty
+                    } else {
+                        Log.d("UserViewModel Order", "Exists, Response Data: ${response.data?.order}")
+                        _orderState.value = OrderState.Success(orders)
+                    }
+                } else {
+                    Log.d("UserViewModel Order", "API Response: Failed to fetch orders or data is null")
+                    _orderState.value = OrderState.Error("Failed to fetch orders or data is null")
+                }
+            } catch (e: HttpException) {
+                _orderState.value = OrderState.Error("Network error: ${e.message()}")
+            } catch (e: IOException) {
+                Log.e("UserViewModel Order", "Network error: Please check your connection")
+                _orderState.value = OrderState.Error("Network error: Please check your connection")
+            } catch (e: Exception) {
+                Log.e("UserViewModel Order", "Unexpected error: ${e.localizedMessage}")
+                _orderState.value = OrderState.Error("Unexpected error: ${e.localizedMessage}")
+            }
+        }
+    }
 }
 
 
@@ -79,4 +116,12 @@ sealed class UpdateState {
     object Loading : UpdateState()
     data class Success(val message: String) : UpdateState()
     data class Error(val message: String) : UpdateState()
+}
+
+sealed class OrderState {
+    object Idle : OrderState()
+    object Loading : OrderState()
+    data class Success(val orders: List<Orders>?) : OrderState()
+    data class Error(val message: String) : OrderState()
+    object Empty : OrderState()
 }
