@@ -227,25 +227,25 @@ fun ProductNamePrice(
 }
 
 
-@Composable
-fun ProductPreview(
-    modifier: Modifier = Modifier,
-    imageResource: String
-){
-    Column (
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Image(
-            painter = painterResource(id = ""),
-            contentDescription = null,
-            modifier = Modifier
-                .height(425.dp)
-                .fillMaxWidth(),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
+//@Composable
+//fun ProductPreview(
+//    modifier: Modifier = Modifier,
+//    imageResource: String
+//){
+//    Column (
+//        modifier = modifier
+//            .fillMaxWidth()
+//    ) {
+//        Image(
+//            painter = painterResource(),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .height(425.dp)
+//                .fillMaxWidth(),
+//            contentScale = ContentScale.Crop
+//        )
+//    }
+//}
 
 
 @Composable
@@ -327,7 +327,7 @@ fun ProductDetail(
     ) {
         InfoSection(
             title = "Deskripsi Produk",
-            description = productDescription
+            description = "productDescription"
         )
         Spacer(Modifier.height(20.dp))
         InfoSection(

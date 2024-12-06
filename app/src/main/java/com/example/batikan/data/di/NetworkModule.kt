@@ -5,10 +5,13 @@ import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.data.datasource.remote.AuthApiService
 import com.example.batikan.data.datasource.remote.AuthInterceptor
 import com.example.batikan.data.datasource.remote.BatikApiService
+import com.example.batikan.data.datasource.remote.UserApiService
 import com.example.batikan.data.repositories.AuthRepositoryImpl
 import com.example.batikan.data.repositories.BatikRepositoryImpl
+import com.example.batikan.data.repositories.UserRepositoryImpl
 import com.example.batikan.domain.repositories.AuthRepository
 import com.example.batikan.domain.repositories.BatikRepository
+import com.example.batikan.domain.repositories.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -96,6 +99,28 @@ object NetworkModule {
     fun provideBatikRepository(repository: BatikRepositoryImpl): BatikRepository {
         return BatikRepository(repository)
     }
+
+    /**
+     * Untuk build User
+     */
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService = retrofit.create(
+        UserApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserRepositoryImpl(apiService: UserApiService): UserRepositoryImpl {
+        return UserRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(repository: UserRepositoryImpl): UserRepository {
+        return UserRepository(repository)
+    }
+
+
 
     /**
      * Untuk build DataStore

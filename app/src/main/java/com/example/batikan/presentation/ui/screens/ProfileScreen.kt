@@ -36,15 +36,23 @@ import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.viewmodel.AuthViewModel
 import com.example.batikan.presentation.viewmodel.LoginState
 import com.example.batikan.presentation.viewmodel.LogoutState
+import com.example.batikan.presentation.viewmodel.UserState
+import com.example.batikan.presentation.viewmodel.UserViewModel
 
 
 @Composable
 fun ProfileContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel()
     ) {
-    val logoutState by viewModel.logoutState.collectAsState()
+    val logoutState by authViewModel.logoutState.collectAsState()
+    val profileState by userViewModel.userState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        userViewModel.fetchUserProfile() // Fungsi dipanggil di sini
+    }
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -58,13 +66,36 @@ fun ProfileContent(
             verticalArrangement = Arrangement.spacedBy(40.dp)
         ) {
             item {
-                ProfileCard(
-                    imageResource = R.drawable.batik_new,
-                    name = "John doe",
-                    email = "test@batikan.com",
-                    phoneNumber = "+6281247016022",
-                    onActionClick = { navController.navigate("update_profile_screen") }
-                )
+                when (profileState) {
+                    is UserState.Loading -> {
+                        // Menampilkan indikator loading saat data profil dimuat
+                        CircularProgressIndicator()
+                    }
+                    is UserState.Success -> {
+                        val user = (profileState as UserState.Success).data
+                        ProfileCard(
+                            imageResource = R.drawable.batik_new,
+                            name = user.name,
+                            email = user.email,
+                            phoneNumber = user.phone,
+                            onActionClick = { navController.navigate("update_profile_screen") }
+                        )
+                    }
+                    is UserState.Error -> {
+                        // Menampilkan pesan error
+                        Text(
+                            text = (profileState as UserState.Error).message,
+                            color = Color.Red,
+                            style = TextMdSemiBold
+                        )
+                    }
+                    else -> {
+                        Text(
+                            text = "Data profil belum dimuat",
+                            style = TextMdSemiBold
+                        )
+                    }
+                }
             }
 
             item {
@@ -120,7 +151,7 @@ fun ProfileContent(
             item {
                 Button(
                     onClick = {
-                        viewModel.logout()
+                        authViewModel.logout()
                     },
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
