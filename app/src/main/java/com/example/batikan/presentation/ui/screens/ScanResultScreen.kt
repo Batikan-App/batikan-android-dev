@@ -50,7 +50,7 @@ import com.example.batikan.presentation.viewmodel.ScanResultState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanResultContent(
-    similiarProduct: List<Product>,
+//    similarProduct: List<Product>,
 //    result: ScanResult,
     modifier: Modifier = Modifier,
     photoUri: String?,
@@ -135,12 +135,12 @@ fun ScanResultContent(
                     }
 
                     item {
-                        ProductSection(
-                            title = "Produk terkait",
-                            description = "Beli batik",
-                            productList = similiarProduct,
-                            modifier = modifier.padding(start = 30.dp)
-                        )
+//                        ProductSection(
+//                            title = "Produk terkait",
+//                            description = "Beli batik",
+////                            productList = similarProduct,
+//                            modifier = modifier.padding(start = 30.dp)
+//                        )
                     }
                 }
             }

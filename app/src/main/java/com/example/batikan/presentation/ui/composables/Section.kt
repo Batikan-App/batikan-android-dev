@@ -230,14 +230,14 @@ fun ProductNamePrice(
 @Composable
 fun ProductPreview(
     modifier: Modifier = Modifier,
-    imageResource: Int
+    imageResource: String
 ){
     Column (
         modifier = modifier
             .fillMaxWidth()
     ) {
         Image(
-            painter = painterResource(id = imageResource),
+            painter = painterResource(id = ""),
             contentDescription = null,
             modifier = Modifier
                 .height(425.dp)
@@ -253,7 +253,6 @@ fun ProductStatistic(
     modifier: Modifier = Modifier,
     sold: Int,
     stock: Int,
-    type: String
 ){
     Row(
         modifier = modifier
@@ -290,14 +289,6 @@ fun ProductStatistic(
         )
 
         Spacer(Modifier.weight(1f))
-
-
-        Text(
-            text = type,
-            style = TextSmallRegular,
-            color = TextSecondary
-        )
-
     }
 }
 
@@ -327,7 +318,6 @@ fun InfoSection(
 @Composable
 fun ProductDetail(
     modifier: Modifier = Modifier,
-    productDescription: String,
     motifDescription: String,
     batikOrigin : String
 

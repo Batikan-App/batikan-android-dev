@@ -1,5 +1,6 @@
 package com.example.batikan.data.datasource.remote
 
+import com.example.batikan.data.model.batik_product.BatikDetailsResponse
 import com.example.batikan.data.model.batik_product.BatikResponse
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
 import okhttp3.MultipartBody
@@ -10,6 +11,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface BatikApiService {
     @GET("api/batik")
@@ -22,4 +24,9 @@ interface BatikApiService {
     suspend fun scanBatik(
         @Part image: MultipartBody.Part
     ): Response<BatikScanResponse>
+
+    @GET("api/batik/{id}")
+    suspend fun getBatikDetail(
+        @Path("id") id: String
+    ): Response<BatikDetailsResponse>
 }

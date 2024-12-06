@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.batikan.presentation.ui.theme.Secondary500
 import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextXsRegular
@@ -26,7 +27,7 @@ import com.example.batikan.presentation.ui.theme.White
 
 
 data class Product(
-    val imageResource: Int,
+    val imageResource: String,
     val title: String,
     val price: String
 )
@@ -34,7 +35,7 @@ data class Product(
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
-    imageResource: Int,
+    imageResource: String,
     title: String,
     price: String
 ){
@@ -46,8 +47,8 @@ fun ProductCard(
         Column (
             modifier = modifier
         ) {
-            Image(
-                painter = painterResource(id = imageResource),
+            AsyncImage(
+                model = imageResource,
                 contentDescription = "Product Image",
                 modifier = Modifier
                     .fillMaxWidth()

@@ -26,6 +26,15 @@ class BatikRepositoryImpl @Inject constructor(
         }
     }
 
+    suspend fun getBatikDetail(batikId: String): List<BatikList> {
+        val response = apiService.getBatikDetail(id = batikId)
+        if (response.isSuccessful) {
+            return response.body()?.data ?: emptyList()
+        } else {
+            throw Exception("Error: ${response.message()}")
+        }
+    }
+
     suspend fun scanBatik(imageFile: File): Result<BatikScanResponse> {
         return try {
 
