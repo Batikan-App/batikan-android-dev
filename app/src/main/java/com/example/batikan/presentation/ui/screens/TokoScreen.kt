@@ -31,6 +31,8 @@ import com.example.batikan.presentation.ui.composables.FilterChipGroup
 import com.example.batikan.presentation.ui.composables.PageTitle
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.composables.ProductCardList
+import com.example.batikan.presentation.ui.composables.ProductOriginList
+import com.example.batikan.presentation.ui.composables.ProductSection
 //import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.composables.SectionTitle
@@ -44,6 +46,8 @@ fun TokoContent(
 //    originProduct: List<Product>,
     viewModel: BatikViewModel = hiltViewModel()
 ){
+    val productOriginList by viewModel.productOriginList.collectAsState()
+    var selectedOrigin by remember { mutableStateOf("") }
     val productList by viewModel.productList.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -85,12 +89,13 @@ fun TokoContent(
             }
 
             item {
-//                ProductSection(
-//                    title = "Produk keren hari ini",
-//                    description = "Tentukan pilihan batikmu!",
-//                    productList = productList, // TODO: Implement fetch featured product
-//                    modifier = Modifier.padding(start = 30.dp)
-//                )
+                ProductSection(
+                    title = "Produk keren hari ini",
+                    description = "Tentukan pilihan batikmu!",
+                    productList = productList,
+                    modifier = Modifier.padding(start = 30.dp),
+                    navController = navController
+                )
             }
 
             item {
@@ -103,46 +108,35 @@ fun TokoContent(
                 BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = navController)
             }
 
-            item () {
+            item {
                 SectionTitle(
                     title = "Batik daerah",
                     description = "Temukan batik dari seluruh daerah disini",
                     modifier = Modifier.padding(start = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                FilterChipGroup(
-                    items = listOf("Semua", "Yogyakarta", "Pekalongan", "Surakarta"),
-                    onSelectedChanged = {},
-                    modifier = Modifier.padding(start = 30.dp)
 
+                FilterChipGroup(
+                    // TODO: masih hardcoded, kalau bisa fetch dari origin
+                    items = listOf("Yogyakarta", "Pontianak", "Cirebon", "Jakarta", "Solo"),
+                    onSelectedChanged = { selected ->
+                        selectedOrigin = selected
+                        viewModel.fetchBatikByOrigin(selected)
+                    },
+                    modifier = Modifier.padding(start = 30.dp)
                 )
+
                 Spacer(Modifier.height(8.dp))
-//                ProductCardList(
-//                    productList = productList, // TODO: implement fetch produk berdasarkan daerah
-//                    modifier = Modifier.padding(start = 30.dp),
-//                )
+
+                ProductOriginList(
+                    productOriginList = productOriginList,
+                    modifier = Modifier.padding(start = 30.dp),
+                    onProductClick = { batikId ->
+                        navController.navigate("detail_product_screen/$batikId")
+                    }
+                )
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun TokoScreenPreview() {
-//    BatikanTheme {
-//        TokoContent(
-//            featuredProducts = listOf(
-//                Product(R.drawable.batik_new, "Batik A", "$20"),
-//                Product(R.drawable.batik_new, "Batik B", "$25"),
-//                Product(R.drawable.batik_new, "Batik C", "$30"),
-//                Product(R.drawable.batik_new, "Batik D", "$35")
-//            ),
-//            originProduct = listOf(
-//                Product(R.drawable.batik_new, "Batik A", "$20"),
-//                Product(R.drawable.batik_new, "Batik B", "$25"),
-//                Product(R.drawable.batik_new, "Batik C", "$30"),
-//                Product(R.drawable.batik_new, "Batik D", "$35")
-//            )
-//        )
-//    }
-//}

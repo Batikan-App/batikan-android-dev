@@ -30,7 +30,7 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
             try {
-                val response = authRepository(email, password)
+                val response = authRepository.login(email, password)
                 if (response.isSuccessful) {
                     val body = response.body()
                     val token = response.body()?.token
