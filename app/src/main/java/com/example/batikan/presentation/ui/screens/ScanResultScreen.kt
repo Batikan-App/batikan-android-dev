@@ -32,7 +32,8 @@ import com.example.batikan.presentation.ui.composables.AboutBatik
 import com.example.batikan.presentation.ui.composables.CardScanResult
 import com.example.batikan.presentation.ui.composables.PageTitle
 import com.example.batikan.presentation.ui.composables.Product
-import com.example.batikan.presentation.ui.composables.ProductSection
+import com.example.batikan.presentation.ui.composables.ProductCardList
+//import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.composables.VisualTryOnCard
 import com.example.batikan.presentation.ui.theme.BatikanTheme
@@ -41,11 +42,11 @@ import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 import com.example.batikan.presentation.viewmodel.ScanResultState
 
-//data class ScanResult(
-//    val name: String,
-//    val aboutMotif: String,
-//    val origin: String
-//)
+data class ScanResult(
+    val name: String,
+    val aboutMotif: String,
+    val origin: String
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +55,7 @@ fun ScanResultContent(
 //    result: ScanResult,
     modifier: Modifier = Modifier,
     photoUri: String?,
+    viewModel: BatikViewModel = hiltViewModel(),
     uiState: ScanResultState,
     navController: NavController
 ) {
@@ -135,6 +137,7 @@ fun ScanResultContent(
                     }
 
                     item {
+//                        ProductCardList(productList = simi, onProductClick = onProductClick)
 //                        ProductSection(
 //                            title = "Produk terkait",
 //                            description = "Beli batik",

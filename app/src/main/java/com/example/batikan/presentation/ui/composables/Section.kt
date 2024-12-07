@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.DisplayXsSemiBold
 import com.example.batikan.presentation.ui.theme.Gray400
@@ -226,25 +227,25 @@ fun ProductNamePrice(
 }
 
 
-//@Composable
-//fun ProductPreview(
-//    modifier: Modifier = Modifier,
-//    imageResource: String
-//){
-//    Column (
-//        modifier = modifier
-//            .fillMaxWidth()
-//    ) {
-//        Image(
-//            painter = painterResource(id = ""),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .height(425.dp)
-//                .fillMaxWidth(),
-//            contentScale = ContentScale.Crop
-//        )
-//    }
-//}
+@Composable
+fun ProductPreview(
+    modifier: Modifier = Modifier,
+    imageResource: String
+){
+    Column (
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        AsyncImage(
+            model = imageResource,
+            contentDescription = null,
+            modifier = Modifier
+                .height(425.dp)
+                .fillMaxWidth(),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
 
 
 @Composable
@@ -252,10 +253,12 @@ fun ProductStatistic(
     modifier: Modifier = Modifier,
     sold: Int,
     stock: Int,
+    type: String,
 ){
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(top = 20.dp)
     ){
         Text(
             text = "Terjual ${sold} ",
@@ -288,6 +291,12 @@ fun ProductStatistic(
         )
 
         Spacer(Modifier.weight(1f))
+
+        Text(
+            text = type,
+            style = TextSmallRegular,
+            color = TextSecondary
+        )
     }
 }
 
@@ -324,10 +333,6 @@ fun ProductDetail(
     Column (
         modifier = modifier
     ) {
-        InfoSection(
-            title = "Deskripsi Produk",
-            description = "productDescription"
-        )
         Spacer(Modifier.height(20.dp))
         InfoSection(
             title = "Tentang Motif",

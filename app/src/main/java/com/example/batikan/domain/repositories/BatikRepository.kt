@@ -1,6 +1,7 @@
 package com.example.batikan.domain.repositories
 
 import android.media.Image
+import com.example.batikan.data.model.batik_product.BatikDetailsResponse
 import com.example.batikan.data.model.batik_product.BatikList
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
 import com.example.batikan.data.repositories.BatikRepositoryImpl
@@ -18,7 +19,7 @@ class BatikRepository @Inject constructor(
         return batikRepositoryImpl.scanBatik(imageFile)
     }
 
-    suspend fun getBatikDetail(batikId: String): List<BatikList> {
+    suspend fun getBatikDetail(batikId: String): Result<BatikDetailsResponse> {
         return batikRepositoryImpl.getBatikDetail(batikId)
     }
 }

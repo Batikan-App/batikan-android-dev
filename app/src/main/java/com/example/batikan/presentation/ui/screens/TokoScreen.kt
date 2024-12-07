@@ -31,7 +31,7 @@ import com.example.batikan.presentation.ui.composables.FilterChipGroup
 import com.example.batikan.presentation.ui.composables.PageTitle
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.composables.ProductCardList
-import com.example.batikan.presentation.ui.composables.ProductSection
+//import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
@@ -85,12 +85,12 @@ fun TokoContent(
             }
 
             item {
-                ProductSection(
-                    title = "Produk keren hari ini",
-                    description = "Tentukan pilihan batikmu!",
-                    productList = productList, // TODO: Implement fetch featured product
-                    modifier = Modifier.padding(start = 30.dp)
-                )
+//                ProductSection(
+//                    title = "Produk keren hari ini",
+//                    description = "Tentukan pilihan batikmu!",
+//                    productList = productList, // TODO: Implement fetch featured product
+//                    modifier = Modifier.padding(start = 30.dp)
+//                )
             }
 
             item {
@@ -117,15 +117,12 @@ fun TokoContent(
 
                 )
                 Spacer(Modifier.height(8.dp))
-                ProductCardList(
-                    productList = productList, // TODO: implement fetch produk berdasarkan daerah
-                    modifier = Modifier.padding(start = 30.dp),
-                    selectedProduct = {}
-                )
+//                ProductCardList(
+//                    productList = productList, // TODO: implement fetch produk berdasarkan daerah
+//                    modifier = Modifier.padding(start = 30.dp),
+//                )
             }
         }
-
-
     }
 }
 
