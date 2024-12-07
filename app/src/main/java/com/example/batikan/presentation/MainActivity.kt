@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ import com.example.batikan.presentation.ui.screens.LogoAnimationScreenContent
 import com.example.batikan.presentation.ui.screens.PhotoResultScreen
 import com.example.batikan.presentation.ui.screens.PhotoResultScreen
 import com.example.batikan.presentation.ui.screens.LogoAnimationScreenContent
+import com.example.batikan.presentation.ui.screens.ProductDetailScreen
 import com.example.batikan.presentation.ui.screens.ProfileContent
 import com.example.batikan.presentation.ui.screens.RegisterScreen
 import com.example.batikan.presentation.ui.screens.ScanResultContent
@@ -126,15 +128,29 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "home_screen") {
                         HomeScreenContent(
-                            navController
+                            navController = navController,
+                            onProductClick = { batikId ->
+                                navController.navigate("detail_product_screen/$batikId")
+                            }
                         )
                     }
 
                     composable(
-                        route = "detail_product_screen?batikId={batikId}",
+                        route = "detail_product_screen/{batikId}",
                         arguments = listOf(navArgument("batikId") { type = NavType.StringType})
                     ) { backStackEntry ->
                         val batikId = backStackEntry.arguments?.getString("batikId")
+
+                        val viewModel: BatikViewModel = hiltViewModel()
+
+                        val productDetailList by viewModel.productDetailList.collectAsState()
+
+                        if (batikId != null) {
+                            ProductDetailScreen(
+                                productDetailList,
+                                productId = batikId
+                            )
+                        }
                     }
 
                     composable(route = "camera_screen") {

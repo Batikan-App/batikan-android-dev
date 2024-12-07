@@ -42,11 +42,11 @@ import com.example.batikan.presentation.viewmodel.UserViewModel
 fun HomeScreenContent(
     navController: NavController,
     viewModel: BatikViewModel = hiltViewModel(),
-    userViewModel: UserViewModel = hiltViewModel()
+    userViewModel: UserViewModel = hiltViewModel(),
+    onProductClick: (String) -> Unit
 ){
     val productList by viewModel.productList.collectAsState()
     val profileState by userViewModel.userState.collectAsState()
-    val productDetailList by viewModel.productDetailList.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchBatik()
@@ -124,25 +124,8 @@ fun HomeScreenContent(
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                ProductCardList(productList = productList, selectedProduct = {})
+                ProductCardList(productList = productList, onProductClick = onProductClick)
             }
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeScreenPreview() {
-//    BatikanTheme {
-//        HomeScreenContent(
-//            navController = ,
-//            userName = "John Doe",
-//            products = listOf(
-//                Product(R.drawable.batik_new, "Batik A", "$20"),
-//                Product(R.drawable.batik_new, "Batik B", "$25"),
-//                Product(R.drawable.batik_new, "Batik C", "$30"),
-//                Product(R.drawable.batik_new, "Batik D", "$35")
-//            )
-//        )
-//    }
-//}

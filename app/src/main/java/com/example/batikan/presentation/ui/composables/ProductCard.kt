@@ -28,21 +28,47 @@ import com.example.batikan.presentation.ui.theme.White
 
 
 data class Product(
+    val id: String,
     val imageResource: String,
     val title: String,
     val price: String
 )
 
 @Composable
+fun ProductCardList(
+    productList: List<Product>,
+    onProductClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+
+    LazyRow(
+        modifier = modifier
+            .fillMaxWidth()
+    ){
+        items(productList) { product ->
+            ProductCard(
+                imageResource = product.imageResource,
+                title = product.title,
+                price = product.price,
+                onClick = { onProductClick(product.id) }
+            )
+            Spacer(Modifier.width(20.dp))
+        }
+    }
+}
+
+@Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
     imageResource: String,
     title: String,
-    price: String
+    price: String,
+    onClick: () -> Unit
 ){
     Card (
         modifier = modifier
-            .width(140.dp),
+            .width(140.dp)
+            .clickable { onClick() },
         shape = RectangleShape,
     ){
         Column (
@@ -77,47 +103,5 @@ fun ProductCard(
                 )
             }
         }
-
-    }
-}
-
-@Composable
-fun ProductCardList(
-    productList: List<Product>,
-    onActionClick: (() -> Unit)? = null,
-    selectedProduct: (Int) -> Unit,
-    modifier: Modifier = Modifier
-){
-    LazyRow(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = {})
-    ){
-        items(productList) { product ->
-            ProductCard(
-                imageResource = product.imageResource,
-                title = product.title,
-                price = product.price,
-            )
-            Spacer(Modifier.width(20.dp))
-        }
-    }
-}
-
-@Composable
-fun ProductSection(
-    title: String,
-    description: String,
-    productList: List<Product>,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        SectionTitle(title = title, description = description)
-        Spacer(Modifier.height(8.dp))
-        ProductCardList(
-            productList = productList, selectedProduct = {}
-        )
     }
 }

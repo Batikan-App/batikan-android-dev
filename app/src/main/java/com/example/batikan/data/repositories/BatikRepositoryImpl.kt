@@ -2,6 +2,7 @@ package com.example.batikan.data.repositories
 
 import android.util.Log
 import com.example.batikan.data.datasource.remote.BatikApiService
+import com.example.batikan.data.model.batik_product.BatikDetailsResponse
 import com.example.batikan.data.model.batik_product.BatikList
 import com.example.batikan.data.model.batik_product.BatikResponse
 import com.example.batikan.data.model.batik_scan.BatikScanData
@@ -26,12 +27,28 @@ class BatikRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun getBatikDetail(batikId: String): List<BatikList> {
-        val response = apiService.getBatikDetail(id = batikId)
-        if (response.isSuccessful) {
-            return response.body()?.data ?: emptyList()
-        } else {
-            throw Exception("Error: ${response.message()}")
+    suspend fun getBatikDetail(batikId: String): Result<BatikDetailsResponse> {
+        return try {
+            val response = apiService.getBatikDetail(id = batikId)
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    Result.success(body)
+                } else {
+                    val errorMessage = "Response body is null"
+                    Log.e("BatikRepository", errorMessage)
+                    Result.failure(Exception(errorMessage))
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val errorMessage = "Error: ${response.code()} - ${response.message()} | $errorBody"
+                Log.e("BatikRepository", errorMessage)
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            Log.e("BatikRepository", "Exception: ${e.message}", e)
+            Result.failure(e)
         }
     }
 

@@ -1,59 +1,30 @@
 package com.example.batikan.presentation.ui.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.batikan.R
-import com.example.batikan.presentation.ui.composables.CheckoutButton
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.example.batikan.data.model.batik_product.BatikList
+//import com.example.batikan.presentation.ui.composables.CheckoutButton
 import com.example.batikan.presentation.ui.composables.ProductDetail
 import com.example.batikan.presentation.ui.composables.ProductNamePrice
+import com.example.batikan.presentation.ui.composables.ProductPreview
 //import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
-import com.example.batikan.presentation.ui.theme.BatikanTheme
-
-class DetailProductScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BatikanTheme {
-                ProductDetailContent(
-                    product = ProductDetail(
-                        imageResource = "String",
-                        name = "Batik Papua",
-                        price = "$20",
-                        motifDescription = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
-                        stockCount = 10,
-                        soldCount = 5,
-                        origin = "Bandung"
-                    ),
-                    onAddToCart = {}
-                )
-
-            }
-        }
-    }
-}
-
+import com.example.batikan.presentation.viewmodel.BatikDetailState
+import com.example.batikan.presentation.viewmodel.BatikViewModel
 
 data class ProductDetail(
+    val id: String,
     val imageResource: String,
     val name: String,
     val price: String,
@@ -63,21 +34,25 @@ data class ProductDetail(
     val origin: String
 )
 
-
 @Composable
-fun ProductDetailContent(
-    product: ProductDetail,
-    onAddToCart: () -> Unit,
-    modifier: Modifier = Modifier
+fun ProductDetailScreen(
+    productDetailList: List<ProductDetail>,
+    viewModel: BatikViewModel = hiltViewModel(),
+    productId: String,
+//    onAddToCart: () -> Unit
 ){
+    LaunchedEffect(productId) {
+        viewModel.fetchBatikDetail(productId)
+    }
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
-        bottomBar = {
-            CheckoutButton(
-                product = product,
-                onAddToCart = onAddToCart
-            )
-        }
+//        bottomBar = {
+//            CheckoutButton(
+//                product = List<ProductDetail>,
+//                onAddToCart = onAddToCart
+//            )
+//        }
     ){ innerPadding ->
         LazyColumn (
             modifier = Modifier
@@ -85,23 +60,24 @@ fun ProductDetailContent(
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            item {
-//                ProductPreview(imageResource = R.)
+            items(productDetailList) { product ->
+
+                ProductPreview(
+                    imageResource = product.imageResource
+                )
+
                 ProductNamePrice(
                     name = product.name,
-                    price = product.price
+                    price = product.price,
                 )
-            }
 
-            item {
                 ProductStatistic(
                     stock = product.stockCount,
                     sold = product.soldCount,
+                    type = "Batik",
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
-            }
 
-            item {
                 ProductDetail(
                     motifDescription = product.motifDescription,
                     batikOrigin = product.origin,
@@ -109,28 +85,5 @@ fun ProductDetailContent(
                 )
             }
         }
-
-
     }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DetailProductScreenPreview(){
-    BatikanTheme {
-        ProductDetailContent(
-            product = ProductDetail(
-                imageResource = "String",
-                name = "Batik Papua",
-                price = "$20",
-                motifDescription = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
-                stockCount = 10,
-                soldCount = 5,
-                origin = "Bandung"
-            ),
-            onAddToCart = {}
-        )
-    }
-
 }
