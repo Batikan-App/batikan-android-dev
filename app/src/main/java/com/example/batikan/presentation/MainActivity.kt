@@ -126,8 +126,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "home_screen") {
                         HomeScreenContent(
-                            navController,
-                            userName = "John Doe",
+                            navController
                         )
                     }
 
@@ -202,31 +201,14 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = "update_profile_screen"){
                         UpdateProfileContent(
-                            navController = navController,
-                            name = "John Doe",
-                            email = "johnn@batikan.com",
-                            phoneNumber = "081234567890"
+                            navController = navController
                         )
                     }
 
                     composable(route = "tracking_screen"){
                         TrackingContent(
                             navController = navController,
-                            modifier = Modifier,
-                            shippingItems = listOf(
-                                Shipping(
-                                    ImageResource = R.drawable.batik_new,
-                                    title = "Batik Pekalongan",
-                                    status = "Dikirim",
-                                    number = "1234567890"
-                                ),
-                                Shipping(
-                                    ImageResource = R.drawable.batik_new,
-                                    title = "Batik Papua",
-                                    status = "Sampai",
-                                    number = "23133213232133"
-                                )
-                            )
+                            modifier = Modifier
                         )
                     }
                 }

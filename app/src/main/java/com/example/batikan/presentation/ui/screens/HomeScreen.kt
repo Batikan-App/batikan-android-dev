@@ -11,12 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,18 +33,23 @@ import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.composables.ProductCardList
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
+import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.viewmodel.BatikViewModel
+import com.example.batikan.presentation.viewmodel.UserState
+import com.example.batikan.presentation.viewmodel.UserViewModel
 
 @Composable
 fun HomeScreenContent(
     navController: NavController,
-    userName: String,
-    viewModel: BatikViewModel = hiltViewModel()
+    viewModel: BatikViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel()
 ){
     val productList by viewModel.productList.collectAsState()
+    val profileState by userViewModel.userState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchBatik()
+        userViewModel.fetchUserProfile()
     }
 
     // Debug log
@@ -63,10 +71,32 @@ fun HomeScreenContent(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item {
-                GreetingSection(
-                    userName = userName,
-                    modifier = Modifier.padding(horizontal = 30.dp)
-                )
+                when (profileState) {
+                is UserState.Loading -> {
+                    CircularProgressIndicator()
+
+                }
+                is UserState.Success -> {
+                    val user = (profileState as UserState.Success).data
+                    GreetingSection(
+                        userName = user.name,
+                        modifier = Modifier.padding(horizontal = 30.dp)
+                    )
+                }
+                is UserState.Error -> {
+                    Text(
+                        text = (profileState as UserState.Error).message,
+                        color = Color.Red,
+                        style = TextMdSemiBold
+                    )
+                }
+                else -> {
+                    GreetingSection(
+                        userName = "username",
+                        modifier = Modifier.padding(horizontal = 30.dp)
+                    )
+                }
+                }
             }
 
             item {
