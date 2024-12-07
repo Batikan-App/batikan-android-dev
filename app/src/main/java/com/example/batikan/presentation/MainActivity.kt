@@ -48,6 +48,7 @@ import com.example.batikan.presentation.ui.screens.ProfileContent
 import com.example.batikan.presentation.ui.screens.RegisterScreen
 import com.example.batikan.presentation.ui.screens.ScanResultContent
 import com.example.batikan.presentation.ui.screens.RegisterScreen
+import com.example.batikan.presentation.ui.screens.SearchResultScreen
 import com.example.batikan.presentation.ui.screens.Shipping
 import com.example.batikan.presentation.ui.screens.TokoContent
 import com.example.batikan.presentation.ui.screens.TrackingContent
@@ -221,6 +222,18 @@ class MainActivity : ComponentActivity() {
                         TrackingContent(
                             navController = navController,
                             modifier = Modifier
+                        )
+                    }
+
+                    composable(
+                        route = "search_result_screen/{query}",
+                        arguments = listOf(navArgument("query") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val query = backStackEntry.arguments?.getString("query") ?: ""
+
+                        SearchResultScreen(
+                            navController = navController,
+                            initialQuery = query
                         )
                     }
                 }

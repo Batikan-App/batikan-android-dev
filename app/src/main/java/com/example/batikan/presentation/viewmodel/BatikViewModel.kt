@@ -1,6 +1,8 @@
         package com.example.batikan.presentation.viewmodel
 
         import android.util.Log
+        import androidx.compose.runtime.State
+        import androidx.compose.runtime.mutableStateOf
         import androidx.lifecycle.ViewModel
         import androidx.lifecycle.viewModelScope
         import com.example.batikan.data.model.batik_details.BatikDetailsResponse
@@ -8,6 +10,7 @@
         import com.example.batikan.data.model.batik_product.BatikDetails
         import com.example.batikan.data.model.batik_product.BatikList
         import com.example.batikan.data.model.batik_scan.BatikScanResponse
+        import com.example.batikan.data.model.batik_search.BatikSearchDetails
         import com.example.batikan.domain.repositories.BatikRepository
         import com.example.batikan.presentation.ui.composables.Product
         import com.example.batikan.presentation.ui.screens.ProductDetail
@@ -44,6 +47,61 @@
             // Khusus untuk yang show origin di toko, observenya dari sini
             private val _productOriginList = MutableStateFlow<List<ProductDetail>>(emptyList())
             val productOriginList: StateFlow<List<ProductDetail>> get() = _productOriginList
+
+            private val _searchHistory = MutableStateFlow<List<String>>(emptyList())
+            val searchHistory: StateFlow<List<String>> get() = _searchHistory
+
+            private val _searchResults = MutableStateFlow<List<ProductDetail>>(emptyList())
+            val searchResults: StateFlow<List<ProductDetail>> get() = _searchResults
+
+            private val _batikSearchState = MutableStateFlow<BatikSearchState>(BatikSearchState.Idle)
+            val batikSearchState: StateFlow<BatikSearchState> get() = _batikSearchState
+
+            private fun addSearchHistory(query: String) {
+                _searchHistory.value = listOf(query) + _searchHistory.value.filterNot { it == query }
+                if (_searchHistory.value.size > 5) {
+                    _searchHistory.value = _searchHistory.value.take(5)
+                }
+            }
+
+            fun searchBatik(query: String) {
+                viewModelScope.launch {
+                    try {
+                        val response = batikRepository.searchBatik(query)
+                        val mappedProducts = mapBatikSearch(response)
+                        Log.d("BatikSearch", "Mapped products: $mappedProducts")
+
+
+                        _searchResults.value = mappedProducts
+
+                        Log.d("BatikViewModel", "API Response: ${response.size} items fetched")
+
+
+                        _productOriginList.value = mappedProducts
+                        _batikSearchState.value = BatikSearchState.Success(response)
+
+                    } catch (e: Exception) {
+                        Log.d("BatikViewModel", "Error searching batik: ${e.message}")
+                        _batikSearchState.value = BatikSearchState.Error("Error: ${e.message}")
+                    }
+                }
+                /**
+                 * viewModelScope.launch {
+                 *                     _batikOriginState.value = BatikOriginState.Loading
+                 *                     try {
+                 *                         val response = batikRepository.getBatikOrigin(origin)
+                 *                         val mappedProducts = mapBatikOrigin(response)
+                 *                         Log.d("BatikOrigin", "Mapped products: $mappedProducts")
+                 *
+                 *                         _productOriginList.value = mappedProducts
+                 *                         _batikOriginState.value = BatikOriginState.Success(response)
+                 *                     } catch (e: Exception) {
+                 *                         Log.d("BatikOrigin", "Exception: ${e.message}")
+                 *                         _batikOriginState.value = BatikOriginState.Error("Error : ${e.message}")
+                 *                     }
+                 *                 }
+                 */
+            }
 
             fun fetchBatik() {
                 viewModelScope.launch {
@@ -138,6 +196,22 @@
                         imageResource = imageFile,
                         title = item.data.name,
                         price = "Rp ${item.data.price}" // Format harga
+                    )
+                }
+            }
+
+            private fun mapBatikSearch(batikitems: List<BatikSearchDetails>): List<ProductDetail> {
+                return batikitems.map { item ->
+                    val imageFile = if(item.img.isNotEmpty()) item.img[0] else ""
+                    ProductDetail(
+                        id = item.id,
+                        imageResource = imageFile,
+                        name = item.name,
+                        origin = item.origin,
+                        soldCount = item.sold,
+                        stockCount = item.stock,
+                        price = "Rp.${item.price}",
+                        motifDescription = item.desc
                     )
                 }
             }
@@ -242,9 +316,17 @@
             data class Error(val message: String): BatikOriginState()
         }
 
+        sealed class BatikSearchState {
+            object Idle: BatikSearchState()
+            object Loading: BatikSearchState()
+            data class Success(val data: List<BatikSearchDetails>): BatikSearchState()
+            data class Error(val message: String): BatikSearchState()
+        }
+
         sealed class BatikDetailState {
             object Idle: BatikDetailState()
             object Loading: BatikDetailState()
             data class Success(val batikDetailData: BatikDetailsResponse): BatikDetailState()
             data class Error(val message: String): BatikDetailState()
         }
+

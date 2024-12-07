@@ -4,6 +4,7 @@ import com.example.batikan.data.model.batik_details.BatikDetailsResponse
 import com.example.batikan.data.model.batik_origin.BatikOriginResponse
 import com.example.batikan.data.model.batik_product.BatikResponse
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
+import com.example.batikan.data.model.batik_search.BatikSearchResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.GET
@@ -34,4 +35,9 @@ interface BatikApiService {
     suspend fun getBatikOrigin(
         @Query("q") query: String
     ): Response<BatikOriginResponse>
+
+    @GET("api/batik/search")
+    suspend fun searchBatik(
+        @Query("q") query: String
+    ): Response<BatikSearchResponse>
 }

@@ -7,6 +7,8 @@ import com.example.batikan.data.model.batik_origin.BatikOriginDetails
 import com.example.batikan.data.model.batik_product.BatikDetails
 import com.example.batikan.data.model.batik_product.BatikList
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
+import com.example.batikan.data.model.batik_search.BatikSearchDetails
+import com.example.batikan.data.model.batik_search.BatikSearchResponse
 import com.example.batikan.domain.repositories.BatikRepository
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -86,6 +88,16 @@ class BatikRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.e("BatikRepositoryImpl", "Exception: ${e.message}", e)
             Result.failure(e)
+        }
+    }
+
+    override suspend fun searchBatik(query: String): List<BatikSearchDetails> {
+        val response = apiService.searchBatik(query)
+        if (response.isSuccessful) {
+            return response.body()?.data ?: emptyList()
+        } else {
+            Log.d("BatikSearch", "Error searching: ${response.message()}")
+            throw Exception("Error: ${response.message()}")
         }
     }
 
