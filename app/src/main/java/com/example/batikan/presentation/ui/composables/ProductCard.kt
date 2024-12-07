@@ -91,7 +91,7 @@ fun ProductCardList(
     LazyRow(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = {selectedProduct()})
+            .clickable(onClick = {})
     ){
         items(productList) { product ->
             ProductCard(

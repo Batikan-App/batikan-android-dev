@@ -119,7 +119,8 @@ fun TokoContent(
                 Spacer(Modifier.height(8.dp))
                 ProductCardList(
                     productList = productList, // TODO: implement fetch produk berdasarkan daerah
-                    modifier = Modifier.padding(start = 30.dp)
+                    modifier = Modifier.padding(start = 30.dp),
+                    selectedProduct = {}
                 )
             }
         }
