@@ -194,7 +194,6 @@ fun SectionTitle(
                     )
                 }
             }
-
         }
     }
 }
@@ -237,7 +236,7 @@ fun ProductNamePrice(
 //            .fillMaxWidth()
 //    ) {
 //        Image(
-//            painter = painterResource(),
+//            painter = painterResource(id = ""),
 //            contentDescription = null,
 //            modifier = Modifier
 //                .height(425.dp)

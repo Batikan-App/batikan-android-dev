@@ -59,18 +59,26 @@
             }
         }
 
-//        fun fetchBatikDetail(batikId: String) {
-//            viewModelScope.launch {
-//                Log.d("BatikDetail", "Fetching batik detail data ...")
-//                _batikDetailState.value = BatikDetailState.Loading
-//
-//                try {
-//                    val batikDetailItem = batikRepository.getBatikDetail(batikId)
-//
-//                    val mappedBatikDetail =
-//                }
-//            }
-//        }
+        fun fetchBatikDetail(batikId: String) {
+            viewModelScope.launch {
+                Log.d("BatikDetail", "Fetching batik detail data ...")
+                _batikDetailState.value = BatikDetailState.Loading
+
+                try {
+                    val batikDetailItem = batikRepository.getBatikDetail(batikId)
+
+                    val mappedBatikDetail = mapBatikDetail(batikDetailItem)
+                    Log.d("BatikViewModel", "Mapped Batik Detail: $mappedBatikDetail")
+
+                    _productDetailList.value = mappedBatikDetail
+                    _batikDetailState.value = BatikDetailState.Success(batikDetailItem)
+
+                } catch (e: Exception) {
+                    Log.d("BatikViewModel", "Exception: ${e.message}")
+                    _batikDetailState.value = BatikDetailState.Error("Error: ${e.message}")
+                }
+            }
+        }
 
         // TODO: di sini img dari data class Product masih integer, jadi agak rancu typing datanya
         // tipe data img dari model data di data layer juga harus diubah ke List<String> biar bisa muncul,
@@ -86,11 +94,20 @@
             }
         }
 
-//        private fun mapBatikDetail(batikDetailItem: List<BatikList>): List<ProductDetail> {
-//            return batikDetailItem.map { item ->
-//
-//            }
-//        }
+        private fun mapBatikDetail(batikDetailItem: List<BatikList>): List<ProductDetail> {
+            return batikDetailItem.map { item ->
+                val imageFile = if (item.data.img.isNotEmpty()) item.data.img[0] else ""
+                ProductDetail(
+                    imageResource = imageFile,
+                    name = item.data.name,
+                    origin = item.data.origin,
+                    soldCount = item.data.sold,
+                    stockCount = item.data.stock,
+                    price = "Rp.${item.data.price}",
+                    motifDescription = item.data.desc
+                )
+            }
+        }
 
         // Fungsi untuk scan batik
         fun scanBatik(imageFile: File) {

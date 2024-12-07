@@ -130,6 +130,13 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+                    composable(
+                        route = "detail_product_screen?batikId={batikId}",
+                        arguments = listOf(navArgument("batikId") { type = NavType.StringType})
+                    ) { backStackEntry ->
+                        val batikId = backStackEntry.arguments?.getString("batikId")
+                    }
+
                     composable(route = "camera_screen") {
                         CameraScreen(navController)
                     }

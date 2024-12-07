@@ -46,6 +46,7 @@ fun HomeScreenContent(
 ){
     val productList by viewModel.productList.collectAsState()
     val profileState by userViewModel.userState.collectAsState()
+    val productDetailList by viewModel.productDetailList.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchBatik()
@@ -123,7 +124,7 @@ fun HomeScreenContent(
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                ProductCardList(productList = productList)
+                ProductCardList(productList = productList, selectedProduct = {productDetailList[]})
             }
         }
     }

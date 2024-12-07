@@ -18,7 +18,7 @@ class BatikRepository @Inject constructor(
         return batikRepositoryImpl.scanBatik(imageFile)
     }
 
-//    suspend fun getBatikDetail(batikId: String): List<BatikList> {
-//        return batikRepositoryImpl.getBatikDetail()
-//    }
+    suspend fun getBatikDetail(batikId: String): List<BatikList> {
+        return batikRepositoryImpl.getBatikDetail(batikId)
+    }
 }

@@ -2,6 +2,7 @@ package com.example.batikan.presentation.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -83,11 +84,14 @@ fun ProductCard(
 @Composable
 fun ProductCardList(
     productList: List<Product>,
+    onActionClick: (() -> Unit)? = null,
+    selectedProduct: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyRow(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(onClick = {selectedProduct()})
     ){
         items(productList) { product ->
             ProductCard(
@@ -107,10 +111,13 @@ fun ProductSection(
     productList: List<Product>,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         SectionTitle(title = title, description = description)
         Spacer(Modifier.height(8.dp))
         ProductCardList(
-            productList = productList)
+            productList = productList, selectedProduct = {}
+        )
     }
 }
