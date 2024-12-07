@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.batikan.data.model.batik_product.BatikList
+import com.example.batikan.data.model.order.Item
 import com.example.batikan.data.model.order.Orders
+import com.example.batikan.data.model.order.TimeStamp
 import com.example.batikan.data.model.user.User
 import com.example.batikan.domain.repositories.UserRepository
 import com.example.batikan.presentation.viewmodel.BatikState
@@ -76,14 +78,13 @@ class UserViewModel @Inject constructor(
             try {
                 val response = userRepository.getUserOrders()
                 if (response.status == "success") {
-                    Log.d("UserViewModel Order", "API Response: Orders fetched successfully")
                     Log.d("UserViewModel Order", "API Response: $response")
-                    val orders = response.data?.order
-                    if (response.data?.order == null) {
-                        Log.d("UserViewModel Order", "Null, Response Data: $orders")
+                    val orders = response.data?.orders
+                    if (orders == null || orders.isEmpty()) {
+                        Log.d("UserViewModel Order", "Orders are empty or null")
                         _orderState.value = OrderState.Empty
                     } else {
-                        Log.d("UserViewModel Order", "Exists, Response Data: ${response.data?.order}")
+                        Log.d("UserViewModel Order", "Orders exist: $orders")
                         _orderState.value = OrderState.Success(orders)
                     }
                 } else {

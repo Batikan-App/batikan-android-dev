@@ -10,7 +10,7 @@ data class Orders(
     val status: String,
     val userId: String,
     val updatedAt: TimeStamp,
-    val items: OrderItemList
+    val items: List<Item>
 )
 
 data class TimeStamp(
@@ -18,9 +18,9 @@ data class TimeStamp(
     val nanoseconds: Int
 )
 
-data class OrderItemList(
+data class Item(
     val name: String,
-    val img: String,
+    val img: List<String>,
     val quantity: Int,
     val price: Int
 )

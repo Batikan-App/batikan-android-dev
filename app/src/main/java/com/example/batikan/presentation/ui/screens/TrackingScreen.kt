@@ -158,14 +158,16 @@ fun TrackingContent(
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     items(orders) { order ->
-                        ShippingCard(
-                            shippingItem = Shipping(
-                                ImageResource = order.items.img,
-                                title = order.name,
-                                status = order.status,
-                                number = order.orderId
+                        order.items.forEach { item ->
+                            ShippingCard(
+                                shippingItem = Shipping(
+                                    ImageResource = item.img.firstOrNull() ?: "",
+                                    title = item.name,
+                                    status = order.status,
+                                    number = order.orderId
+                                )
                             )
-                        )
+                        }
                     }
                 }
 

@@ -1,5 +1,6 @@
 package com.example.batikan.domain.repositories
 
+import android.util.Log
 import com.example.batikan.data.model.order.OrderResponse
 import com.example.batikan.data.model.user.UpdateProfileResponse
 import com.example.batikan.data.model.user.User
@@ -19,6 +20,9 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun getUserOrders(): OrderResponse {
-        return userRepositoryImpl.getUserOrders()
+        val response = userRepositoryImpl.getUserOrders()
+        Log.d("UserRepository", "Fetched Response: $response")
+        return response
+
     }
 }
