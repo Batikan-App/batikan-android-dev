@@ -1,17 +1,17 @@
 package com.example.batikan.data.datasource.remote
 
-import com.example.batikan.data.model.batik_product.BatikDetailsResponse
+import com.example.batikan.data.model.batik_details.BatikDetailsResponse
+import com.example.batikan.data.model.batik_origin.BatikOriginResponse
 import com.example.batikan.data.model.batik_product.BatikResponse
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface BatikApiService {
     @GET("api/batik")
@@ -29,4 +29,9 @@ interface BatikApiService {
     suspend fun getBatikDetail(
         @Path("id") id: String
     ): Response<BatikDetailsResponse>
+
+    @GET("api/batik/origin")
+    suspend fun getBatikOrigin(
+        @Query("q") query: String
+    ): Response<BatikOriginResponse>
 }

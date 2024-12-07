@@ -3,9 +3,9 @@
         import android.util.Log
         import androidx.lifecycle.ViewModel
         import androidx.lifecycle.viewModelScope
-        import com.example.batikan.R
+        import com.example.batikan.data.model.batik_details.BatikDetailsResponse
+        import com.example.batikan.data.model.batik_origin.BatikOriginDetails
         import com.example.batikan.data.model.batik_product.BatikDetails
-        import com.example.batikan.data.model.batik_product.BatikDetailsResponse
         import com.example.batikan.data.model.batik_product.BatikList
         import com.example.batikan.data.model.batik_scan.BatikScanResponse
         import com.example.batikan.domain.repositories.BatikRepository
@@ -37,6 +37,13 @@
 
             private val _scanResultState = MutableStateFlow<ScanResultState>(ScanResultState.Idle)
             val scanResultState: StateFlow<ScanResultState> get() = _scanResultState
+            
+            private val _batikOriginState = MutableStateFlow<BatikOriginState>(BatikOriginState.Idle)
+            val batikOriginState: StateFlow<BatikOriginState> get() = _batikOriginState
+
+            // Khusus untuk yang show origin di toko, observenya dari sini
+            private val _productOriginList = MutableStateFlow<List<ProductDetail>>(emptyList())
+            val productOriginList: StateFlow<List<ProductDetail>> get() = _productOriginList
 
             fun fetchBatik() {
                 viewModelScope.launch {
@@ -56,6 +63,24 @@
                     } catch (e: Exception) {
                         Log.d("BatikViewModel", "Exception: ${e.message}")
                         _batikState.value = BatikState.Error("Error: ${e.message}")
+                    }
+                }
+            }
+
+            // Fungsi untuk mengambil origin batik
+            fun fetchBatikByOrigin(origin: String) {
+                viewModelScope.launch {
+                    _batikOriginState.value = BatikOriginState.Loading
+                    try {
+                        val response = batikRepository.getBatikOrigin(origin)
+                        val mappedProducts = mapBatikOrigin(response)
+                        Log.d("BatikOrigin", "Mapped products: $mappedProducts")
+
+                        _productOriginList.value = mappedProducts
+                        _batikOriginState.value = BatikOriginState.Success(response)
+                    } catch (e: Exception) {
+                        Log.d("BatikOrigin", "Exception: ${e.message}")
+                        _batikOriginState.value = BatikOriginState.Error("Error : ${e.message}")
                     }
                 }
             }
@@ -117,6 +142,22 @@
                 }
             }
 
+            private fun mapBatikOrigin(batikitems: List<BatikOriginDetails>): List<ProductDetail> {
+                return batikitems.map { item ->
+                    val imageFile = if(item.img.isNotEmpty()) item.img[0] else ""
+                    ProductDetail(
+                        id = item.id,
+                        imageResource = imageFile,
+                        name = item.name,
+                        origin = item.origin,
+                        soldCount = item.sold,
+                        stockCount = item.stock,
+                        price = "Rp.${item.price}",
+                        motifDescription = item.desc
+                    )
+                }
+            }
+
             // Fungsi untuk scan batik
             fun scanBatik(imageFile: File) {
                 viewModelScope.launch {
@@ -124,12 +165,18 @@
                     _scanResultState.value = ScanResultState.Loading
 
                     try {
-
-                        val resultScan = batikRepository(imageFile = imageFile)
+                        val resultScan = batikRepository.scanBatik(imageFile = imageFile)
                         Log.d("BatikViewModelScan", "Scan success: $resultScan")
 
                         _scanResultState.value = when {
-                            resultScan.isSuccess -> ScanResultState.Success(resultScan.getOrNull()!!)
+                            resultScan.isSuccess -> {
+                                val scanResponse = resultScan.getOrNull()!!
+
+                                // Panggil fungsi fetchSimilarBatik
+                                fetchSimilarBatikByName(scanResponse.data.data.name)
+
+                                ScanResultState.Success(scanResponse)
+                            }
                             else -> ScanResultState.Error(
                                 resultScan.exceptionOrNull()?.message ?: "Unknown Error"
                             )
@@ -140,14 +187,39 @@
                     }
                 }
             }
-        }
 
-        // Logic untuk membandingkan nama produk hasil scan dan nama produk di db
-//        fun onScanSuccess(scanResponse: BatikScanResponse) {
-//            val scannedBatikName = scanResponse.data.data.name
-//
-//
-//        }
+
+            // Fungsi untuk mengambil similar batik
+            private fun fetchSimilarBatikByName(batikName: String) {
+                viewModelScope.launch {
+                    Log.d("BatikViewModel", "Fetching similar batik with name: $batikName")
+                    _batikState.value = BatikState.Loading
+
+                    try {
+                        // Ambil semua batik dari repository
+                        val batikItems = batikRepository.getBatik()
+
+                        // Filter batik berdasarkan nama yang sama dengan hasil scan
+                        val similarBatikItems = batikItems.filter {
+                            it.data.name.equals(batikName, ignoreCase = true)
+                        }
+
+                        Log.d("BatikViewModel", "Similar Batik Items found: ${similarBatikItems.size}")
+
+                        // Mapping ke Product untuk ditampilkan di UI
+                        val mappedSimilarProducts = mapBatikToProduct(similarBatikItems)
+
+                        // Update product list dengan batik yang serupa
+                        _productList.value = mappedSimilarProducts
+                        _batikState.value = BatikState.Success(similarBatikItems)
+
+                    } catch (e: Exception) {
+                        Log.d("BatikViewModel", "Exception: ${e.message}")
+                        _batikState.value = BatikState.Error("Error: ${e.message}")
+                    }
+                }
+            }
+        }
 
         sealed class ScanResultState {
             object Idle : ScanResultState()
@@ -161,6 +233,13 @@
             object Loading : BatikState()
             data class Success(val data: List<BatikList>) : BatikState()
             data class Error(val message: String) : BatikState()
+        }
+
+        sealed class BatikOriginState {
+            object Idle: BatikOriginState()
+            object Loading: BatikOriginState()
+            data class Success(val data: List<BatikOriginDetails>): BatikOriginState()
+            data class Error(val message: String): BatikOriginState()
         }
 
         sealed class BatikDetailState {

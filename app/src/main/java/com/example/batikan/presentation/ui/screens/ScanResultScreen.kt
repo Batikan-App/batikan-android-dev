@@ -22,6 +22,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ import com.example.batikan.presentation.ui.composables.CardScanResult
 import com.example.batikan.presentation.ui.composables.PageTitle
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.composables.ProductCardList
+import com.example.batikan.presentation.ui.composables.ProductSection
 //import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.composables.VisualTryOnCard
@@ -51,14 +54,14 @@ data class ScanResult(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanResultContent(
-//    similarProduct: List<Product>,
-//    result: ScanResult,
-    modifier: Modifier = Modifier,
     photoUri: String?,
     viewModel: BatikViewModel = hiltViewModel(),
     uiState: ScanResultState,
     navController: NavController
 ) {
+
+    val similarBatikProduct by viewModel.productList.collectAsState()
+
     when (uiState) {
         is ScanResultState.Idle -> {
             Text("Menunggu proses scan...", modifier = Modifier.fillMaxSize())
@@ -137,13 +140,12 @@ fun ScanResultContent(
                     }
 
                     item {
-//                        ProductCardList(productList = simi, onProductClick = onProductClick)
-//                        ProductSection(
-//                            title = "Produk terkait",
-//                            description = "Beli batik",
-////                            productList = similarProduct,
-//                            modifier = modifier.padding(start = 30.dp)
-//                        )
+                        ProductSection(
+                            title = "Produk terkait",
+                            description = "Beli batik",
+                            productList = similarBatikProduct,
+                            navController = navController
+                        )
                     }
                 }
             }

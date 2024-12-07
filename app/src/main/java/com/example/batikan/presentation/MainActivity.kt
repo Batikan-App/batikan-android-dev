@@ -199,20 +199,9 @@ class MainActivity : ComponentActivity() {
 //                BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = )
 
                     composable(route = "toko_screen") {
+
                         TokoContent(
                             navController,
-//                            featuredProducts = listOf(
-//                                Product(R.drawable.batik_new, "Batik A", "$20"),
-//                                Product(R.drawable.batik_new, "Batik B", "$25"),
-//                                Product(R.drawable.batik_new, "Batik C", "$30"),
-//                                Product(R.drawable.batik_new, "Batik D", "$35")
-//                            ),
-//                            originProduct = listOf(
-//                                Product(R.drawable.batik_new, "Batik A", "$20"),
-//                                Product(R.drawable.batik_new, "Batik B", "$25"),
-//                                Product(R.drawable.batik_new, "Batik C", "$30"),
-//                                Product(R.drawable.batik_new, "Batik D", "$35")
-//                            )
                         )
                     }
 

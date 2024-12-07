@@ -70,14 +70,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepositoryImpl(apiService: AuthApiService): AuthRepositoryImpl {
+    fun provideAuthRepositoryImpl(apiService: AuthApiService): AuthRepository {
         return AuthRepositoryImpl(apiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthRepository(repository: AuthRepositoryImpl): AuthRepository {
-        return AuthRepository(repository)
     }
 
     /**
@@ -90,14 +84,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBatikRepositoryImpl(apiService: BatikApiService): BatikRepositoryImpl {
+    fun provideBatikRepositoryImpl(apiService: BatikApiService): BatikRepository {
         return BatikRepositoryImpl(apiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideBatikRepository(repository: BatikRepositoryImpl): BatikRepository {
-        return BatikRepository(repository)
     }
 
     /**

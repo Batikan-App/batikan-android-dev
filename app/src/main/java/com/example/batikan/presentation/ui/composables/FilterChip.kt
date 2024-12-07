@@ -8,7 +8,9 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,9 +29,16 @@ fun FilterChipGroup(
     modifier: Modifier = Modifier,
     items: List<String>,
     defaultSelectedItemIndex:Int = 0,
-    onSelectedChanged : (Int) -> Unit = {}
+    onSelectedChanged : (String) -> Unit = {}
 ){
-    var selectedItemIndex by remember { mutableStateOf(defaultSelectedItemIndex) }
+    var selectedItemIndex by remember { mutableIntStateOf(defaultSelectedItemIndex) }
+
+    LaunchedEffect(defaultSelectedItemIndex) {
+        if (items.isNotEmpty()) {
+            onSelectedChanged(items[defaultSelectedItemIndex])
+        }
+    }
+
 
     LazyRow(
         modifier = modifier
@@ -43,7 +52,7 @@ fun FilterChipGroup(
                 selected = items[selectedItemIndex] == items[index],
                 onClick = {
                     selectedItemIndex = index
-                    onSelectedChanged(index)
+                    onSelectedChanged(items[index])
                 },
                 enabled = true,
                 label = { Text(items[index]) },
@@ -59,7 +68,6 @@ fun FilterChipGroup(
                     selectedBorderColor = Primary600,
                     borderWidth = 2.dp
                 )
-
             )
         }
     }

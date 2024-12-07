@@ -20,7 +20,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.batikan.presentation.ui.screens.ProductDetail
 import com.example.batikan.presentation.ui.theme.Secondary500
 import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextXsRegular
@@ -33,6 +35,29 @@ data class Product(
     val title: String,
     val price: String
 )
+
+@Composable
+fun ProductOriginList(
+    productOriginList: List<ProductDetail>,
+    onProductClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+
+    LazyRow(
+        modifier = modifier
+            .fillMaxWidth()
+    ){
+        items(productOriginList) { product ->
+            ProductCard(
+                imageResource = product.imageResource,
+                title = product.name,
+                price = product.price,
+                onClick = { onProductClick(product.id) }
+            )
+            Spacer(Modifier.width(20.dp))
+        }
+    }
+}
 
 @Composable
 fun ProductCardList(
@@ -103,5 +128,25 @@ fun ProductCard(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ProductSection(
+    navController: NavController,
+    title: String,
+    description: String,
+    productList: List<Product>,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        SectionTitle(title = title, description = description)
+        Spacer(Modifier.height(8.dp))
+        ProductCardList(
+            productList = productList,
+            onProductClick = { batikId ->
+                navController.navigate("detail_product_screen/$batikId")
+            }
+        )
     }
 }

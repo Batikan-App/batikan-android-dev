@@ -2,23 +2,22 @@ package com.example.batikan.data.repositories
 
 import android.util.Log
 import com.example.batikan.data.datasource.remote.BatikApiService
-import com.example.batikan.data.model.batik_product.BatikDetailsResponse
+import com.example.batikan.data.model.batik_details.BatikDetailsResponse
+import com.example.batikan.data.model.batik_origin.BatikOriginDetails
+import com.example.batikan.data.model.batik_product.BatikDetails
 import com.example.batikan.data.model.batik_product.BatikList
-import com.example.batikan.data.model.batik_product.BatikResponse
-import com.example.batikan.data.model.batik_scan.BatikScanData
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
-import okhttp3.Callback
+import com.example.batikan.domain.repositories.BatikRepository
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 
 class BatikRepositoryImpl @Inject constructor(
     private val apiService: BatikApiService
-) {
-    suspend fun getBatik(): List<BatikList> {
+): BatikRepository {
+    override suspend fun getBatik(): List<BatikList> {
         val response = apiService.getBatikList() // Tidak perlu lagi menyisipkan token manual
         if (response.isSuccessful) {
             return response.body()?.data ?: emptyList()
@@ -27,7 +26,16 @@ class BatikRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun getBatikDetail(batikId: String): Result<BatikDetailsResponse> {
+     override suspend fun getBatikOrigin(origin: String): List<BatikOriginDetails> {
+        val response = apiService.getBatikOrigin(origin)
+        if (response.isSuccessful) {
+            return response.body()?.data ?: emptyList()
+        } else {
+            throw Exception("Error: ${response.message()}")
+        }
+    }
+
+    override suspend fun getBatikDetail(batikId: String): Result<BatikDetailsResponse> {
         return try {
             val response = apiService.getBatikDetail(id = batikId)
 
@@ -52,7 +60,7 @@ class BatikRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun scanBatik(imageFile: File): Result<BatikScanResponse> {
+    override suspend fun scanBatik(imageFile: File): Result<BatikScanResponse> {
         return try {
 
             // Buat request body dari file
