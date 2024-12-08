@@ -37,6 +37,15 @@ data class Product(
 )
 
 @Composable
+fun ProductSearchResultList(
+    productOriginList: List<ProductDetail>,
+    onProductClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+
+}
+
+@Composable
 fun ProductOriginList(
     productOriginList: List<ProductDetail>,
     onProductClick: (String) -> Unit,
