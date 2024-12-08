@@ -1,8 +1,10 @@
 package com.example.batikan.presentation.ui.composables
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -45,12 +47,14 @@ import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.TextXlSemiBold
 import com.example.batikan.presentation.ui.theme.TextXsRegular
 import com.example.batikan.presentation.ui.theme.White
+import com.example.batikan.presentation.ui.util.shimmerEffect
 
 
 @Composable
 fun GreetingSection(
     modifier: Modifier = Modifier,
-    userName: String
+    userName: String,
+    isLoading: Boolean
 ){
     Row(
         modifier = modifier
@@ -58,7 +62,24 @@ fun GreetingSection(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
-    ){
+    ) {
+    if (isLoading) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+                    .shimmerEffect()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(20.dp)
+                    .shimmerEffect()
+            )
+        }
+    } else {
         Column {
             Text(
                 text = "Selamat datang,",
@@ -71,6 +92,7 @@ fun GreetingSection(
                 color = TextPrimary
             )
         }
+    }
         Button(
             onClick = {},
             colors = ButtonDefaults.buttonColors(
@@ -88,6 +110,7 @@ fun GreetingSection(
     }
 }
 
+
 @Composable
 fun ProfileCard (
     modifier: Modifier = Modifier,
@@ -95,7 +118,8 @@ fun ProfileCard (
     name: String,
     email: String,
     phoneNumber: String,
-    onActionClick: () -> Unit
+    onActionClick: () -> Unit,
+    isLoading: Boolean
 ) {
     Row (
         modifier = Modifier
@@ -106,34 +130,62 @@ fun ProfileCard (
             Image(
                 painter = painterResource(id = imageResource),
                 contentDescription = "profile image",
-                modifier = Modifier.size(width = 36.dp , height = 36.dp)
+                modifier = Modifier.size(width = 48.dp, height = 48.dp)
             )
-            Column (
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+            if (isLoading) {
+                Column (verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(20.dp)
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(20.dp)
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .height(20.dp)
+                            .shimmerEffect()
+                    )
+                }
+
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = name,
+                        style = TextMdSemiBold,
+                        color = TextPrimary
+                    )
+                    Text(
+                        text = email,
+                        style = TextSmallRegular,
+                        color = TextSecondary
+                    )
+                    Text(
+                        text = phoneNumber,
+                        style = TextSmallRegular,
+                        color = TextSecondary
+                    )
+                }
+            }
+            }
+
+            IconButton(
+                onClick = onActionClick
             ) {
-                Text(
-                    text = name,
-                    style = TextMdSemiBold,
-                    color = TextPrimary
-                )
-                Text(
-                    text = email,
-                    style = TextSmallRegular,
-                    color = TextSecondary
-                )
-                Text(
-                    text = phoneNumber,
-                    style = TextSmallRegular,
-                    color = TextSecondary
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
                 )
             }
-        }
-
-        IconButton(
-            onClick = onActionClick
-        ) {
-            Icon(imageVector = Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(24.dp))
-        }
 
     }
 }
@@ -389,4 +441,5 @@ fun AboutBatik(
         )
     }
 }
+
 

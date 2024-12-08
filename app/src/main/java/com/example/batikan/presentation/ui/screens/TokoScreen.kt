@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,6 +39,9 @@ import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
+import com.example.batikan.presentation.ui.theme.TextMdSemiBold
+import com.example.batikan.presentation.viewmodel.BatikOriginState
+import com.example.batikan.presentation.viewmodel.BatikState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 
 @Composable
@@ -47,6 +52,8 @@ fun TokoContent(
     viewModel: BatikViewModel = hiltViewModel()
 ){
     var query by remember { mutableStateOf("") }
+    val batikState by viewModel.batikState.collectAsState()
+    val originState by viewModel.batikOriginState.collectAsState()
     val productOriginList by viewModel.productOriginList.collectAsState()
     var selectedOrigin by remember { mutableStateOf("") }
     val productList by viewModel.productList.collectAsState()
@@ -92,13 +99,46 @@ fun TokoContent(
             }
 
             item {
-                ProductSection(
-                    title = "Produk keren hari ini",
-                    description = "Tentukan pilihan batikmu!",
-                    productList = productList,
-                    modifier = Modifier.padding(start = 30.dp),
-                    navController = navController
-                )
+                when (batikState) {
+                    is BatikState.Loading -> {
+                        ProductSection(
+                            title = "Produk keren hari ini",
+                            description = "Tentukan pilihan batikmu!",
+                            productList = productList,
+                            navController = navController,
+                            isLoading = true
+                        )
+                    }
+
+                    is BatikState.Success -> {
+                        ProductSection(
+                            title = "Produk keren hari ini",
+                            description = "Tentukan pilihan batikmu!",
+                            productList = productList,
+                            navController = navController,
+                            isLoading = false
+                        )
+                    }
+
+                    is BatikState.Error -> {
+                        Text(
+                            text = (batikState as BatikState.Error).message,
+                            color = Color.Red,
+                            style = TextMdSemiBold
+                        )
+                    }
+
+                    else -> {
+                        Text(
+                            text = "Produk segera tersedia 😉",
+                            color = Color.Red,
+                            style = TextMdSemiBold,
+                            modifier = Modifier.padding(horizontal = 30.dp)
+
+                        )
+                    }
+                }
+
             }
 
             item {
@@ -131,13 +171,45 @@ fun TokoContent(
 
                 Spacer(Modifier.height(8.dp))
 
-                ProductOriginList(
-                    productOriginList = productOriginList,
-                    modifier = Modifier.padding(start = 30.dp),
-                    onProductClick = { batikId ->
-                        navController.navigate("detail_product_screen/$batikId")
+                when (originState) {
+                    is BatikOriginState.Loading -> {
+                        ProductOriginList(
+                            productOriginList = productOriginList,
+                            onProductClick = { batikId ->
+                                navController.navigate("detail_product_screen/$batikId")
+                            },
+                            isLoading = true
+                        )
                     }
-                )
+
+                    is BatikOriginState.Success -> {
+                        ProductOriginList(
+                            productOriginList = productOriginList,
+                            onProductClick = { batikId ->
+                                navController.navigate("detail_product_screen/$batikId")
+                            },
+                            isLoading = false
+                        )
+                    }
+
+                    is BatikOriginState.Error -> {
+                        Text(
+                            text = (batikState as BatikOriginState.Error).message,
+                            color = Color.Red,
+                            style = TextMdSemiBold
+                        )
+                    }
+
+                    else -> {
+                        Text(
+                            text = "Produk segera tersedia 😉",
+                            color = Color.Red,
+                            style = TextMdSemiBold,
+                            modifier = Modifier.padding(horizontal = 30.dp)
+
+                        )
+                    }
+                }
             }
         }
     }
