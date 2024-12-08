@@ -61,6 +61,7 @@ fun ScanResultContent(
 ) {
 
     val similarBatikProduct by viewModel.productList.collectAsState()
+    val batikState by viewModel.batikState.collectAsState()
 
     when (uiState) {
         is ScanResultState.Idle -> {
@@ -142,9 +143,10 @@ fun ScanResultContent(
                     item {
                         ProductSection(
                             title = "Produk terkait",
-                            description = "Beli batik",
+                            description = "Beli batiknya sekarang",
                             productList = similarBatikProduct,
-                            navController = navController
+                            navController = navController,
+                            isLoading = false
                         )
                     }
                 }

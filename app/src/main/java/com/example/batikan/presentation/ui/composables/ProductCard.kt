@@ -3,6 +3,7 @@ package com.example.batikan.presentation.ui.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,10 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.batikan.presentation.ui.screens.ProductDetail
+import com.example.batikan.presentation.ui.theme.Gray100
+import com.example.batikan.presentation.ui.theme.Gray200
 import com.example.batikan.presentation.ui.theme.Secondary500
 import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextXsRegular
 import com.example.batikan.presentation.ui.theme.White
+import com.example.batikan.presentation.ui.util.shimmerEffect
 
 
 data class Product(
@@ -49,7 +53,8 @@ fun ProductSearchResultList(
 fun ProductOriginList(
     productOriginList: List<ProductDetail>,
     onProductClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean
 ){
 
     LazyRow(
@@ -61,7 +66,8 @@ fun ProductOriginList(
                 imageResource = product.imageResource,
                 title = product.name,
                 price = "Rp${product.price}",
-                onClick = { onProductClick(product.id) }
+                onClick = { onProductClick(product.id) },
+                isLoading = isLoading
             )
             Spacer(Modifier.width(20.dp))
         }
@@ -72,7 +78,8 @@ fun ProductOriginList(
 fun ProductCardList(
     productList: List<Product>,
     onProductClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean
 ){
 
     LazyRow(
@@ -84,7 +91,8 @@ fun ProductCardList(
                 imageResource = product.imageResource,
                 title = product.title,
                 price = product.price,
-                onClick = { onProductClick(product.id) }
+                onClick = { onProductClick(product.id) },
+                isLoading = isLoading
             )
             Spacer(Modifier.width(20.dp))
         }
@@ -97,7 +105,8 @@ fun ProductCard(
     imageResource: String,
     title: String,
     price: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isLoading: Boolean
 ){
     Card (
         modifier = modifier
@@ -108,33 +117,58 @@ fun ProductCard(
         Column (
             modifier = modifier
         ) {
-            AsyncImage(
-                model = imageResource,
-                contentDescription = "Product Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .clip(RectangleShape),
-                contentScale = ContentScale.Crop
-            )
+            if (isLoading) {
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .shimmerEffect()
+                )
+            } else {
+                AsyncImage(
+                    model = imageResource,
+                    contentDescription = "Product Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .clip(RectangleShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
             Column  (
                 modifier = modifier
-                    .background(color = Secondary500)
+                    .background( color = if (isLoading) Gray200 else Secondary500)
                     .fillMaxWidth()
                     .padding(10.dp)
 
             ){
-                Text(
-                    text = title,
-                    style = TextMdMedium,
-                    color = White
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = price,
-                    style = TextXsRegular,
-                    color = White
-                )
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(20.dp)
+                            .shimmerEffect()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(20.dp)
+                            .shimmerEffect()
+                    )
+                } else {
+                    Text(
+                        text = title,
+                        style = TextMdMedium,
+                        color = White
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = price,
+                        style = TextXsRegular,
+                        color = White
+                    )
+                }
             }
         }
     }
@@ -146,16 +180,18 @@ fun ProductSection(
     title: String,
     description: String,
     productList: List<Product>,
+    isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SectionTitle(title = title, description = description)
+        SectionTitle(title = title, description = description, modifier = Modifier.padding(start = 30.dp))
         Spacer(Modifier.height(8.dp))
         ProductCardList(
             productList = productList,
             onProductClick = { batikId ->
                 navController.navigate("detail_product_screen/$batikId")
-            }
+            },
+            isLoading = isLoading
         )
     }
 }

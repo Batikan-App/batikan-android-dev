@@ -26,13 +26,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.presentation.ui.composables.ProductCard
+import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SearchBar
+import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
+import com.example.batikan.presentation.viewmodel.BatikSearchState
+import com.example.batikan.presentation.viewmodel.BatikState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -50,6 +55,7 @@ fun SearchResultScreen(
     var query by remember { mutableStateOf(initialQuery) }
 
     val searchResults by viewModel.searchResults.collectAsState()
+    val searchState by viewModel.batikSearchState.collectAsState()
 
     LaunchedEffect(query) {
         if (query.isBlank()) {
@@ -135,12 +141,45 @@ fun SearchResultScreen(
                 ) {
                     items(searchResults) { product ->
                         Spacer(Modifier.height(8.dp))
-                        ProductCard(
-                            imageResource = product.imageResource,
-                            title = product.name,
-                            price = "Rp${product.price}",
-                            onClick = { navController.navigate("detail_product_screen/${product.id}") }
-                        )
+                        when (searchState) {
+                            is BatikSearchState.Loading -> {
+                                ProductCard(
+                                    imageResource = product.imageResource,
+                                    title = product.name,
+                                    price = "Rp${product.price}",
+                                    onClick = { navController.navigate("detail_product_screen/${product.id}") },
+                                    isLoading = true
+                                )
+                            }
+
+                            is BatikSearchState.Success -> {
+                                ProductCard(
+                                    imageResource = product.imageResource,
+                                    title = product.name,
+                                    price = "Rp${product.price}",
+                                    onClick = { navController.navigate("detail_product_screen/${product.id}") },
+                                    isLoading = false
+                                )
+                            }
+
+                            is BatikSearchState.Error -> {
+                                Text(
+                                    text = (searchState as BatikSearchState.Error).message,
+                                    color = Color.Red,
+                                    style = TextMdSemiBold
+                                )
+                            }
+
+                            else -> {
+                                Text(
+                                    text = "Produk segera tersedia 😉",
+                                    color = Color.Red,
+                                    style = TextMdSemiBold,
+                                    modifier = Modifier.padding(horizontal = 30.dp)
+
+                                )
+                            }
+                        }
                     }
                 }
             }
