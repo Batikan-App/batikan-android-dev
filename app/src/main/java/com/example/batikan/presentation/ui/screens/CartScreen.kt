@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,10 +27,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.CartItemRow
@@ -40,15 +46,18 @@ import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextQuatenary
+import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
+import com.example.batikan.presentation.viewmodel.CartViewModel
+import com.example.batikan.presentation.viewmodel.GetCartState
 
 
 data class CartItem(
     val id: String,
     val name: String,
-    val imageResources: Int,
+    val imageResources: String,
     val price: Int,
     val count: Int,
     val isChecked: Boolean = true
@@ -58,11 +67,18 @@ data class CartItem(
 @Composable
 fun CartContent (
     modifier: Modifier = Modifier,
-    cartItems: List<CartItem>,
     onItemCheckedChange: (String, Boolean) -> Unit,
     onItemCountChange: (String, Int) -> Unit,
-    navController: NavController
+    navController: NavController,
+    cartViewModel: CartViewModel = hiltViewModel()
 ) {
+    val cartItems by cartViewModel.cartItemList.collectAsState()
+    val getCartState by cartViewModel.getCartState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        cartViewModel.fetchCartData()
+    }
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -102,7 +118,7 @@ fun CartContent (
                         color = TextQuatenary
                     )
                     Text(
-                        text = "Rp. ${cartItems.sumOf { it.price * it.count }}",
+                        text = "Rp....",
                         style = TextMdSemiBold,
                         color = TextPrimary
                     )
@@ -129,54 +145,39 @@ fun CartContent (
 
         }
     ) { innerPadding ->
-        LazyColumn (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            items(cartItems) { cartItem ->
-                CartItemRow(
-                    cartItem = cartItem,
-                    onCheckedChange = { isChecked ->
-                        onItemCheckedChange(cartItem.id, isChecked)
-                    },
-                    onCountChange = { newCount ->
-                        onItemCountChange(cartItem.id, newCount)
-                    }
-                )
-
+        when (getCartState) {
+            is GetCartState.Loading -> {
+                CircularProgressIndicator(modifier = Modifier.padding(16.dp))
             }
 
+            is GetCartState.Success -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    items(cartItems) { cartItem ->
+                        CartItemRow(
+                            cartItem = cartItem,
+                            onCheckedChange = { isChecked ->
+                                onItemCheckedChange(cartItem.id, isChecked)
+                            },
+                            onCountChange = { newCount ->
+                                onItemCountChange(cartItem.id, newCount)
+                            }
+                        )
+                    }
+                }
+            }
+
+            is GetCartState.Error -> {
+                Text(
+                    text = (getCartState as GetCartState.Error).message,
+                    modifier = Modifier.padding(16.dp),
+                    color = TextSecondary
+                )
+            }
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun CartScreenPreview() {
-//    BatikanTheme {
-//        CartContent(
-//            cartItems = listOf(
-//                CartItem(
-//                    id = "1",
-//                    name = "Batik Pekalongan",
-//                    price = 200000,
-//                    count = 1,
-//                    isChecked = false,
-//                    imageResources = R.drawable.batik_new
-//                ),
-//                CartItem(
-//                    id = "2",
-//                    name = "Batik Papua",
-//                    price = 250000,
-//                    count = 2,
-//                    isChecked = true,
-//                    imageResources = R.drawable.batik_new
-//                )
-//            ),
-//            onItemCheckedChange = { _, _ -> },
-//            onItemCountChange = { _, _ -> },
-//        )
-//    }
-//}

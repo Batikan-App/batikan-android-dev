@@ -37,6 +37,7 @@ import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.helpers.resizeImageFile
 import com.example.batikan.presentation.ui.screens.BatikanWelcomeScreen
 import com.example.batikan.presentation.ui.screens.CameraScreen
+import com.example.batikan.presentation.ui.screens.CartContent
 import com.example.batikan.presentation.ui.screens.HomeScreenContent
 import com.example.batikan.presentation.ui.screens.LoginScreen
 import com.example.batikan.presentation.ui.screens.LogoAnimationScreenContent
@@ -138,20 +139,28 @@ class MainActivity : ComponentActivity() {
 
                     composable(
                         route = "detail_product_screen/{batikId}",
-                        arguments = listOf(navArgument("batikId") { type = NavType.StringType})
+                        arguments = listOf(navArgument("batikId") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val batikId = backStackEntry.arguments?.getString("batikId")
-
                         val viewModel: BatikViewModel = hiltViewModel()
-
                         val productDetailList by viewModel.productDetailList.collectAsState()
 
                         if (batikId != null) {
                             ProductDetailScreen(
-                                productDetailList,
-                                productId = batikId
+                                productDetailList = productDetailList,
+                                productId = batikId,
                             )
+                        } else {
+                            Text(text = "Invalid batik ID", modifier = Modifier.fillMaxSize())
                         }
+                    }
+
+                    composable("cart_screen") {
+                        CartContent(
+                            navController = navController,
+                            onItemCheckedChange = { _,_ -> },
+                            onItemCountChange = {_,_ -> },
+                        )
                     }
 
                     composable(route = "camera_screen") {

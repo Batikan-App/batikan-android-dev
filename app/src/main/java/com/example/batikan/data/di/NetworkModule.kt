@@ -5,12 +5,15 @@ import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.data.datasource.remote.AuthApiService
 import com.example.batikan.data.datasource.remote.AuthInterceptor
 import com.example.batikan.data.datasource.remote.BatikApiService
+import com.example.batikan.data.datasource.remote.CartApiService
 import com.example.batikan.data.datasource.remote.UserApiService
 import com.example.batikan.data.repositories.AuthRepositoryImpl
 import com.example.batikan.data.repositories.BatikRepositoryImpl
+import com.example.batikan.data.repositories.CartRepositoryImpl
 import com.example.batikan.data.repositories.UserRepositoryImpl
 import com.example.batikan.domain.repositories.AuthRepository
 import com.example.batikan.domain.repositories.BatikRepository
+import com.example.batikan.domain.repositories.CartRepository
 import com.example.batikan.domain.repositories.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -108,7 +111,20 @@ object NetworkModule {
         return UserRepository(repository)
     }
 
+    /**
+     * Untuk cart
+     */
+    @Provides
+    @Singleton
+    fun provideCartApiService(retrofit: Retrofit): CartApiService = retrofit.create(
+        CartApiService::class.java
+    )
 
+    @Provides
+    @Singleton
+    fun provideCartRepositoryImpl(apiService: CartApiService): CartRepository {
+        return CartRepositoryImpl(apiService)
+    }
 
     /**
      * Untuk build DataStore

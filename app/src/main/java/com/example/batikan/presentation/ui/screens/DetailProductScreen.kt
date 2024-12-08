@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.batikan.data.model.batik_product.BatikList
+import com.example.batikan.presentation.ui.composables.CheckoutButton
+import com.example.batikan.presentation.ui.composables.Product
 //import com.example.batikan.presentation.ui.composables.CheckoutButton
 import com.example.batikan.presentation.ui.composables.ProductDetail
 import com.example.batikan.presentation.ui.composables.ProductNamePrice
@@ -22,6 +24,11 @@ import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
 import com.example.batikan.presentation.viewmodel.BatikDetailState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
+import com.example.batikan.presentation.viewmodel.CartViewModel
+
+/**
+ * TODO: Nambahin icon cart biar user bisa buka cart di pojok kanan atas
+ */
 
 data class ProductDetail(
     val id: String,
@@ -39,20 +46,26 @@ fun ProductDetailScreen(
     productDetailList: List<ProductDetail>,
     viewModel: BatikViewModel = hiltViewModel(),
     productId: String,
-//    onAddToCart: () -> Unit
+    cartViewModel: CartViewModel = hiltViewModel(),
 ){
     LaunchedEffect(productId) {
         viewModel.fetchBatikDetail(productId)
     }
 
+    val product = productDetailList.find { it.id == productId }
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
-//        bottomBar = {
+        bottomBar = {
 //            CheckoutButton(
-//                product = List<ProductDetail>,
-//                onAddToCart = onAddToCart
+//                product = product,
+//                onAddToCart = { quantity ->
+//                    if (quantity > 0) {
+//                        cartViewModel.addItemToCart(product.id, quantity)
+//                    }
+//                }
 //            )
-//        }
+        }
     ){ innerPadding ->
         LazyColumn (
             modifier = Modifier

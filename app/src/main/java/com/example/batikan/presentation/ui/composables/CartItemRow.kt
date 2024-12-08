@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.batikan.presentation.ui.screens.CartItem
 import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
@@ -44,8 +45,8 @@ fun CartItemRow (
             checked = cartItem.isChecked,
             onCheckedChange = onCheckedChange
         )
-        Image(
-            painter = painterResource(id = cartItem.imageResources),
+        AsyncImage(
+            model = cartItem.imageResources,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

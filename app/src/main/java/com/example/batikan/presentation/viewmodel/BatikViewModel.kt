@@ -64,6 +64,11 @@
                 }
             }
 
+            fun clearSearchResults() {
+                _searchResults.value = emptyList()
+                _batikSearchState.value = BatikSearchState.Idle
+            }
+
             fun searchBatik(query: String) {
                 viewModelScope.launch {
                     try {
@@ -85,22 +90,6 @@
                         _batikSearchState.value = BatikSearchState.Error("Error: ${e.message}")
                     }
                 }
-                /**
-                 * viewModelScope.launch {
-                 *                     _batikOriginState.value = BatikOriginState.Loading
-                 *                     try {
-                 *                         val response = batikRepository.getBatikOrigin(origin)
-                 *                         val mappedProducts = mapBatikOrigin(response)
-                 *                         Log.d("BatikOrigin", "Mapped products: $mappedProducts")
-                 *
-                 *                         _productOriginList.value = mappedProducts
-                 *                         _batikOriginState.value = BatikOriginState.Success(response)
-                 *                     } catch (e: Exception) {
-                 *                         Log.d("BatikOrigin", "Exception: ${e.message}")
-                 *                         _batikOriginState.value = BatikOriginState.Error("Error : ${e.message}")
-                 *                     }
-                 *                 }
-                 */
             }
 
             fun fetchBatik() {

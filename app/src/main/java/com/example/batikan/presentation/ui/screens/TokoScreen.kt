@@ -96,7 +96,7 @@ fun TokoContent(
                     title = "Produk keren hari ini",
                     description = "Tentukan pilihan batikmu!",
                     productList = productList,
-                    modifier = Modifier.padding(start = 30.dp),
+                    modifier = Modifier.padding(start = 30.dp, end = 30.dp),
                     navController = navController
                 )
             }
@@ -108,7 +108,7 @@ fun TokoContent(
                     modifier = Modifier.padding(start = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = navController)
+                BatikScanCard(modifier = Modifier.padding(start = 30.dp, end = 30.dp), navController = navController)
             }
 
             item {
@@ -126,14 +126,14 @@ fun TokoContent(
                         selectedOrigin = selected
                         viewModel.fetchBatikByOrigin(selected)
                     },
-                    modifier = Modifier.padding(start = 30.dp)
+                    modifier = Modifier.padding(start = 30.dp, end = 30.dp)
                 )
 
                 Spacer(Modifier.height(8.dp))
 
                 ProductOriginList(
                     productOriginList = productOriginList,
-                    modifier = Modifier.padding(start = 30.dp),
+                    modifier = Modifier.padding(start = 30.dp, end = 30.dp),
                     onProductClick = { batikId ->
                         navController.navigate("detail_product_screen/$batikId")
                     }
