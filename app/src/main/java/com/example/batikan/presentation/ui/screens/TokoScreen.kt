@@ -46,6 +46,7 @@ fun TokoContent(
 //    originProduct: List<Product>,
     viewModel: BatikViewModel = hiltViewModel()
 ){
+    var query by remember { mutableStateOf("") }
     val productOriginList by viewModel.productOriginList.collectAsState()
     var selectedOrigin by remember { mutableStateOf("") }
     val productList by viewModel.productList.collectAsState()
@@ -59,7 +60,6 @@ fun TokoContent(
         Log.d("TokoScreen", "Product: $product")
     }
 
-    var query by remember { mutableStateOf("") }
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -84,7 +84,10 @@ fun TokoContent(
                 SearchBar(
                     query = query,
                     onQueryChanged = { query = it },
-                    onSearch = {},
+                    onSearch = {
+                        viewModel.searchBatik(query)
+                        navController.navigate("search_result_screen/$query")
+                    },
                 )
             }
 

@@ -4,6 +4,7 @@ import com.example.batikan.data.model.batik_details.BatikDetailsResponse
 import com.example.batikan.data.model.batik_origin.BatikOriginDetails
 import com.example.batikan.data.model.batik_product.BatikList
 import com.example.batikan.data.model.batik_scan.BatikScanResponse
+import com.example.batikan.data.model.batik_search.BatikSearchDetails
 import java.io.File
 
 interface BatikRepository {
@@ -14,4 +15,6 @@ interface BatikRepository {
     suspend fun getBatikDetail(batikId: String): Result<BatikDetailsResponse>
 
     suspend fun getBatikOrigin(origin: String): List<BatikOriginDetails>
+
+     suspend fun searchBatik(query: String): List<BatikSearchDetails>
 }
