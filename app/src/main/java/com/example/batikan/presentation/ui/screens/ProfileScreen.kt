@@ -75,7 +75,8 @@ fun ProfileContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 30.dp)
+                .padding(top = 20.dp),
             verticalArrangement = Arrangement.spacedBy(40.dp)
         ) {
             item {

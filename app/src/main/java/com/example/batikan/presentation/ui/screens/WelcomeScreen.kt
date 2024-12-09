@@ -95,6 +95,7 @@ fun BatikanWelcomeScreen(navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
+//                    .padding(horizontal = 20.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -103,9 +104,7 @@ fun BatikanWelcomeScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = Primary600),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .size(width = 330.dp, 50.dp)
-                        .height(48.dp)
-                        .padding(bottom = 8.dp),
+                        .height(48.dp),
                     shape = RectangleShape
                 ) {
                     Text(

@@ -75,7 +75,8 @@ fun TokoContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(top = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
 
         ) {
