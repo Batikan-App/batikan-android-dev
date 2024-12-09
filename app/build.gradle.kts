@@ -118,4 +118,7 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Midtrans Sandbox
+    implementation("com.midtrans:uikit:2.0.0-SANDBOX") // change the number to the latest version
 }
