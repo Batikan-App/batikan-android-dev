@@ -31,8 +31,8 @@ class CartViewModel @Inject constructor(
     private val _addCartState = MutableStateFlow<AddCartState>(AddCartState.Loading)
     val addCartState: StateFlow<AddCartState> get() = _addCartState
 
-    private val _cartItemList = MutableStateFlow<List<CartItem>>(emptyList())
-    val cartItemList: StateFlow<List<CartItem>> = _cartItemList
+    private val _cartItemList = MutableStateFlow<List<ProductDetail>>(emptyList())
+    val cartItemList: StateFlow<List<ProductDetail>> = _cartItemList
 
     fun fetchCartData() {
         viewModelScope.launch {
@@ -41,26 +41,29 @@ class CartViewModel @Inject constructor(
             val result = cartRepository.getCartData()
             result.fold(
                 onSuccess = { data ->
-                    val cartItems = mapCartToCartItem(data.data.cartItem)
+                    val cartItems = mapCartToProductDetail(data.data.cartItem)
                     _cartItemList.value = cartItems
                     _getCartState.value = GetCartState.Success(data)
                 },
                 onFailure = { error ->
-                    _getCartState.value =GetCartState.Error(error.message ?: "Unknown error")
+                    _getCartState.value = GetCartState.Error(error.message ?: "Unknown error")
                 }
             )
         }
     }
 
-    private fun mapCartToCartItem(cartItems: (List<CartItemData>)): List<CartItem> {
-        return cartItems.map { item ->
-            val imageFile = if(item.img.isNotEmpty()) item.img[0] else ""
-            CartItem(
+    private fun mapCartToProductDetail(cartItem: (List<CartItemData>)): List<ProductDetail> {
+        return cartItem.map { item ->
+            val imageFile = if (item.img.isNotEmpty()) item.img[0] else ""
+            ProductDetail(
                 id = item.id,
                 name = item.name,
                 price = item.price,
-                count = item.quantity,
-                imageResources = imageFile,
+                stockCount = item.quantity,
+                imageResource = imageFile,
+                motifDescription = "",
+                origin = "",
+                soldCount = 0
             )
         }
     }
@@ -111,6 +114,7 @@ class CartViewModel @Inject constructor(
 //            isChecked = true
 //        )
 //    }
+
 }
 
 sealed class GetCartState {
@@ -120,6 +124,7 @@ sealed class GetCartState {
 }
 
 sealed class AddCartState {
+    object Idle: AddCartState()
     object Loading: AddCartState()
     data class Success(val data: AddItemResponse): AddCartState()
     data class Error(val message: String): AddCartState()

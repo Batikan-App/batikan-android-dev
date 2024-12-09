@@ -204,7 +204,7 @@ fun SectionTitle(
 fun ProductNamePrice(
     modifier: Modifier  = Modifier,
     name: String,
-    price: String
+    price: Int
 ){
     Column (
         modifier = Modifier
@@ -219,7 +219,7 @@ fun ProductNamePrice(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = price,
+            text = "Rp.${price}",
             style = TextLgMedium,
             color = White
         )

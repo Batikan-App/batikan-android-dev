@@ -15,12 +15,12 @@ interface CartApiService {
     @GET("api/user/cart")
     suspend fun getCartItems(): Response<CartResponse>
 
-    @POST
+    @POST("api/user/cart")
     suspend fun addItemToCart(
         @Body request: CartRequest
     ): Response<AddItemResponse>
 
-    @PATCH
+    @PATCH("api/user/cart")
     suspend fun updateItemCart(
         @Body request: CartRequest
     ): Response<UpdateItemResponse>

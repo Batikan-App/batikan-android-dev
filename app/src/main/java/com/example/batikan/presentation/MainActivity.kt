@@ -149,6 +149,7 @@ class MainActivity : ComponentActivity() {
                             ProductDetailScreen(
                                 productDetailList = productDetailList,
                                 productId = batikId,
+                                navController = navController
                             )
                         } else {
                             Text(text = "Invalid batik ID", modifier = Modifier.fillMaxSize())

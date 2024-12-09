@@ -13,10 +13,13 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +30,9 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.batikan.data.model.cart.AddItemResponse
 import com.example.batikan.presentation.ui.screens.CartItem
 import com.example.batikan.presentation.ui.screens.ProductDetail
 import com.example.batikan.presentation.ui.theme.Gray100
@@ -35,18 +41,23 @@ import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
+import com.example.batikan.presentation.viewmodel.AddCartState
+import com.example.batikan.presentation.viewmodel.CartViewModel
 
 
 @Composable
 fun CheckoutButton(
     modifier: Modifier = Modifier,
-    product: ProductDetail,
-    onAddToCart: (Int) -> Unit
-) {
+    productId: String,
+    productStock: Int,
+    navController: NavController,
+    cartViewModel: CartViewModel = hiltViewModel(),
+    ) {
     var isCounting by remember { mutableStateOf(false) }
     var count by remember { mutableStateOf(0) }
-
     var quantity by remember { mutableStateOf(1) }
+
+    val addCartState by cartViewModel.addCartState.collectAsState()
 
     if (isCounting) {
         Column(
@@ -84,15 +95,32 @@ fun CheckoutButton(
                     color = TextPrimary,
                 )
 
-//                IconButton(onClick = {
-//                    if (count < product.count) count += 1
-//                }) {
-//                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
-//                }
+                IconButton(onClick = {
+                    if (count < productStock) count += 1
+                }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                }
             }
 
+            when(addCartState) {
+                is AddCartState.Idle -> {}
+                is AddCartState.Loading -> CircularProgressIndicator()
+                is AddCartState.Success -> {
+                    LaunchedEffect(Unit) {
+                        // Navigate to Cart
+                        navController.navigate("cart_screen")
+                    }
+                }
+                is AddCartState.Error -> {
+                    Text(text="Gagal menambahkan produk")
+                }
+            }
             Button(
-                onClick = { onAddToCart(quantity) },
+                onClick = {
+                    if(count > 0) {
+                        cartViewModel.addItemToCart(productId, count)
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 30.dp)

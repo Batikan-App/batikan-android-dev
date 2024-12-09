@@ -153,7 +153,7 @@
                                     origin = detail.origin,
                                     soldCount = detail.sold,
                                     stockCount = detail.stock,
-                                    price = "Rp.${detail.price}",
+                                    price = detail.price,
                                     motifDescription = detail.desc
                                 )
 
@@ -199,7 +199,7 @@
                         origin = item.origin,
                         soldCount = item.sold,
                         stockCount = item.stock,
-                        price = "Rp.${item.price}",
+                        price = item.price,
                         motifDescription = item.desc
                     )
                 }
@@ -215,7 +215,7 @@
                         origin = item.origin,
                         soldCount = item.sold,
                         stockCount = item.stock,
-                        price = "Rp.${item.price}",
+                        price = item.price,
                         motifDescription = item.desc
                     )
                 }

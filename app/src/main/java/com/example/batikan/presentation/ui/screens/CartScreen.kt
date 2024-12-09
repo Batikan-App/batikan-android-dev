@@ -52,6 +52,7 @@ import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 import com.example.batikan.presentation.viewmodel.CartViewModel
 import com.example.batikan.presentation.viewmodel.GetCartState
+import com.example.batikan.presentation.viewmodel.UserState
 
 
 data class CartItem(
@@ -60,7 +61,17 @@ data class CartItem(
     val imageResources: String,
     val price: Int,
     val count: Int,
-    val isChecked: Boolean = true
+
+    /**
+     * val id: String,
+     *     val imageResource: String,
+     *     val name: String,
+     *     val price: String,
+     *     val motifDescription: String,
+     *     val stockCount: Int,
+     *     val soldCount: Int,
+     *     val origin: String
+     */
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +83,7 @@ fun CartContent (
     navController: NavController,
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
+    val isChecked: Boolean = true
     val cartItems by cartViewModel.cartItemList.collectAsState()
     val getCartState by cartViewModel.getCartState.collectAsState()
 
@@ -79,78 +91,79 @@ fun CartContent (
         cartViewModel.fetchCartData()
     }
 
-    Scaffold (
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Keranjang",
-                        style = TextMdSemiBold,
-                        color = TextPrimary
+    when (getCartState) {
+        is GetCartState.Loading -> {
+            CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+        }
+
+        is GetCartState.Success -> {
+            val product = (getCartState as GetCartState.Success).data.data
+            Scaffold (
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = "Keranjang",
+                                style = TextMdSemiBold,
+                                color = TextPrimary
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.navigateUp() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null,
+                                    tint = TextPrimary
+                                )
+                            }
+                        }
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = TextPrimary
-                        )
+                bottomBar = {
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = Primary50)
+                            .padding(horizontal = 30.dp)
+                            .padding(vertical = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+
+                        ) {
+                        Column ( ) {
+                            Text(
+                                text = "Total",
+                                style = TextSmallRegular,
+                                color = TextQuatenary
+                            )
+                            Text(
+                                text = "Rp.${product.totalPrice}",
+                                style = TextMdSemiBold,
+                                color = TextPrimary
+                            )
+
+                        }
+
+                        Button(
+                            onClick = {  },
+                            modifier = modifier
+                                .width(110.dp)
+                                .height(40.dp),
+                            shape = RectangleShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = Primary600)
+                        ) {
+                            Text(
+                                text = "Bayar",
+                                style = TextSmallSemiBold,
+                                color = White
+                            )
+                        }
+
+
                     }
-                }
-            )
-        },
-        bottomBar = {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Primary50)
-                    .padding(horizontal = 30.dp)
-                    .padding(vertical = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-
-            ) {
-                Column ( ) {
-                    Text(
-                        text = "Total",
-                        style = TextSmallRegular,
-                        color = TextQuatenary
-                    )
-                    Text(
-                        text = "Rp....",
-                        style = TextMdSemiBold,
-                        color = TextPrimary
-                    )
 
                 }
-
-                Button(
-                    onClick = {  },
-                    modifier = modifier
-                        .width(110.dp)
-                        .height(40.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = Primary600)
-                ) {
-                    Text(
-                        text = "Bayar",
-                        style = TextSmallSemiBold,
-                        color = White
-                    )
-                }
-
-
-            }
-
-        }
-    ) { innerPadding ->
-        when (getCartState) {
-            is GetCartState.Loading -> {
-                CircularProgressIndicator(modifier = Modifier.padding(16.dp))
-            }
-
-            is GetCartState.Success -> {
+            ) { innerPadding ->
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -170,14 +183,14 @@ fun CartContent (
                     }
                 }
             }
+        }
 
-            is GetCartState.Error -> {
-                Text(
-                    text = (getCartState as GetCartState.Error).message,
-                    modifier = Modifier.padding(16.dp),
-                    color = TextSecondary
-                )
-            }
+        is GetCartState.Error -> {
+            Text(
+                text = (getCartState as GetCartState.Error).message,
+                modifier = Modifier.padding(16.dp),
+                color = TextSecondary
+            )
         }
     }
 }

@@ -138,7 +138,7 @@ fun SearchResultScreen(
                         ProductCard(
                             imageResource = product.imageResource,
                             title = product.name,
-                            price = product.price,
+                            price = "Rp${product.price}",
                             onClick = { navController.navigate("detail_product_screen/${product.id}") }
                         )
                     }
