@@ -47,6 +47,7 @@ import coil.compose.AsyncImage
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.Primary600
+import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextMdRegular
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
@@ -250,37 +251,42 @@ fun ShippingCard(
                 model = shippingItem.ImageResource,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(60.dp, 60.dp)
+                modifier = Modifier.size(80.dp, 80.dp)
             )
-            Column {
+            Column (
+//                verticalArrangement = Arrangement.SpaceAround
+
+            ) {
                 Text(
                     text = shippingItem.title,
-                    style = TextSmallSemiBold,
+                    style = TextMdSemiBold,
                     color = TextPrimary
                 )
+                Spacer(Modifier.height(4.dp))
                 Text(
                     text = shippingItem.status,
                     style = TextSmallRegular,
                     color = TextSecondary
                 )
+                Row (
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = shippingItem.number,
+                        style = TextSmallMedium,
+                        color = TextPrimary
+                    )
+                    IconButton(onClick = {  }) {
+                        Icon(
+                            imageVector = Icons.Default.CopyAll,
+                            contentDescription = null,
+                            tint = TextPrimary
+                        )
+                    }
+                }
             }
         }
-        Row (
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = shippingItem.number,
-                style = TextSmallMedium,
-                color = TextPrimary
-            )
-            IconButton(onClick = {  }) {
-                Icon(
-                    imageVector = Icons.Default.CopyAll,
-                    contentDescription = null,
-                    tint = TextPrimary
-                )
-            }
-        }
+
 
 
     }

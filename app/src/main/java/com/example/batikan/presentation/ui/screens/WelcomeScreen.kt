@@ -114,6 +114,8 @@ fun BatikanWelcomeScreen(navController: NavController) {
                     )
                 }
 
+                Spacer(Modifier.height(8.dp))
+
                 OutlinedButton(
                     onClick = { navController.navigate("register_screen") },
                     modifier = Modifier
