@@ -14,7 +14,6 @@ import com.example.batikan.data.model.cart.UpdateItemResponse
 import com.example.batikan.domain.repositories.BatikRepository
 import com.example.batikan.domain.repositories.CartRepository
 import com.example.batikan.presentation.ui.composables.Product
-import com.example.batikan.presentation.ui.screens.CartItem
 import com.example.batikan.presentation.ui.screens.ProductDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +21,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository,
 ) : ViewModel() {
+    private val _idOrder = MutableStateFlow("")
+    val idOrder: StateFlow<String> = _idOrder
+
     private val _getCartState = MutableStateFlow<GetCartState>(GetCartState.Loading)
     val getCartState: StateFlow<GetCartState> get() = _getCartState
 
@@ -57,10 +60,10 @@ class CartViewModel @Inject constructor(
             val result = cartRepository.getCartData()
             result.fold(
                 onSuccess = { data ->
-                    val cartItems = mapCartToProductDetail(data.data.cartItem)
-                    _cartItemList.value = cartItems
+                    // Periksa jika data cart kosong
+                    val cartItems = data.data.cartItem ?: emptyList()
+                    _cartItemList.value = mapCartToProductDetail(cartItems)
                     _getCartState.value = GetCartState.Success(data)
-
                 },
                 onFailure = { error ->
                     _getCartState.value = GetCartState.Error(error.message ?: "Unknown error")
@@ -69,7 +72,9 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private fun mapCartToProductDetail(cartItem: (List<CartItemData>)): List<ProductDetail> {
+    private fun mapCartToProductDetail(cartItem: List<CartItemData>?): List<ProductDetail> {
+        if (cartItem.isNullOrEmpty()) return emptyList()
+
         return cartItem.map { item ->
             val imageFile = if (item.img.isNotEmpty()) item.img[0] else ""
             ProductDetail(
@@ -104,54 +109,38 @@ class CartViewModel @Inject constructor(
     }
     fun updateItemCart(productId: String, quantity: Int) {
         viewModelScope.launch {
-            // Optimistically update local state
-            _cartItemList.value = _cartItemList.value.map { item ->
+            val currentCart = _cartItemList.value
+            val updatedCart = currentCart.map { item ->
                 if (item.id == productId) item.copy(stockCount = quantity) else item
             }
-            _itemUpdateStates[productId] = true
+            _cartItemList.value = updatedCart
 
-            // Update server-side data
+            // Update total price
+            _totalPrice.value = updatedCart.sumOf { it.price.toLong() * it.stockCount.toLong() }
+
+            _itemUpdateStates[productId] = true
             val response = cartRepository.updateCartItem(productId, quantity)
             if (!response.isSuccessful) {
-                // Revert the state if the update fails
-                _cartItemList.value = _cartItemList.value.map { item ->
-                    if (item.id == productId) item.copy(stockCount = item.stockCount) else item
-                }
+                // Revert state if update fails
+                _cartItemList.value = currentCart
+                _totalPrice.value = currentCart.sumOf { it.price.toLong() * it.stockCount.toLong() }
             }
-
             _itemUpdateStates[productId] = false
         }
     }
 
+    private fun generateOrderId(length: Int): String {
+        val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
-//    fun addItemToCart(productDetail: ProductDetail, quantity: Int) {
-//        val currentList = _cartItemList.value.toMutableList()
-//        val newItem = productDetail.toCartItem(quantity)
-//
-//        // Periksa apakah item sudah ada
-//        val existingItem = currentList.find { it.id == newItem.id }
-//        if (existingItem != null) {
-//            // Perbarui jumlah jika sudah ada
-//            val updatedItem = existingItem.copy(count = existingItem.count + quantity)
-//            currentList[currentList.indexOf(existingItem)] = updatedItem
-//        } else {
-//            // Tambahkan item baru
-//            currentList.add(newItem)
-//        }
-//
-//        _cartItemList.value = currentList
-//    }
-//
-//    fun ProductDetail.toCartItem(quantity: Int): CartItem {
-//        return CartItem(
-//            id = this.id,
-//            name = this.name,
-//            imageResources = this.imageResource,
-//            price = this.price.replace(",", "").replace("Rp ", "").toInt(), // Menghapus format string harga
-//            count = quantity,
-//            isChecked = true
-//        )
-//    }
+        return (1..length)
+            .map { Random.nextInt(0, charPool.size) }
+            .map(charPool::get)
+            .joinToString("")
+    }
+
+    fun getIdOrder() {
+        _idOrder.value = generateOrderId(10)
+    }
 
 }
 
@@ -173,5 +162,4 @@ sealed class UpdateCartState {
     object Loading: UpdateCartState()
     data class Success(val data: UpdateItemResponse): UpdateCartState()
     data class Error(val message: String): UpdateCartState()
-
 }

@@ -1,6 +1,7 @@
 package com.example.batikan.presentation.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -32,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,26 +57,6 @@ import com.example.batikan.presentation.viewmodel.CartViewModel
 import com.example.batikan.presentation.viewmodel.GetCartState
 import com.example.batikan.presentation.viewmodel.UserState
 
-
-data class CartItem(
-    val id: String,
-    val name: String,
-    val imageResources: String,
-    val price: Int,
-    val count: Int,
-
-    /**
-     * val id: String,
-     *     val imageResource: String,
-     *     val name: String,
-     *     val price: String,
-     *     val motifDescription: String,
-     *     val stockCount: Int,
-     *     val soldCount: Int,
-     *     val origin: String
-     */
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartContent (
@@ -86,9 +68,8 @@ fun CartContent (
     val cartItems by cartViewModel.cartItemList.collectAsState()
     val getCartState by cartViewModel.getCartState.collectAsState()
     val totalPrice by cartViewModel.totalPrice.collectAsState()
+    Log.d("CartTotalPrice", "$totalPrice")
     val itemUpdateStates = cartViewModel.itemUpdateStates
-
-
 
     LaunchedEffect(Unit) {
         cartViewModel.fetchCartData()
@@ -100,91 +81,92 @@ fun CartContent (
         }
 
         is GetCartState.Success -> {
-            val product = (getCartState as GetCartState.Success).data.data
-            Scaffold (
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                text = "Keranjang",
-                                style = TextMdSemiBold,
-                                color = TextPrimary
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = { navController.navigateUp() }) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = null,
-                                    tint = TextPrimary
-                                )
-                            }
-                        }
-                    )
-                },
-                bottomBar = {
-                    Column {
-                        Row (
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(color = Primary50)
-                                .padding(horizontal = 30.dp)
-                                .padding(vertical = 20.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-
-                            ) {
-                            Column ( ) {
+            if (cartItems.isEmpty()) {
+                Text(
+                    text = "Keranjang Anda kosong",
+                    modifier = Modifier.fillMaxSize(),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            title = {
                                 Text(
-                                    text = "Total",
-                                    style = TextSmallRegular,
-                                    color = TextQuatenary
-                                )
-                                Text(
-                                    text = "Rp.${totalPrice}",
+                                    text = "Keranjang",
                                     style = TextMdSemiBold,
                                     color = TextPrimary
                                 )
-
                             }
-
-                            Button(
-                                onClick = {  },
-                                modifier = modifier
-                                    .width(110.dp)
-                                    .height(40.dp),
-                                shape = RectangleShape,
-                                colors = ButtonDefaults.buttonColors(containerColor = Primary600)
-                            ) {
-                                Text(
-                                    text = "Bayar",
-                                    style = TextSmallSemiBold,
-                                    color = White
-                                )
-                            }
-                        }
-                        BottomNavBar(navController = navController)
-
-                    }
-                }
-            ) { innerPadding ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = 30.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    items(
-                        items = cartItems,
-                        key = { it.id }
-                    ) { cartItem ->
-                        CartItemRow(
-                            cartItem = cartItem,
-                            onCountChange = {  id, count -> cartViewModel.updateItemCart(id, count) } ,
-                            isLoading = itemUpdateStates[cartItem.id] == true,
-
                         )
+                    },
+                    bottomBar = {
+                        Column {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(color = Primary50)
+                                    .padding(horizontal = 30.dp)
+                                    .padding(vertical = 20.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+
+                                ) {
+                                Column() {
+                                    Text(
+                                        text = "Total",
+                                        style = TextSmallRegular,
+                                        color = TextQuatenary
+                                    )
+                                    Text(
+                                        text = "Rp.${totalPrice}",
+                                        style = TextMdSemiBold,
+                                        color = TextPrimary
+                                    )
+
+                                }
+
+                                Button(
+                                    onClick = { navController.navigate("payment_detail_screen") },
+                                    modifier = modifier
+                                        .width(110.dp)
+                                        .height(40.dp),
+                                    shape = RectangleShape,
+                                    colors = ButtonDefaults.buttonColors(containerColor = Primary600)
+                                ) {
+                                    Text(
+                                        text = "Bayar",
+                                        style = TextSmallSemiBold,
+                                        color = White
+                                    )
+                                }
+                            }
+                            BottomNavBar(navController = navController)
+                        }
+                    }
+                ) { innerPadding ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(horizontal = 30.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        items(
+                            items = cartItems,
+                            key = { it.id }
+                        ) { cartItem ->
+                            CartItemRow(
+                                cartItem = cartItem,
+                                onCountChange = { id, count ->
+                                    cartViewModel.updateItemCart(
+                                        id,
+                                        count
+                                    )
+                                },
+                                isLoading = itemUpdateStates[cartItem.id] == true,
+                            )
+                        }
                     }
                 }
             }
@@ -197,5 +179,6 @@ fun CartContent (
                 color = TextSecondary
             )
         }
+
     }
 }

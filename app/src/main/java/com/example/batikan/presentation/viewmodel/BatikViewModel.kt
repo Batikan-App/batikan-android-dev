@@ -64,6 +64,14 @@
                 }
             }
 
+            fun getBatikIdFromSearchResult(index: Int): String? {
+                return if (index in _searchResults.value.indices) {
+                    _searchResults.value[index].id
+                } else {
+                    null // Mengembalikan null jika index tidak valid
+                }
+            }
+
             fun clearSearchResults() {
                 _searchResults.value = emptyList()
                 _batikSearchState.value = BatikSearchState.Idle

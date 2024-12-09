@@ -41,15 +41,6 @@ data class Product(
 )
 
 @Composable
-fun ProductSearchResultList(
-    productOriginList: List<ProductDetail>,
-    onProductClick: (String) -> Unit,
-    modifier: Modifier = Modifier
-){
-
-}
-
-@Composable
 fun ProductOriginList(
     productOriginList: List<ProductDetail>,
     onProductClick: (String) -> Unit,
@@ -176,21 +167,19 @@ fun ProductCard(
 
 @Composable
 fun ProductSection(
-    navController: NavController,
     title: String,
     description: String,
+    onProductClick: (String) -> Unit,
     productList: List<Product>,
     isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SectionTitle(title = title, description = description, modifier = Modifier.padding(start = 30.dp))
+        SectionTitle(title = title, description = description, modifier = Modifier)
         Spacer(Modifier.height(8.dp))
         ProductCardList(
             productList = productList,
-            onProductClick = { batikId ->
-                navController.navigate("detail_product_screen/$batikId")
-            },
+            onProductClick = onProductClick,
             isLoading = isLoading
         )
     }

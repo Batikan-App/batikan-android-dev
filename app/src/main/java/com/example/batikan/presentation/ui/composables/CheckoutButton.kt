@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.data.model.cart.AddItemResponse
-import com.example.batikan.presentation.ui.screens.CartItem
 import com.example.batikan.presentation.ui.screens.ProductDetail
 import com.example.batikan.presentation.ui.theme.Gray100
 import com.example.batikan.presentation.ui.theme.Primary600
@@ -104,15 +103,11 @@ fun CheckoutButton(
 
             when(addCartState) {
                 is AddCartState.Idle -> {}
-                is AddCartState.Loading -> CircularProgressIndicator()
+                is AddCartState.Loading -> {}
                 is AddCartState.Success -> {
                     LaunchedEffect(Unit) {
                         // Navigate to Cart
-                        navController.navigate("cart_screen") {
-                            popUpTo("detail_product_screen") {
-                                inclusive = true
-                            }
-                        }
+                        navController.navigate("cart_screen")
                     }
                 }
                 is AddCartState.Error -> {

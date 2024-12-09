@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -44,6 +45,8 @@ import com.example.batikan.presentation.ui.screens.LogoAnimationScreenContent
 import com.example.batikan.presentation.ui.screens.PhotoResultScreen
 import com.example.batikan.presentation.ui.screens.PhotoResultScreen
 import com.example.batikan.presentation.ui.screens.LogoAnimationScreenContent
+import com.example.batikan.presentation.ui.screens.PaymentDetailContent
+import com.example.batikan.presentation.ui.screens.PaymentScreen
 import com.example.batikan.presentation.ui.screens.ProductDetailScreen
 import com.example.batikan.presentation.ui.screens.ProfileContent
 import com.example.batikan.presentation.ui.screens.RegisterScreen
@@ -72,6 +75,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val context = LocalContext.current
 
             BatikanTheme {
                 val navController = rememberNavController()
@@ -132,7 +136,24 @@ class MainActivity : ComponentActivity() {
                         HomeScreenContent(
                             navController = navController,
                             onProductClick = { batikId ->
-                                navController.navigate("detail_product_screen/$batikId")
+                                navController.navigate("detail_product_screen/$batikId") {
+                                    popUpTo("home_screen") {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
+                    }
+
+                    composable(route = "toko_screen") {
+                        TokoContent(
+                            navController = navController,
+                            onProductClick = { batikId ->
+                                navController.navigate("detail_product_screen/$batikId") {
+                                    popUpTo("toko_screen") {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         )
                     }
@@ -161,6 +182,28 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
 //                            onItemCheckedChange = { _,_ -> },
 //                            onItemCountChange = {_,_ -> },
+                        )
+                    }
+
+                    composable("payment_detail_screen") {
+                        PaymentDetailContent(
+                            navController = navController,
+                            modifier = Modifier,
+                            navigateToPayment = { urlSnap ->
+                                navController.navigate("payment/$urlSnap")
+                            }
+                        )
+                    }
+
+                    composable("payment/{urlSnap}", listOf(navArgument("urlSnap") { type = NavType.StringType })) {
+                        val urlSnap = it.arguments?.getString("urlSnap") ?: ""
+                        PaymentScreen(
+                            context = context,
+                            url = urlSnap,
+                            backHandler = {
+                                navController.popBackStack()
+                            },
+                            navController = navController
                         )
                     }
 
@@ -205,14 +248,13 @@ class MainActivity : ComponentActivity() {
                             photoUri = photoUri,
                             uiState = uiState,
                             navController = navController,
-                        )
-                    }
-//                BatikScanCard(modifier = Modifier.padding(start = 30.dp), navController = )
-
-                    composable(route = "toko_screen") {
-
-                        TokoContent(
-                            navController,
+                            onProductClick = { batikId ->
+                                navController.navigate("detail_product_screen/$batikId") {
+                                    popUpTo("toko_screen") {
+                                        inclusive = true
+                                    }
+                                }
+                            }
                         )
                     }
 
@@ -235,6 +277,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+                    // TODO: perbaiki error backstack di sini biar navbar bisa fleksibel
                     composable(
                         route = "search_result_screen/{query}",
                         arguments = listOf(navArgument("query") { type = NavType.StringType })
@@ -243,7 +286,7 @@ class MainActivity : ComponentActivity() {
 
                         SearchResultScreen(
                             navController = navController,
-                            initialQuery = query
+                            initialQuery = query,
                         )
                     }
                 }

@@ -121,4 +121,10 @@ dependencies {
 
     // Midtrans Sandbox
     implementation("com.midtrans:uikit:2.0.0-SANDBOX") // change the number to the latest version
+    implementation("com.midtrans:java-library:3.1.4")
+
+    // Test Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+
 }
