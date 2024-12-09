@@ -159,8 +159,8 @@ class MainActivity : ComponentActivity() {
                     composable("cart_screen") {
                         CartContent(
                             navController = navController,
-                            onItemCheckedChange = { _,_ -> },
-                            onItemCountChange = {_,_ -> },
+//                            onItemCheckedChange = { _,_ -> },
+//                            onItemCountChange = {_,_ -> },
                         )
                     }
 

@@ -1,5 +1,6 @@
 package com.example.batikan.presentation.viewmodel
 
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import com.example.batikan.data.model.cart.AddItemResponse
 import com.example.batikan.data.model.cart.CartItemData
 import com.example.batikan.data.model.cart.CartItemList
 import com.example.batikan.data.model.cart.CartResponse
+import com.example.batikan.data.model.cart.UpdateItemResponse
 import com.example.batikan.domain.repositories.BatikRepository
 import com.example.batikan.domain.repositories.CartRepository
 import com.example.batikan.presentation.ui.composables.Product
@@ -34,6 +36,20 @@ class CartViewModel @Inject constructor(
     private val _cartItemList = MutableStateFlow<List<ProductDetail>>(emptyList())
     val cartItemList: StateFlow<List<ProductDetail>> = _cartItemList
 
+    private val _itemUpdateStates = mutableStateMapOf<String, Boolean>()
+    val itemUpdateStates: Map<String, Boolean> get() = _itemUpdateStates
+
+    private val _totalPrice = MutableStateFlow(0L)
+    val totalPrice: StateFlow<Long> get() = _totalPrice
+
+    init {
+        viewModelScope.launch {
+            cartItemList.collect { items ->
+                _totalPrice.value = items.sumOf { it.price.toLong() * it.stockCount.toLong() }
+            }
+        }
+    }
+
     fun fetchCartData() {
         viewModelScope.launch {
             _getCartState.value = GetCartState.Loading
@@ -44,6 +60,7 @@ class CartViewModel @Inject constructor(
                     val cartItems = mapCartToProductDetail(data.data.cartItem)
                     _cartItemList.value = cartItems
                     _getCartState.value = GetCartState.Success(data)
+
                 },
                 onFailure = { error ->
                     _getCartState.value = GetCartState.Error(error.message ?: "Unknown error")
@@ -85,6 +102,27 @@ class CartViewModel @Inject constructor(
             }
         }
     }
+    fun updateItemCart(productId: String, quantity: Int) {
+        viewModelScope.launch {
+            // Optimistically update local state
+            _cartItemList.value = _cartItemList.value.map { item ->
+                if (item.id == productId) item.copy(stockCount = quantity) else item
+            }
+            _itemUpdateStates[productId] = true
+
+            // Update server-side data
+            val response = cartRepository.updateCartItem(productId, quantity)
+            if (!response.isSuccessful) {
+                // Revert the state if the update fails
+                _cartItemList.value = _cartItemList.value.map { item ->
+                    if (item.id == productId) item.copy(stockCount = item.stockCount) else item
+                }
+            }
+
+            _itemUpdateStates[productId] = false
+        }
+    }
+
 
 //    fun addItemToCart(productDetail: ProductDetail, quantity: Int) {
 //        val currentList = _cartItemList.value.toMutableList()
@@ -128,4 +166,12 @@ sealed class AddCartState {
     object Loading: AddCartState()
     data class Success(val data: AddItemResponse): AddCartState()
     data class Error(val message: String): AddCartState()
+}
+
+sealed class UpdateCartState {
+    object Idle: UpdateCartState()
+    object Loading: UpdateCartState()
+    data class Success(val data: UpdateItemResponse): UpdateCartState()
+    data class Error(val message: String): UpdateCartState()
+
 }

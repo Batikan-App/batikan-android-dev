@@ -3,6 +3,7 @@ package com.example.batikan.presentation.ui.composables
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -33,6 +34,7 @@ fun BottomNavBar(
     items: List<BottomNavItem> = listOf(
         BottomNavItem("Home", Icons.Default.Home, "home_screen"),
         BottomNavItem("Shop", Icons.Default.ShoppingCart, "toko_screen"),
+        BottomNavItem("Cart", Icons.Default.ShoppingBag, "cart_screen"),
         BottomNavItem("Profile", Icons.Default.Person, "profile_screen")
     )
 ) {
