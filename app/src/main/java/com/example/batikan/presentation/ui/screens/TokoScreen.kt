@@ -176,7 +176,11 @@ fun TokoContent(
                         ProductOriginList(
                             productOriginList = productOriginList,
                             onProductClick = { batikId ->
-                                navController.navigate("detail_product_screen/$batikId")
+                                navController.navigate("detail_product_screen/$batikId"){
+                                    popUpTo("toko_screen"){
+                                        inclusive = true
+                                    }
+                                }
                             },
                             isLoading = true
                         )

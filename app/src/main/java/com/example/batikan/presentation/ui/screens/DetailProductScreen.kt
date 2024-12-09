@@ -26,7 +26,6 @@ import com.example.batikan.presentation.ui.composables.ProductNamePrice
 import com.example.batikan.presentation.ui.composables.ProductPreview
 //import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
-import com.example.batikan.presentation.viewmodel.AddCartState
 import com.example.batikan.presentation.viewmodel.BatikDetailState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 import com.example.batikan.presentation.viewmodel.CartViewModel

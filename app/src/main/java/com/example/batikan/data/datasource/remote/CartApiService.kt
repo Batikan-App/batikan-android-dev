@@ -6,6 +6,7 @@ import com.example.batikan.data.model.cart.CartResponse
 import com.example.batikan.data.model.cart.UpdateItemResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST

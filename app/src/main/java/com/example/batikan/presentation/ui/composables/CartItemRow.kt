@@ -15,11 +15,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.batikan.presentation.ui.screens.CartItem
 import com.example.batikan.presentation.ui.screens.ProductDetail
@@ -28,14 +34,20 @@ import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
+import com.example.batikan.presentation.viewmodel.CartViewModel
 
 @Composable
 fun CartItemRow (
     modifier: Modifier = Modifier,
     cartItem: ProductDetail,
-    onCheckedChange: (Boolean) -> Unit,
-    onCountChange: (Int) -> Unit
+//    onCheckedChange: (Boolean) -> Unit,
+    onCountChange: (String, Int) -> Unit,
+    isLoading: Boolean,
+    cartViewModel: CartViewModel = hiltViewModel()
+
 ) {
+    var stockCount by remember(cartItem.id) { mutableStateOf(cartItem.stockCount) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -73,7 +85,18 @@ fun CartItemRow (
 
                 ) {
                 IconButton(
-                    onClick = { if (cartItem.stockCount > 1) onCountChange(cartItem.stockCount - 1)}
+                    onClick = {
+                        if (cartItem.stockCount > 1) {
+//                            onCountChange(cartItem.stockCount - 1)
+//                            cartViewModel.updateItemCart(cartItem.id, cartItem.stockCount - 1)
+//                            cartViewModel.fetchCartData()
+                            stockCount -= 1
+                            onCountChange(cartItem.id, stockCount)
+
+                        } else {
+                            // ToDo : Remove item from cart
+                        }
+                    }
                 ) {
                     Icon(imageVector = Icons.Default.Remove, contentDescription = null)
                 }
@@ -83,8 +106,16 @@ fun CartItemRow (
                     color = TextPrimary,
                 )
                 IconButton(
-                    // ToDo : Add checking max item
-                    onClick = {onCountChange(cartItem.stockCount + 1)}
+                    onClick = {
+//                        onCountChange(cartItem.stockCount + 1)
+                        //** ganti dengan stok maksimal yang sesuai
+                        if (cartItem.stockCount < 100 ) {
+                            stockCount += 1
+                            onCountChange(cartItem.id, stockCount)
+
+                        }
+                        // ToDo : Add checking max stok
+                    }
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = null)
                 }

@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
+import com.example.batikan.presentation.ui.composables.BottomNavBar
 import com.example.batikan.presentation.ui.composables.CartItemRow
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.Primary200
@@ -78,14 +79,16 @@ data class CartItem(
 @Composable
 fun CartContent (
     modifier: Modifier = Modifier,
-    onItemCheckedChange: (String, Boolean) -> Unit,
-    onItemCountChange: (String, Int) -> Unit,
     navController: NavController,
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
     val isChecked: Boolean = true
     val cartItems by cartViewModel.cartItemList.collectAsState()
     val getCartState by cartViewModel.getCartState.collectAsState()
+    val totalPrice by cartViewModel.totalPrice.collectAsState()
+    val itemUpdateStates = cartViewModel.itemUpdateStates
+
+
 
     LaunchedEffect(Unit) {
         cartViewModel.fetchCartData()
@@ -121,64 +124,66 @@ fun CartContent (
                     )
                 },
                 bottomBar = {
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = Primary50)
-                            .padding(horizontal = 30.dp)
-                            .padding(vertical = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                    Column {
+                        Row (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color = Primary50)
+                                .padding(horizontal = 30.dp)
+                                .padding(vertical = 20.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
 
-                        ) {
-                        Column ( ) {
-                            Text(
-                                text = "Total",
-                                style = TextSmallRegular,
-                                color = TextQuatenary
-                            )
-                            Text(
-                                text = "Rp.${product.totalPrice}",
-                                style = TextMdSemiBold,
-                                color = TextPrimary
-                            )
+                            ) {
+                            Column ( ) {
+                                Text(
+                                    text = "Total",
+                                    style = TextSmallRegular,
+                                    color = TextQuatenary
+                                )
+                                Text(
+                                    text = "Rp.${totalPrice}",
+                                    style = TextMdSemiBold,
+                                    color = TextPrimary
+                                )
 
+                            }
+
+                            Button(
+                                onClick = {  },
+                                modifier = modifier
+                                    .width(110.dp)
+                                    .height(40.dp),
+                                shape = RectangleShape,
+                                colors = ButtonDefaults.buttonColors(containerColor = Primary600)
+                            ) {
+                                Text(
+                                    text = "Bayar",
+                                    style = TextSmallSemiBold,
+                                    color = White
+                                )
+                            }
                         }
-
-                        Button(
-                            onClick = {  },
-                            modifier = modifier
-                                .width(110.dp)
-                                .height(40.dp),
-                            shape = RectangleShape,
-                            colors = ButtonDefaults.buttonColors(containerColor = Primary600)
-                        ) {
-                            Text(
-                                text = "Bayar",
-                                style = TextSmallSemiBold,
-                                color = White
-                            )
-                        }
-
+                        BottomNavBar(navController = navController)
 
                     }
-
                 }
             ) { innerPadding ->
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding),
+                        .padding(innerPadding)
+                        .padding(horizontal = 30.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    items(cartItems) { cartItem ->
+                    items(
+                        items = cartItems,
+                        key = { it.id }
+                    ) { cartItem ->
                         CartItemRow(
                             cartItem = cartItem,
-                            onCheckedChange = { isChecked ->
-                                onItemCheckedChange(cartItem.id, isChecked)
-                            },
-                            onCountChange = { newCount ->
-                                onItemCountChange(cartItem.id, newCount)
-                            }
+                            onCountChange = {  id, count -> cartViewModel.updateItemCart(id, count) } ,
+                            isLoading = itemUpdateStates[cartItem.id] == true,
+
                         )
                     }
                 }
