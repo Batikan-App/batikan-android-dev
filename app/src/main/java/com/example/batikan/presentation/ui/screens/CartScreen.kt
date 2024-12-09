@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,10 +27,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.CartItemRow
@@ -40,143 +46,151 @@ import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextQuatenary
+import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
+import com.example.batikan.presentation.viewmodel.CartViewModel
+import com.example.batikan.presentation.viewmodel.GetCartState
+import com.example.batikan.presentation.viewmodel.UserState
 
 
 data class CartItem(
     val id: String,
     val name: String,
-    val imageResources: Int,
+    val imageResources: String,
     val price: Int,
     val count: Int,
-    val isChecked: Boolean = true
+
+    /**
+     * val id: String,
+     *     val imageResource: String,
+     *     val name: String,
+     *     val price: String,
+     *     val motifDescription: String,
+     *     val stockCount: Int,
+     *     val soldCount: Int,
+     *     val origin: String
+     */
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartContent (
     modifier: Modifier = Modifier,
-    cartItems: List<CartItem>,
     onItemCheckedChange: (String, Boolean) -> Unit,
     onItemCountChange: (String, Int) -> Unit,
-    navController: NavController
+    navController: NavController,
+    cartViewModel: CartViewModel = hiltViewModel()
 ) {
-    Scaffold (
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Keranjang",
-                        style = TextMdSemiBold,
-                        color = TextPrimary
+    val isChecked: Boolean = true
+    val cartItems by cartViewModel.cartItemList.collectAsState()
+    val getCartState by cartViewModel.getCartState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        cartViewModel.fetchCartData()
+    }
+
+    when (getCartState) {
+        is GetCartState.Loading -> {
+            CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+        }
+
+        is GetCartState.Success -> {
+            val product = (getCartState as GetCartState.Success).data.data
+            Scaffold (
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = "Keranjang",
+                                style = TextMdSemiBold,
+                                color = TextPrimary
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.navigateUp() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null,
+                                    tint = TextPrimary
+                                )
+                            }
+                        }
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = TextPrimary
+                bottomBar = {
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = Primary50)
+                            .padding(horizontal = 30.dp)
+                            .padding(vertical = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+
+                        ) {
+                        Column ( ) {
+                            Text(
+                                text = "Total",
+                                style = TextSmallRegular,
+                                color = TextQuatenary
+                            )
+                            Text(
+                                text = "Rp.${product.totalPrice}",
+                                style = TextMdSemiBold,
+                                color = TextPrimary
+                            )
+
+                        }
+
+                        Button(
+                            onClick = {  },
+                            modifier = modifier
+                                .width(110.dp)
+                                .height(40.dp),
+                            shape = RectangleShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = Primary600)
+                        ) {
+                            Text(
+                                text = "Bayar",
+                                style = TextSmallSemiBold,
+                                color = White
+                            )
+                        }
+
+
+                    }
+
+                }
+            ) { innerPadding ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    items(cartItems) { cartItem ->
+                        CartItemRow(
+                            cartItem = cartItem,
+                            onCheckedChange = { isChecked ->
+                                onItemCheckedChange(cartItem.id, isChecked)
+                            },
+                            onCountChange = { newCount ->
+                                onItemCountChange(cartItem.id, newCount)
+                            }
                         )
                     }
                 }
-            )
-        },
-        bottomBar = {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Primary50)
-                    .padding(horizontal = 30.dp)
-                    .padding(vertical = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-
-            ) {
-                Column ( ) {
-                    Text(
-                        text = "Total",
-                        style = TextSmallRegular,
-                        color = TextQuatenary
-                    )
-                    Text(
-                        text = "Rp. ${cartItems.sumOf { it.price * it.count }}",
-                        style = TextMdSemiBold,
-                        color = TextPrimary
-                    )
-
-                }
-
-                Button(
-                    onClick = {  },
-                    modifier = modifier
-                        .width(110.dp)
-                        .height(40.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = Primary600)
-                ) {
-                    Text(
-                        text = "Bayar",
-                        style = TextSmallSemiBold,
-                        color = White
-                    )
-                }
-
-
             }
-
         }
-    ) { innerPadding ->
-        LazyColumn (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            items(cartItems) { cartItem ->
-                CartItemRow(
-                    cartItem = cartItem,
-                    onCheckedChange = { isChecked ->
-                        onItemCheckedChange(cartItem.id, isChecked)
-                    },
-                    onCountChange = { newCount ->
-                        onItemCountChange(cartItem.id, newCount)
-                    }
-                )
 
-            }
-
+        is GetCartState.Error -> {
+            Text(
+                text = (getCartState as GetCartState.Error).message,
+                modifier = Modifier.padding(16.dp),
+                color = TextSecondary
+            )
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun CartScreenPreview() {
-//    BatikanTheme {
-//        CartContent(
-//            cartItems = listOf(
-//                CartItem(
-//                    id = "1",
-//                    name = "Batik Pekalongan",
-//                    price = 200000,
-//                    count = 1,
-//                    isChecked = false,
-//                    imageResources = R.drawable.batik_new
-//                ),
-//                CartItem(
-//                    id = "2",
-//                    name = "Batik Papua",
-//                    price = 250000,
-//                    count = 2,
-//                    isChecked = true,
-//                    imageResources = R.drawable.batik_new
-//                )
-//            ),
-//            onItemCheckedChange = { _, _ -> },
-//            onItemCountChange = { _, _ -> },
-//        )
-//    }
-//}

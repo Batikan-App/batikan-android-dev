@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -33,8 +34,12 @@ import com.example.batikan.presentation.ui.composables.ProductCard
 import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.viewmodel.BatikViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 
 
+@OptIn(FlowPreview::class)
 @Composable
 fun SearchResultScreen(
     navController: NavController,
@@ -47,7 +52,16 @@ fun SearchResultScreen(
     val searchResults by viewModel.searchResults.collectAsState()
 
     LaunchedEffect(query) {
-        viewModel.searchBatik(query)
+        if (query.isBlank()) {
+            viewModel.clearSearchResults()
+        } else {
+            snapshotFlow { query }
+                .filter { it.isNotBlank() }
+                .debounce(300)
+                .collect {
+                    viewModel.searchBatik(it)
+                }
+        }
     }
 
     Scaffold(
@@ -72,13 +86,6 @@ fun SearchResultScreen(
                 onSearch = {
                     if(query.isNotBlank()) {
                         viewModel.searchBatik(query)
-                        // Navigasi ke screen yang sama setiap query baru
-                        navController.navigate("search_result_screen/$query") {
-                            // pop up ke destinasi yang ini lagi untuk menghindari stacked screen
-                            popUpTo("search_result_screen/$query") {
-                                inclusive = true
-                            }
-                        }
                     }
                 },
 
@@ -131,7 +138,7 @@ fun SearchResultScreen(
                         ProductCard(
                             imageResource = product.imageResource,
                             title = product.name,
-                            price = product.price,
+                            price = "Rp${product.price}",
                             onClick = { navController.navigate("detail_product_screen/${product.id}") }
                         )
                     }

@@ -60,7 +60,7 @@ fun ProductOriginList(
             ProductCard(
                 imageResource = product.imageResource,
                 title = product.name,
-                price = product.price,
+                price = "Rp${product.price}",
                 onClick = { onProductClick(product.id) }
             )
             Spacer(Modifier.width(20.dp))

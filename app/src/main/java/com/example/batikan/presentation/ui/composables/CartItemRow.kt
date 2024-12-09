@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.batikan.presentation.ui.screens.CartItem
+import com.example.batikan.presentation.ui.screens.ProductDetail
 import com.example.batikan.presentation.ui.theme.TextMdMedium
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
@@ -30,7 +32,7 @@ import com.example.batikan.presentation.ui.theme.TextSmallRegular
 @Composable
 fun CartItemRow (
     modifier: Modifier = Modifier,
-    cartItem: CartItem,
+    cartItem: ProductDetail,
     onCheckedChange: (Boolean) -> Unit,
     onCountChange: (Int) -> Unit
 ) {
@@ -40,12 +42,12 @@ fun CartItemRow (
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Checkbox(
-            checked = cartItem.isChecked,
-            onCheckedChange = onCheckedChange
-        )
-        Image(
-            painter = painterResource(id = cartItem.imageResources),
+//        Checkbox(
+//            checked = cartItem.isChecked,
+//            onCheckedChange = onCheckedChange
+//        )
+        AsyncImage(
+            model = cartItem.imageResource,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -58,7 +60,7 @@ fun CartItemRow (
                 color = TextPrimary
             )
             Text(
-                text = "Rp. ${cartItem.price}",
+                text = "Rp. ${cartItem.price * cartItem.stockCount}",
                 style = TextSmallRegular,
                 color = TextSecondary
             )
@@ -71,18 +73,18 @@ fun CartItemRow (
 
                 ) {
                 IconButton(
-                    onClick = { if (cartItem.count > 1) onCountChange(cartItem.count - 1)}
+                    onClick = { if (cartItem.stockCount > 1) onCountChange(cartItem.stockCount - 1)}
                 ) {
                     Icon(imageVector = Icons.Default.Remove, contentDescription = null)
                 }
                 Text(
-                    text = cartItem.count.toString(),
+                    text = cartItem.stockCount.toString(),
                     style = TextMdSemiBold,
                     color = TextPrimary,
                 )
                 IconButton(
                     // ToDo : Add checking max item
-                    onClick = {onCountChange(cartItem.count + 1)}
+                    onClick = {onCountChange(cartItem.stockCount + 1)}
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = null)
                 }

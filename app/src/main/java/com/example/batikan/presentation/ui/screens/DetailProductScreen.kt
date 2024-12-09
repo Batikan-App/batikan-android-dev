@@ -5,29 +5,41 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.batikan.data.model.batik_product.BatikList
+import com.example.batikan.presentation.ui.composables.CheckoutButton
+import com.example.batikan.presentation.ui.composables.Product
 //import com.example.batikan.presentation.ui.composables.CheckoutButton
 import com.example.batikan.presentation.ui.composables.ProductDetail
 import com.example.batikan.presentation.ui.composables.ProductNamePrice
 import com.example.batikan.presentation.ui.composables.ProductPreview
 //import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
+import com.example.batikan.presentation.viewmodel.AddCartState
 import com.example.batikan.presentation.viewmodel.BatikDetailState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
+import com.example.batikan.presentation.viewmodel.CartViewModel
+
+/**
+ * TODO: Nambahin icon cart biar user bisa buka cart di pojok kanan atas
+ */
 
 data class ProductDetail(
     val id: String,
     val imageResource: String,
     val name: String,
-    val price: String,
+    val price: Int,
     val motifDescription: String,
     val stockCount: Int,
     val soldCount: Int,
@@ -39,19 +51,20 @@ fun ProductDetailScreen(
     productDetailList: List<ProductDetail>,
     viewModel: BatikViewModel = hiltViewModel(),
     productId: String,
-//    onAddToCart: () -> Unit
+    navController: NavController
 ){
     LaunchedEffect(productId) {
         viewModel.fetchBatikDetail(productId)
     }
 
+//    val product = productDetailList.find { it.id == productId }
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
 //        bottomBar = {
-//            CheckoutButton(
-//                product = List<ProductDetail>,
-//                onAddToCart = onAddToCart
-//            )
+//            val productCheckoutId = productDetailList[0].id
+//            val productStock = productDetailList[0].stockCount
+//
 //        }
     ){ innerPadding ->
         LazyColumn (
@@ -82,6 +95,12 @@ fun ProductDetailScreen(
                     motifDescription = product.motifDescription,
                     batikOrigin = product.origin,
                     modifier = Modifier.padding(horizontal = 30.dp)
+                )
+
+                CheckoutButton(
+                    productId = product.id,
+                    productStock = product.stockCount,
+                    navController = navController
                 )
             }
         }
