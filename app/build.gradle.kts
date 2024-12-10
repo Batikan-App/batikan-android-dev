@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +22,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("string", "batikanBaseUrl", "")
+        buildConfigField("string", "midtransServerKey", "")
+        buildConfigField("string", "midtransClientKey", "")
     }
 
     buildTypes {
@@ -28,6 +34,7 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+
             )
         }
     }
