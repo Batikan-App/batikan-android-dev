@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.batikan.data.Constants
 import com.example.batikan.presentation.ui.composables.TextFieldWithTitle
 import com.example.batikan.presentation.ui.theme.*
 import com.example.batikan.presentation.viewmodel.CartViewModel
@@ -45,8 +46,8 @@ fun PaymentDetailContent(
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
     // Midtrans Properties
-    Midtrans.serverKey = "SB-Mid-server-rHFukgQ2DArO8-6W-z_A1Ane"
-    Midtrans.clientKey = "SB-Mid-client-dG_IZJQxVxGQdYeQ"
+    Midtrans.serverKey = Constants.MIDTRANS_SERVER_KEY
+    Midtrans.clientKey = Constants.MIDTRANS_CLIENT_KEY
     Midtrans.isProduction = false
 
     // Coroutine Properties
