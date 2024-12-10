@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.batikan.data.model.batik_product.BatikList
 import com.example.batikan.data.model.batik_search.BatikSearchDetails
 import com.example.batikan.data.model.cart.AddItemResponse
+import com.example.batikan.data.model.cart.CartDeleteResponse
 import com.example.batikan.data.model.cart.CartItemData
 import com.example.batikan.data.model.cart.CartItemList
 import com.example.batikan.data.model.cart.CartResponse
@@ -18,6 +19,7 @@ import com.example.batikan.presentation.ui.screens.ProductDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -35,6 +37,9 @@ class CartViewModel @Inject constructor(
 
     private val _addCartState = MutableStateFlow<AddCartState>(AddCartState.Loading)
     val addCartState: StateFlow<AddCartState> get() = _addCartState
+
+    private val _deleteCartState = MutableStateFlow<Result<Unit>?>(null)
+    val deleteCartState: StateFlow<Result<Unit>?> = _deleteCartState.asStateFlow()
 
     private val _cartItemList = MutableStateFlow<List<ProductDetail>>(emptyList())
     val cartItemList: StateFlow<List<ProductDetail>> = _cartItemList
@@ -107,6 +112,18 @@ class CartViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun deleteCartItems() {
+        viewModelScope.launch {
+            _deleteCartState.value = try {
+                cartRepository.deleteCartItems()
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
     fun updateItemCart(productId: String, quantity: Int) {
         viewModelScope.launch {
             val currentCart = _cartItemList.value
@@ -155,6 +172,13 @@ sealed class AddCartState {
     object Loading: AddCartState()
     data class Success(val data: AddItemResponse): AddCartState()
     data class Error(val message: String): AddCartState()
+}
+
+sealed class DeleteCartState {
+    object Idle: DeleteCartState()
+    object Loading: DeleteCartState()
+    data class Success(val message: CartDeleteResponse): DeleteCartState()
+    data class Error(val message: String): DeleteCartState()
 }
 
 sealed class UpdateCartState {

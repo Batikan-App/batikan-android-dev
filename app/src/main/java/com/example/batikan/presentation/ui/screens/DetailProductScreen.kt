@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,31 +15,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.example.batikan.data.model.batik_product.BatikList
 import com.example.batikan.presentation.ui.composables.CheckoutButton
-import com.example.batikan.presentation.ui.composables.Product
-//import com.example.batikan.presentation.ui.composables.CheckoutButton
 import com.example.batikan.presentation.ui.composables.ProductDetail
 import com.example.batikan.presentation.ui.composables.ProductNamePrice
 import com.example.batikan.presentation.ui.composables.ProductPreview
-//import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
-import com.example.batikan.presentation.viewmodel.BatikDetailState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
-import com.example.batikan.presentation.viewmodel.CartViewModel
-
-/**
- * TODO: Nambahin icon cart biar user bisa buka cart di pojok kanan atas
- */
 
 data class ProductDetail(
     val id: String,
@@ -65,7 +51,6 @@ fun ProductDetailScreen(
         viewModel.fetchBatikDetail(productId)
     }
 
-
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -78,7 +63,14 @@ fun ProductDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(
+                        onClick = {
+                        navController.navigate("home_screen") {
+                            popUpTo("detail_product_screen") {
+                                inclusive = true
+                            }
+                        }
+                    }) { // TODO bisa jadi ini yang bikin ngebug
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -88,11 +80,6 @@ fun ProductDetailScreen(
                 }
             )
         },
-//        bottomBar = {
-//            val productCheckoutId = productDetailList[0].id
-//            val productStock = productDetailList[0].stockCount
-//
-//        }
     ){ innerPadding ->
         LazyColumn (
             modifier = Modifier

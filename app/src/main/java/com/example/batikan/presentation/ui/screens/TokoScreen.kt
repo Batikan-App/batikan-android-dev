@@ -69,7 +69,9 @@ fun TokoContent(
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
-        bottomBar = {BottomNavBar(navController = navController)}
+        bottomBar = {
+            BottomNavBar(navController = navController)
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -83,7 +85,7 @@ fun TokoContent(
                 PageTitle(
                     title = "Koleksi Batik Kami",
                     description = "Temukan batik kualitas terbaik dari kami",
-                    modifier = Modifier.padding(start = 30.dp)
+                    modifier = Modifier.padding(horizontal = 30.dp),
                 )
             }
 
@@ -106,7 +108,8 @@ fun TokoContent(
                             description = "Tentukan pilihan batikmu!",
                             productList = productList,
                             onProductClick = onProductClick,
-                            isLoading = true
+                            isLoading = true,
+                            modifier = Modifier.padding(horizontal = 30.dp),
                         )
                     }
 
@@ -116,7 +119,8 @@ fun TokoContent(
                             description = "Tentukan pilihan batikmu!",
                             productList = productList,
                             onProductClick = onProductClick,
-                            isLoading = false
+                            isLoading = false,
+                            modifier = Modifier.padding(horizontal = 30.dp),
                         )
                     }
 
@@ -144,7 +148,7 @@ fun TokoContent(
                 SectionTitle(
                     title = "Cari batik cepat lewat scan",
                     description = "Scan batikmu sekarang",
-                    modifier = Modifier.padding(start = 30.dp)
+                    modifier = Modifier.padding(horizontal = 30.dp),
                 )
                 Spacer(Modifier.height(8.dp))
                 BatikScanCard(modifier = Modifier.padding(start = 30.dp, end = 30.dp), navController = navController)
@@ -154,7 +158,7 @@ fun TokoContent(
                 SectionTitle(
                     title = "Batik daerah",
                     description = "Temukan batik dari seluruh daerah disini",
-                    modifier = Modifier.padding(start = 30.dp)
+                    modifier = Modifier.padding(horizontal = 30.dp),
                 )
                 Spacer(Modifier.height(8.dp))
 
@@ -165,7 +169,7 @@ fun TokoContent(
                         selectedOrigin = selected
                         viewModel.fetchBatikByOrigin(selected)
                     },
-                    modifier = Modifier.padding(start = 30.dp, end = 30.dp)
+                    modifier = Modifier.padding(horizontal = 30.dp),
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -175,7 +179,8 @@ fun TokoContent(
                         ProductOriginList(
                             productOriginList = productOriginList,
                             onProductClick = onProductClick,
-                            isLoading = true
+                            isLoading = true,
+                            modifier = Modifier.padding(horizontal = 30.dp),
                         )
                     }
 
@@ -183,7 +188,8 @@ fun TokoContent(
                         ProductOriginList(
                             productOriginList = productOriginList,
                             onProductClick = onProductClick,
-                            isLoading = false
+                            isLoading = false,
+                            modifier = Modifier.padding(horizontal = 30.dp),
                         )
                     }
 
@@ -200,8 +206,7 @@ fun TokoContent(
                             text = "Produk segera tersedia 😉",
                             color = Color.Red,
                             style = TextMdSemiBold,
-                            modifier = Modifier.padding(horizontal = 30.dp)
-
+                            modifier = Modifier.padding(horizontal = 30.dp),
                         )
                     }
                 }

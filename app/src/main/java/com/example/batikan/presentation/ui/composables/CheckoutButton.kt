@@ -107,7 +107,9 @@ fun CheckoutButton(
                 is AddCartState.Success -> {
                     LaunchedEffect(Unit) {
                         // Navigate to Cart
-                        navController.navigate("cart_screen")
+                        navController.navigate("cart_screen") {
+                            launchSingleTop = false
+                        }
                     }
                 }
                 is AddCartState.Error -> {

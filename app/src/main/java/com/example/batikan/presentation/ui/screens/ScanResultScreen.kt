@@ -144,7 +144,7 @@ fun ScanResultContent(
                     item {
                         ProductSection(
                             modifier = Modifier
-                                .padding(horizontal = 30.dp),
+                                .padding(horizontal = 30.dp, vertical = 10.dp),
                             title = "Produk terkait",
                             description = "Beli batiknya sekarang",
                             productList = similarBatikProduct,
@@ -164,26 +164,3 @@ fun ScanResultContent(
         }
     }
 }
-
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ScanResultScreenPreview(){
-//    BatikanTheme {
-//        ScanResultContent(
-//            result = ScanResult(
-//                name = "Batik Papua",
-//                aboutMotif = "Batik Papua adalah salah satu jenis batik khas Indonesia yang berasal dari daerah Papua. Berbeda dengan batik dari daerah lain, batik Papua memiliki ciri khas pada motif dan warna yang menggambarkan budaya, alam, serta kehidupan masyarakat Papua. Motif-motif pada batik Papua seringkali terinspirasi dari bentuk-bentuk alami seperti tumbuhan, hewan khas Papua, dan simbol adat yang memiliki makna mendalam.",
-//                origin = "Papua Barat"
-//            ),
-//            similiarProduct = listOf(
-//                Product(R.drawable.batik_new, "Batik A", "$20"),
-//                Product(R.drawable.batik_new, "Batik B", "$25"),
-//                Product(R.drawable.batik_new, "Batik C", "$30"),
-//                Product(R.drawable.batik_new, "Batik D", "$35")
-//            )
-//
-//        )
-//    }
-//}
