@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BottomNavBar
+import com.example.batikan.presentation.ui.composables.CartItemLoading
 import com.example.batikan.presentation.ui.composables.CartItemRow
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.Primary200
@@ -96,7 +98,13 @@ fun CartContent (
 
     when (getCartState) {
         is GetCartState.Loading -> {
-            CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+            CartItemLoading()
+            Spacer(modifier = Modifier.padding(20.dp))
+            CartItemLoading()
+            Spacer(modifier = Modifier.padding(20.dp))
+            CartItemLoading()
+
+
         }
 
         is GetCartState.Success -> {

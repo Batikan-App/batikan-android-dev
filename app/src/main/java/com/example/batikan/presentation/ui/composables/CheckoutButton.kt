@@ -104,7 +104,7 @@ fun CheckoutButton(
 
             when(addCartState) {
                 is AddCartState.Idle -> {}
-                is AddCartState.Loading -> CircularProgressIndicator()
+                is AddCartState.Loading -> {}
                 is AddCartState.Success -> {
                     LaunchedEffect(Unit) {
                         // Navigate to Cart

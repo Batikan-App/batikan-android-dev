@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -265,7 +266,7 @@ fun RegisterScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 40.dp),
+                    .padding(horizontal = 20.dp, vertical = 30.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -276,10 +277,7 @@ fun RegisterScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = if(isFormValid) Primary600 else Color(0xFF98A2B3)),
-                    modifier = Modifier
-                        .size(width = 330.dp, 50.dp)
-                        .height(48.dp)
-                        .padding(bottom = 8.dp) ,
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
                     shape = RoundedCornerShape(6.dp),
                     enabled = isFormValid
                 ) {
@@ -289,6 +287,8 @@ fun RegisterScreen(
                         fontSize = 16.sp
                     )
                 }
+
+                Spacer(Modifier.height(12.dp))
 
                 when (registerState) {
                     is RegisterState.Loading -> CircularProgressIndicator()
@@ -309,10 +309,8 @@ fun RegisterScreen(
                 OutlinedButton(
                     border = BorderStroke(width = 1.dp, color = Primary600),
                     onClick = { navController.navigate("login_screen") },
-                    modifier = Modifier
-                        .size(width = 330.dp, 50.dp)
-                        .height(48.dp)
-                        .padding(bottom = 8.dp),
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+
                     shape = RoundedCornerShape(6.dp),
                     colors = ButtonDefaults.outlinedButtonColors(),
                 ) {
