@@ -195,7 +195,7 @@ fun TokoContent(
 
                     is BatikOriginState.Error -> {
                         Text(
-                            text = (batikState as BatikOriginState.Error).message,
+                            text = (originState as BatikOriginState.Error).message,
                             color = Color.Red,
                             style = TextMdSemiBold
                         )

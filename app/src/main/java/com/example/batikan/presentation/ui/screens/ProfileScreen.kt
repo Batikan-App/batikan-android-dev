@@ -1,14 +1,8 @@
 package com.example.batikan.presentation.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -42,16 +36,10 @@ import com.example.batikan.presentation.ui.composables.ButtonWithIcon
 import com.example.batikan.presentation.ui.composables.ProfileCard
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
-import com.example.batikan.presentation.ui.theme.TextPrimary
-import com.example.batikan.presentation.ui.theme.TextSecondary
-import com.example.batikan.presentation.ui.theme.TextSmallMedium
-import com.example.batikan.presentation.ui.theme.TextXsRegular
 import com.example.batikan.presentation.viewmodel.AuthViewModel
-import com.example.batikan.presentation.viewmodel.LoginState
 import com.example.batikan.presentation.viewmodel.LogoutState
 import com.example.batikan.presentation.viewmodel.UserState
 import com.example.batikan.presentation.viewmodel.UserViewModel
-
 
 @Composable
 fun ProfileContent(
@@ -64,7 +52,7 @@ fun ProfileContent(
     val profileState by userViewModel.userState.collectAsState()
 
     LaunchedEffect(Unit) {
-        userViewModel.fetchUserProfile() // Fungsi dipanggil di sini
+        userViewModel.fetchUserProfile()
     }
 
     Scaffold (
@@ -103,7 +91,6 @@ fun ProfileContent(
                         )
                     }
                     is UserState.Error -> {
-                        // Menampilkan pesan error
                         Text(
                             text = (profileState as UserState.Error).message,
                             color = Color.Red,
@@ -191,17 +178,17 @@ fun ProfileContent(
                     is LogoutState.Loading -> CircularProgressIndicator()
                     is LogoutState.Success -> {
                         LaunchedEffect(Unit) {
-                            // Navigate to welcome screen
-                            navController.navigate("welcome_screen")
+                            navController.navigate("welcome_screen") {
+                                popUpTo("profile_screen") {
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
-                    is LogoutState.Error -> Text((logoutState as LoginState.Error).message, color = Color.Red)
+                    is LogoutState.Error -> Text((logoutState as LogoutState.Error).message, color = Color.Red)
                     else -> {}
                 }
-
             }
-
-
         }
 
     }
