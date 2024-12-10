@@ -120,7 +120,11 @@ fun HomeScreenContent(
                     title = "Produk keren hari ini",
                     description = "Tentukan pilihan batikmu!",
                     actionText = "Lihat semua",
-                    onActionClick = { navController.navigate("toko_screen") },
+                    onActionClick = { navController.navigate("toko_screen") {
+                        popUpTo("home_screen") {
+                            inclusive = true
+                        }
+                    } },
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -129,7 +133,8 @@ fun HomeScreenContent(
                         ProductCardList(
                             productList = productList,
                             onProductClick = onProductClick,
-                            isLoading = true
+                            isLoading = true,
+                            modifier = Modifier.padding(horizontal = 30.dp)
                         )
                     }
 
@@ -137,7 +142,8 @@ fun HomeScreenContent(
                         ProductCardList(
                             productList = productList,
                             onProductClick = onProductClick,
-                            isLoading = false
+                            isLoading = false,
+                            modifier = Modifier.padding(horizontal = 30.dp)
                         )
                     }
 
@@ -155,7 +161,6 @@ fun HomeScreenContent(
                             color = Color.Red,
                             style = TextMdSemiBold,
                             modifier = Modifier.padding(horizontal = 30.dp)
-
                         )
                     }
                 }

@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.batikan.data.model.batik_product.BatikList
+import com.example.batikan.data.model.cart.AddItemResponse
 import com.example.batikan.data.model.order.Item
+import com.example.batikan.data.model.order.MakeOrderResponse
 import com.example.batikan.data.model.order.Orders
 import com.example.batikan.data.model.order.TimeStamp
 import com.example.batikan.data.model.user.User
@@ -25,10 +27,13 @@ class UserViewModel @Inject constructor(
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Idle)
     private val _orderState = MutableStateFlow<OrderState>(OrderState.Idle)
+    private val _addOrderState = MutableStateFlow<AddOrderState>(AddOrderState.Idle)
+
 
     val userState: StateFlow<UserState> get() = _userState
     val updateState: StateFlow<UpdateState> get() = _updateState
     val orderState: StateFlow<OrderState> get() = _orderState
+    val addOrderState: StateFlow<AddOrderState> get() = _addOrderState
 
 
     fun fetchUserProfile() {
@@ -102,6 +107,24 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+
+    fun makeOrder(name: String, phone: String, address: String) {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.makeOrder(name, phone, address)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        _addOrderState.value = AddOrderState.Success(body)
+                    } else {
+                        _addOrderState.value = AddOrderState.Error("Error")
+                    }
+                }
+            } catch (e: HttpException) {
+                _addOrderState.value = AddOrderState.Error("Network error: ${e.message}")
+            }
+        }
+    }
 }
 
 
@@ -125,4 +148,10 @@ sealed class OrderState {
     data class Success(val orders: List<Orders>?) : OrderState()
     data class Error(val message: String) : OrderState()
     object Empty : OrderState()
+}
+
+sealed class AddOrderState {
+    object Idle: AddOrderState()
+    data class Success(val data: MakeOrderResponse): AddOrderState()
+    data class Error(val message: String): AddOrderState()
 }

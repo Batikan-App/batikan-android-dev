@@ -98,10 +98,3 @@ fun PhotoResultScreen(
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewPhotoResultScreen() {
-//    PhotoResultScreen(navController = rememberNavController(), photoUri = "https://images.unsplash.com/photo-1672716912554-c23ba8fac4ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmF0aWt8ZW58MHx8MHx8fDA%3D")
-//}

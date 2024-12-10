@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,11 +15,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.HideImage
+import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
@@ -61,98 +66,122 @@ import com.example.batikan.presentation.viewmodel.UserState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartContent (
+fun CartContent(
     modifier: Modifier = Modifier,
     navController: NavController,
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
-    val isChecked: Boolean = true
     val cartItems by cartViewModel.cartItemList.collectAsState()
     val getCartState by cartViewModel.getCartState.collectAsState()
     val totalPrice by cartViewModel.totalPrice.collectAsState()
-    Log.d("CartTotalPrice", "$totalPrice")
     val itemUpdateStates = cartViewModel.itemUpdateStates
 
     LaunchedEffect(Unit) {
         cartViewModel.fetchCartData()
     }
 
-    when (getCartState) {
-        is GetCartState.Loading -> {
-            CartItemLoading()
-            Spacer(modifier = Modifier.padding(20.dp))
-            CartItemLoading()
-            Spacer(modifier = Modifier.padding(20.dp))
-            CartItemLoading()
-
-
-        }
-
-        is GetCartState.Success -> {
-            if (cartItems.isEmpty()) {
-                Text(
-                    text = "Keranjang Anda kosong",
-                    modifier = Modifier.fillMaxSize(),
-                    textAlign = TextAlign.Center
-                )
-            } else {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = "Keranjang",
-                                    style = TextMdSemiBold,
-                                    color = TextPrimary
-                                )
-                            }
-                        )
-                    },
-                    bottomBar = {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Keranjang",
+                        style = TextMdSemiBold,
+                        color = TextPrimary
+                    )
+                }
+            )
+        },
+        bottomBar = {
+            if (cartItems.isNotEmpty()) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = Primary50)
+                            .padding(horizontal = 30.dp)
+                            .padding(vertical = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Column {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(color = Primary50)
-                                    .padding(horizontal = 30.dp)
-                                    .padding(vertical = 20.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
+                            Text(
+                                text = "Total",
+                                style = TextSmallRegular,
+                                color = TextQuatenary
+                            )
+                            Text(
+                                text = "Rp.${totalPrice}",
+                                style = TextMdSemiBold,
+                                color = TextPrimary
+                            )
+                        }
 
-                                ) {
-                                Column() {
-                                    Text(
-                                        text = "Total",
-                                        style = TextSmallRegular,
-                                        color = TextQuatenary
-                                    )
-                                    Text(
-                                        text = "Rp.${totalPrice}",
-                                        style = TextMdSemiBold,
-                                        color = TextPrimary
-                                    )
-
-                                }
-
-                                Button(
-                                    onClick = { navController.navigate("payment_detail_screen") },
-                                    modifier = modifier
-                                        .width(110.dp)
-                                        .height(40.dp),
-                                    shape = RectangleShape,
-                                    colors = ButtonDefaults.buttonColors(containerColor = Primary600)
-                                ) {
-                                    Text(
-                                        text = "Bayar",
-                                        style = TextSmallSemiBold,
-                                        color = White
-                                    )
-                                }
-                            }
-                            BottomNavBar(navController = navController)
+                        Button(
+                            onClick = { navController.navigate("payment_detail_screen") },
+                            modifier = modifier
+                                .width(110.dp)
+                                .height(40.dp),
+                            shape = RectangleShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = Primary600)
+                        ) {
+                            Text(
+                                text = "Bayar",
+                                style = TextSmallSemiBold,
+                                color = White
+                            )
                         }
                     }
-                ) { innerPadding ->
+                    BottomNavBar(navController = navController)
+                }
+            } else {
+                // Tetap tampilkan BottomNavBar meskipun keranjang kosong
+                BottomNavBar(navController = navController)
+            }
+        }
+    ) { innerPadding ->
+        when (getCartState) {
+            is GetCartState.Loading -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    items(3) {
+                        CartItemLoading()
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                }
+            }
+
+            is GetCartState.Success -> {
+                if (cartItems.isEmpty()) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.RemoveShoppingCart,
+                                contentDescription = "Empty Orders",
+                                tint = TextSecondary,
+                                modifier = Modifier.size(80.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Belum ada item di keranjang.",
+                                style = TextSmallRegular,
+                                color = TextSecondary,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -178,15 +207,22 @@ fun CartContent (
                     }
                 }
             }
-        }
 
-        is GetCartState.Error -> {
-            Text(
-                text = (getCartState as GetCartState.Error).message,
-                modifier = Modifier.padding(16.dp),
-                color = TextSecondary
-            )
+            is GetCartState.Error -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    Text(
+                        text = (getCartState as GetCartState.Error).message,
+                        style = TextSmallRegular,
+                        color = TextSecondary
+                    )
+                }
+            }
         }
-
     }
 }
+

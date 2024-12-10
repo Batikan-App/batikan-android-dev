@@ -3,6 +3,7 @@ package com.example.batikan.data.repositories
 import android.util.Log
 import com.example.batikan.data.datasource.remote.CartApiService
 import com.example.batikan.data.model.cart.AddItemResponse
+import com.example.batikan.data.model.cart.CartDeleteResponse
 import com.example.batikan.data.model.cart.CartRequest
 import com.example.batikan.data.model.cart.CartResponse
 import com.example.batikan.data.model.cart.UpdateItemResponse
@@ -13,6 +14,19 @@ import javax.inject.Inject
 class CartRepositoryImpl @Inject constructor(
     private val apiService: CartApiService
 ): CartRepository {
+    override suspend fun deleteCartItems(): Result<Unit> {
+        return try {
+            val response = apiService.deleteCartItem()
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Failed with code: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun getCartData(): Result<CartResponse> {
         return try {
             val response = apiService.getCartItems()

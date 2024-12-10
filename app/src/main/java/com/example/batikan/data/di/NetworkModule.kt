@@ -102,14 +102,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideUserRepositoryImpl(apiService: UserApiService): UserRepositoryImpl {
+    fun provideUserRepositoryImpl(apiService: UserApiService): UserRepository {
         return UserRepositoryImpl(apiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRepository(repository: UserRepositoryImpl): UserRepository {
-        return UserRepository(repository)
     }
 
     /**

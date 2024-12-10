@@ -1,6 +1,7 @@
 package com.example.batikan.data.datasource.remote
 
 import com.example.batikan.data.model.cart.AddItemResponse
+import com.example.batikan.data.model.cart.CartDeleteResponse
 import com.example.batikan.data.model.cart.CartRequest
 import com.example.batikan.data.model.cart.CartResponse
 import com.example.batikan.data.model.cart.UpdateItemResponse
@@ -25,4 +26,8 @@ interface CartApiService {
     suspend fun updateItemCart(
         @Body request: CartRequest
     ): Response<UpdateItemResponse>
+
+    @DELETE("api/user/cart")
+    suspend fun deleteCartItem(
+    ): Response<CartDeleteResponse>
 }

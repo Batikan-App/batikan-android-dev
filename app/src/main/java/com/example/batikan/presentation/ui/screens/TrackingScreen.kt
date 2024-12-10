@@ -203,23 +203,7 @@ fun TrackingContent(
                     }
                 }
             }
-
         }
-
-//        LazyColumn (
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(innerPadding),
-//            verticalArrangement = Arrangement.spacedBy(20.dp)
-//        ) {
-//            items(shippingItems) { shippingItem ->
-//                ShippingCard(
-//                    shippingItem = shippingItem
-//                )
-//            }
-//        }
-
-
     }
 }
 
@@ -254,7 +238,7 @@ fun ShippingCard(
                 modifier = Modifier.size(80.dp, 80.dp)
             )
             Column (
-//                verticalArrangement = Arrangement.SpaceAround
+
 
             ) {
                 Text(
@@ -286,32 +270,5 @@ fun ShippingCard(
                 }
             }
         }
-
-
-
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    BatikanTheme {
-//        TrackingContent(
-//            modifier = Modifier,
-//            shippingItems = listOf(
-//                Shipping(
-//                    ImageResource = R.drawable.batik_new,
-//                    title = "Batik Pekalongan",
-//                    status = "Dikirim",
-//                    number = "1234567890"
-//                ),
-//                Shipping(
-//                    ImageResource = R.drawable.batik_new,
-//                    title = "Batik Papua",
-//                    status = "Sampai",
-//                    number = "23133213232133"
-//                )
-//            )
-//        )
-//    }
-//}
