@@ -41,7 +41,6 @@ fun HomeScreenContent(
     val profileState by userViewModel.userState.collectAsState()
     val batikState by viewModel.batikState.collectAsState()
 
-
     LaunchedEffect(Unit) {
         viewModel.fetchBatik()
         userViewModel.fetchUserProfile()

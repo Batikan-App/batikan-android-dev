@@ -1,9 +1,21 @@
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
+
+//val localProperties = Properties()
+//val localPropertiesFile = rootProject.file("local.properties")
+//if (localPropertiesFile.exists()) {
+//    localPropertiesFile.inputStream().use { stream ->
+//        localProperties.load(stream)
+//    }
+//}
 
 android {
     namespace = "com.example.batikan"
@@ -20,6 +32,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "MIDTRANS_SERVER_KEY", properties.getProperty("MIDTRANS_SERVER_KEY"))
+        buildConfigField("String", "MIDTRANS_CLIENT_KEY", properties.getProperty("MIDTRANS_CLIENT_KEY"))
+        buildConfigField("String", "BATIKAN_BASE_URL", properties.getProperty("BATIKAN_BASE_URL"))
+
     }
 
     buildTypes {
@@ -40,6 +58,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -118,4 +137,11 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Midtrans Sandbox
+    implementation("com.midtrans:uikit:2.0.0-SANDBOX") // change the number to the latest version
+    implementation("com.midtrans:java-library:3.1.4")
+
+    // Test Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }

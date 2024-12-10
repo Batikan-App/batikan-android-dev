@@ -65,7 +65,6 @@ fun ProductDetailScreen(
         viewModel.fetchBatikDetail(productId)
     }
 
-//    val product = productDetailList.find { it.id == productId }
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),

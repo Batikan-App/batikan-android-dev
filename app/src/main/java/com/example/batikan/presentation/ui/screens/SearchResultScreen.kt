@@ -147,7 +147,13 @@ fun SearchResultScreen(
                                     imageResource = product.imageResource,
                                     title = product.name,
                                     price = "Rp${product.price}",
-                                    onClick = { navController.navigate("detail_product_screen/${product.id}") },
+                                    onClick = {
+                                        navController.navigate("detail_product_screen/${product.id}") {
+                                            popUpTo("search_result_screen") {
+                                                inclusive = true
+                                            }
+                                        }
+                                    },
                                     isLoading = true
                                 )
                             }
@@ -157,7 +163,13 @@ fun SearchResultScreen(
                                     imageResource = product.imageResource,
                                     title = product.name,
                                     price = "Rp${product.price}",
-                                    onClick = { navController.navigate("detail_product_screen/${product.id}") },
+                                    onClick = {
+                                        navController.navigate("detail_product_screen/${product.id}") {
+                                            popUpTo("search_result_screen") {
+                                                inclusive = true
+                                            }
+                                        }
+                                    },
                                     isLoading = false
                                 )
                             }

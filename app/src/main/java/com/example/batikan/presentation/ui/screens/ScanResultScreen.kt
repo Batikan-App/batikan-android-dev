@@ -57,6 +57,7 @@ fun ScanResultContent(
     photoUri: String?,
     viewModel: BatikViewModel = hiltViewModel(),
     uiState: ScanResultState,
+    onProductClick: (String) -> Unit,
     navController: NavController
 ) {
 
@@ -142,11 +143,13 @@ fun ScanResultContent(
 
                     item {
                         ProductSection(
+                            modifier = Modifier
+                                .padding(horizontal = 30.dp),
                             title = "Produk terkait",
                             description = "Beli batiknya sekarang",
                             productList = similarBatikProduct,
-                            navController = navController,
-                            isLoading = false
+                            isLoading = false,
+                            onProductClick = onProductClick
                         )
                     }
                 }

@@ -47,8 +47,7 @@ import com.example.batikan.presentation.viewmodel.BatikViewModel
 @Composable
 fun TokoContent(
     navController: NavController,
-//    featuredProducts: List<Product>,
-//    originProduct: List<Product>,
+    onProductClick: (String) -> Unit,
     viewModel: BatikViewModel = hiltViewModel()
 ){
     var query by remember { mutableStateOf("") }
@@ -106,7 +105,7 @@ fun TokoContent(
                             title = "Produk keren hari ini",
                             description = "Tentukan pilihan batikmu!",
                             productList = productList,
-                            navController = navController,
+                            onProductClick = onProductClick,
                             isLoading = true
                         )
                     }
@@ -116,7 +115,7 @@ fun TokoContent(
                             title = "Produk keren hari ini",
                             description = "Tentukan pilihan batikmu!",
                             productList = productList,
-                            navController = navController,
+                            onProductClick = onProductClick,
                             isLoading = false
                         )
                     }
@@ -135,7 +134,6 @@ fun TokoContent(
                             color = Color.Red,
                             style = TextMdSemiBold,
                             modifier = Modifier.padding(horizontal = 30.dp)
-
                         )
                     }
                 }
@@ -176,13 +174,7 @@ fun TokoContent(
                     is BatikOriginState.Loading -> {
                         ProductOriginList(
                             productOriginList = productOriginList,
-                            onProductClick = { batikId ->
-                                navController.navigate("detail_product_screen/$batikId"){
-                                    popUpTo("toko_screen"){
-                                        inclusive = true
-                                    }
-                                }
-                            },
+                            onProductClick = onProductClick,
                             isLoading = true
                         )
                     }
@@ -190,9 +182,7 @@ fun TokoContent(
                     is BatikOriginState.Success -> {
                         ProductOriginList(
                             productOriginList = productOriginList,
-                            onProductClick = { batikId ->
-                                navController.navigate("detail_product_screen/$batikId")
-                            },
+                            onProductClick = onProductClick,
                             isLoading = false
                         )
                     }

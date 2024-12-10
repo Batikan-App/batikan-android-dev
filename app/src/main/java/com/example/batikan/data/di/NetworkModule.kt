@@ -1,6 +1,7 @@
 package com.example.batikan.data.di
 
 import android.content.Context
+import com.example.batikan.data.Constants
 import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.data.datasource.remote.AuthApiService
 import com.example.batikan.data.datasource.remote.AuthInterceptor
@@ -29,7 +30,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "https://batikan-backend-30189848328.asia-southeast2.run.app/"
+    private const val BASE_URL = Constants.BATIKAN_BASE_URL
 
     /**
      * Untuk AuthInterceptor
