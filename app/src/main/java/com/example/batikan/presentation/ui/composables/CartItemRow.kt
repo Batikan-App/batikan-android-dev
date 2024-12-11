@@ -141,15 +141,19 @@ fun CartItemRow (
                     ) {
                     IconButton(
                         onClick = {
-                            if (cartItem.stockCount > 1) {
+                            if (cartItem.stockCount >= 0) {
 //                            onCountChange(cartItem.stockCount - 1)
 //                            cartViewModel.updateItemCart(cartItem.id, cartItem.stockCount - 1)
 //                            cartViewModel.fetchCartData()
                                 stockCount -= 1
+                                if(stockCount == 0) {
+                                    cartViewModel.fetchCartData()
+                                }
                                 onCountChange(cartItem.id, stockCount)
 
-                            } else {
-                                // ToDo : Remove item from cart
+
+//                            } else {
+//                                // ToDo : Remove item from cart
                             }
                         }
                     ) {

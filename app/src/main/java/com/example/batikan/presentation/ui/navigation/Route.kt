@@ -36,4 +36,6 @@ sealed class Route(
     object TrackingScreen: Route(route = "trackingScreen")
 
     object LogoAnimationScreen: Route(route = "logoScreen")
+
+    object AboutAppScreen: Route(route = "aboutAppScreen")
 }
