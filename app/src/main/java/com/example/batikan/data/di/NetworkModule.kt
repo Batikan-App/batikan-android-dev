@@ -31,7 +31,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = Constants.BATIKAN_BASE_URL
+    private const val BASE_URL = "https://batikan-backend-30189848328.asia-southeast2.run.app/"
 
     /**
      * Untuk AuthInterceptor

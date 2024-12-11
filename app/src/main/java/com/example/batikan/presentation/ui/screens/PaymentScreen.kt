@@ -15,12 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.presentation.viewmodel.AddOrderState
-import com.example.batikan.presentation.viewmodel.CartViewModel
 import com.example.batikan.presentation.viewmodel.UserState
 import com.example.batikan.presentation.viewmodel.UserViewModel
 import kotlinx.coroutines.launch

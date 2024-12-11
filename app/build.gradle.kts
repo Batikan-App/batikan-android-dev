@@ -1,30 +1,22 @@
-import org.jetbrains.kotlin.gradle.plugin.extraProperties
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
-//val localProperties = Properties()
-//val localPropertiesFile = rootProject.file("local.properties")
-//if (localPropertiesFile.exists()) {
-//    localPropertiesFile.inputStream().use { stream ->
-//        localProperties.load(stream)
-//    }
-//}
-
 android {
     namespace = "com.example.batikan"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.batikan"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -36,7 +28,6 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "MIDTRANS_SERVER_KEY", properties.getProperty("MIDTRANS_SERVER_KEY"))
         buildConfigField("String", "MIDTRANS_CLIENT_KEY", properties.getProperty("MIDTRANS_CLIENT_KEY"))
-        buildConfigField("String", "BATIKAN_BASE_URL", properties.getProperty("BATIKAN_BASE_URL"))
 
     }
 

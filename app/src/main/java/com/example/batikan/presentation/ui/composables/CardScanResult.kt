@@ -37,7 +37,6 @@ fun CardScanResult(
     modifier: Modifier = Modifier,
     name: String,
     origin: String,
-    imageResource: Int,
     photoUri: String?,
     onActionClick: () -> Unit
 ){

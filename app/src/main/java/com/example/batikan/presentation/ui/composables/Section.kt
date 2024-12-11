@@ -1,6 +1,5 @@
 package com.example.batikan.presentation.ui.composables
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,7 +47,6 @@ import com.example.batikan.presentation.ui.theme.TextXlSemiBold
 import com.example.batikan.presentation.ui.theme.TextXsRegular
 import com.example.batikan.presentation.ui.theme.White
 import com.example.batikan.presentation.ui.util.shimmerEffect
-
 
 @Composable
 fun GreetingSection(
@@ -430,9 +428,10 @@ fun AboutBatik(
     ) {
         Text(
             text = "Tentang Batik",
-            style = TextSmallMedium,
-            color = TextPrimary
+            style = TextMdSemiBold,
+            color = TextPrimary,
         )
+        Spacer(Modifier.height(20.dp))
         Text(
             text = description,
             style = TextSmallRegular,

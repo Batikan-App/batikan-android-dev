@@ -1,10 +1,5 @@
 package com.example.batikan.presentation.ui.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,36 +20,33 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.batikan.R
-import com.example.batikan.presentation.ui.theme.BatikanTheme
+import com.example.batikan.presentation.ui.theme.BorderPrimary
 import com.example.batikan.presentation.ui.theme.Primary600
-import com.example.batikan.presentation.ui.theme.TextMdMedium
-import com.example.batikan.presentation.ui.theme.TextMdRegular
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallMedium
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
-import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 import com.example.batikan.presentation.viewmodel.OrderState
 import com.example.batikan.presentation.viewmodel.UserViewModel
@@ -94,7 +86,13 @@ fun TrackingContent(
                             tint = TextPrimary
                         )
                     }
-                }
+                },
+                // Mengatur warna latar belakang menjadi putih
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    navigationIconContentColor = TextPrimary,
+                    titleContentColor = TextPrimary
+                )
             )
         },
     ) { innerPadding ->
@@ -159,19 +157,26 @@ fun TrackingContent(
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     items(orders) { order ->
-                        order.items.forEach { item ->
+                        order.items.forEachIndexed { index, item ->
                             ShippingCard(
                                 shippingItem = Shipping(
-                                    ImageResource = item.img.firstOrNull() ?: "",
+                                    imageResource = item.img.firstOrNull() ?: "",
                                     title = item.name,
                                     status = order.status,
                                     number = order.orderId
                                 )
                             )
+                            // Tambahkan Divider kecuali untuk elemen terakhir
+                            if (index < order.items.size - 1) {
+                                HorizontalDivider(
+                                    color = BorderPrimary,
+                                    thickness = 8.dp,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
+                            }
                         }
                     }
                 }
-
             }
 
             is OrderState.Error -> {
@@ -208,7 +213,7 @@ fun TrackingContent(
 }
 
 data class Shipping(
-    val ImageResource: String,
+    val imageResource: String,
     val title: String,
     val status: String,
     val number: String
@@ -232,7 +237,7 @@ fun ShippingCard(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AsyncImage(
-                model = shippingItem.ImageResource,
+                model = shippingItem.imageResource,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(80.dp, 80.dp)

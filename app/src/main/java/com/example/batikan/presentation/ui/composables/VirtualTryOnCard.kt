@@ -30,7 +30,6 @@ import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
 
-
 @Composable
 fun VisualTryOnCard(
     modifier: Modifier = Modifier,
