@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.extraProperties
 import java.util.Properties
 
 plugins {
@@ -28,7 +27,6 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "MIDTRANS_SERVER_KEY", properties.getProperty("MIDTRANS_SERVER_KEY"))
         buildConfigField("String", "MIDTRANS_CLIENT_KEY", properties.getProperty("MIDTRANS_CLIENT_KEY"))
-        buildConfigField("String", "BATIKAN_BASE_URL", properties.getProperty("BATIKAN_BASE_URL"))
 
     }
 
