@@ -2,7 +2,6 @@ package com.example.batikan.presentation.ui.screens
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,10 +25,8 @@ import com.example.batikan.presentation.ui.theme.*
 import com.example.batikan.presentation.viewmodel.CartViewModel
 import com.example.batikan.presentation.viewmodel.UserViewModel
 import com.example.batikan.presentation.viewmodel.UserState
-// Midtrans
 import com.midtrans.Midtrans
 import com.midtrans.httpclient.SnapApi
-import com.midtrans.httpclient.error.MidtransError
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

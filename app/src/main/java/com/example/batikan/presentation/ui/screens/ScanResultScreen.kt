@@ -1,19 +1,16 @@
 package com.example.batikan.presentation.ui.screens
 
-import android.net.Uri
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -33,23 +29,14 @@ import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.AboutBatik
 import com.example.batikan.presentation.ui.composables.CardScanResult
 import com.example.batikan.presentation.ui.composables.PageTitle
-import com.example.batikan.presentation.ui.composables.Product
-import com.example.batikan.presentation.ui.composables.ProductCardList
 import com.example.batikan.presentation.ui.composables.ProductSection
-//import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.composables.VisualTryOnCard
-import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
+import com.example.batikan.presentation.ui.util.shimmerEffect
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 import com.example.batikan.presentation.viewmodel.ScanResultState
-
-data class ScanResult(
-    val name: String,
-    val aboutMotif: String,
-    val origin: String
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +56,22 @@ fun ScanResultContent(
             Text("Menunggu proses scan...", modifier = Modifier.fillMaxSize())
         }
         is ScanResultState.Loading -> {
-            CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+            Column {
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 20.dp)
+                        .height(200.dp)
+                        .shimmerEffect()
+                )
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(500.dp)
+                        .shimmerEffect()
+                )
+            }
         }
         is ScanResultState.Success -> {
             val response = uiState.response

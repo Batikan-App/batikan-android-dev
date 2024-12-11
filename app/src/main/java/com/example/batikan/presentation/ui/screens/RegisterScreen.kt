@@ -36,18 +36,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.R
-import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.DisplayXsBold
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
 import com.example.batikan.presentation.viewmodel.AuthViewModel
-import com.example.batikan.presentation.viewmodel.LoginState
 import com.example.batikan.presentation.viewmodel.RegisterState
 
 @Composable
@@ -55,7 +52,6 @@ fun RegisterScreen(
     navController: NavController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    var isButtonClicked by remember { mutableStateOf(false) }
 
     val registerState by viewModel.registerState.collectAsState()
 

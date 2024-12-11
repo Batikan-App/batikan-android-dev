@@ -1,10 +1,5 @@
 package com.example.batikan.presentation.ui.screens
 
-import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,38 +16,29 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.batikan.R
 import com.example.batikan.presentation.ui.composables.BottomNavBar
 import com.example.batikan.presentation.ui.composables.CartItemLoading
 import com.example.batikan.presentation.ui.composables.CartItemRow
-import com.example.batikan.presentation.ui.theme.BatikanTheme
-import com.example.batikan.presentation.ui.theme.Primary200
 import com.example.batikan.presentation.ui.theme.Primary50
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
@@ -64,7 +50,6 @@ import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 import com.example.batikan.presentation.viewmodel.CartViewModel
 import com.example.batikan.presentation.viewmodel.GetCartState
-import com.example.batikan.presentation.viewmodel.UserState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

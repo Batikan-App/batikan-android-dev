@@ -1,10 +1,5 @@
 package com.example.batikan.presentation.ui.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,24 +32,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.batikan.R
-import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.Primary600
-import com.example.batikan.presentation.ui.theme.TextMdMedium
-import com.example.batikan.presentation.ui.theme.TextMdRegular
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.ui.theme.TextSecondary
 import com.example.batikan.presentation.ui.theme.TextSmallMedium
 import com.example.batikan.presentation.ui.theme.TextSmallRegular
-import com.example.batikan.presentation.ui.theme.TextSmallSemiBold
 import com.example.batikan.presentation.ui.theme.White
 import com.example.batikan.presentation.viewmodel.OrderState
 import com.example.batikan.presentation.viewmodel.UserViewModel

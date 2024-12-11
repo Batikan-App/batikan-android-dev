@@ -1,8 +1,6 @@
 package com.example.batikan.presentation.ui.screens
 
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.example.batikan.presentation.ui.theme.DisplayXsSemiBold
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.White

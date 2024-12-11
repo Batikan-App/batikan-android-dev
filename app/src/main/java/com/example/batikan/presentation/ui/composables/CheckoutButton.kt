@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -22,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,8 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.batikan.data.model.cart.AddItemResponse
-import com.example.batikan.presentation.ui.screens.ProductDetail
 import com.example.batikan.presentation.ui.theme.Gray100
 import com.example.batikan.presentation.ui.theme.Primary600
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
@@ -55,8 +52,7 @@ fun CheckoutButton(
     cartViewModel: CartViewModel = hiltViewModel(),
     ) {
     var isCounting by remember { mutableStateOf(false) }
-    var count by remember { mutableStateOf(0) }
-    var quantity by remember { mutableStateOf(1) }
+    var count by remember { mutableIntStateOf(0) }
 
     val addCartState by cartViewModel.addCartState.collectAsState()
 

@@ -32,12 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.batikan.presentation.ui.composables.ProductCard
-import com.example.batikan.presentation.ui.composables.ProductSection
 import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.viewmodel.BatikSearchState
-import com.example.batikan.presentation.viewmodel.BatikState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
