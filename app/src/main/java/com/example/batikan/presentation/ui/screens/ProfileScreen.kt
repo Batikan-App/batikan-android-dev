@@ -148,8 +148,8 @@ fun ProfileContent(
                 )
 
                 ButtonWithIcon(
-                    onClick = {},
-                    text = "Tentang",
+                    onClick = { navController.navigate("about_app_screen") },
+                    text = "Tentang Batikan",
                     leadingIcon = Icons.Default.Info,
                     trailingIocn = Icons.Default.ChevronRight
                 )

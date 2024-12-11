@@ -26,6 +26,7 @@ import com.example.batikan.presentation.ui.composables.ProductPreview
 import com.example.batikan.presentation.ui.composables.ProductStatistic
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
 import com.example.batikan.presentation.ui.theme.TextPrimary
+import com.example.batikan.presentation.ui.util.parseStringToNewLine
 import com.example.batikan.presentation.viewmodel.BatikViewModel
 
 data class ProductDetail(
@@ -106,7 +107,7 @@ fun ProductDetailScreen(
                 )
 
                 ProductDetail(
-                    motifDescription = product.motifDescription,
+                    motifDescription = parseStringToNewLine(product.motifDescription).toString(),
                     batikOrigin = product.origin,
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )

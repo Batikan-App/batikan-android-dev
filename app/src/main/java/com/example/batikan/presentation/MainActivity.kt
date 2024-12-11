@@ -36,6 +36,7 @@ import com.example.batikan.R
 import com.example.batikan.data.datasource.local.DataStoreManager
 import com.example.batikan.presentation.ui.composables.Product
 import com.example.batikan.presentation.ui.helpers.resizeImageFile
+import com.example.batikan.presentation.ui.screens.AboutScreen
 import com.example.batikan.presentation.ui.screens.BatikanWelcomeScreen
 import com.example.batikan.presentation.ui.screens.CameraScreen
 import com.example.batikan.presentation.ui.screens.CartContent
@@ -221,6 +222,11 @@ class MainActivity : ComponentActivity() {
 //                            onItemCountChange = {_,_ -> },
                         )
                     }
+
+                    composable ( "about_app_screen" ){
+                        AboutScreen(navController = navController)
+                    }
+
 
                     composable("payment_detail_screen") {
                         PaymentDetailContent(
