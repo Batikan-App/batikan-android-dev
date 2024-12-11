@@ -145,68 +145,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = "toko_screen") {
-                        TokoContent(
-                            navController = navController,
-                            onProductClick = { batikId ->
-                                navController.navigate("detail_product_screen/$batikId") {
-                                    popUpTo("toko_screen") {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-                        )
-                    }
-
-                    composable(
-                        route = "detail_product_screen/{batikId}",
-                        arguments = listOf(navArgument("batikId") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val batikId = backStackEntry.arguments?.getString("batikId")
-                        val viewModel: BatikViewModel = hiltViewModel()
-                        val productDetailList by viewModel.productDetailList.collectAsState()
-
-                        if (batikId != null) {
-                            ProductDetailScreen(
-                                productDetailList = productDetailList,
-                                productId = batikId,
-                                navController = navController
-                            )
-                        } else {
-                            Text(text = "Invalid batik ID", modifier = Modifier.fillMaxSize())
-                        }
-                    }
-
-                    composable("cart_screen") {
-                        CartContent(
-                            navController = navController,
-//                            onItemCheckedChange = { _,_ -> },
-//                            onItemCountChange = {_,_ -> },
-                        )
-                    }
-
-                    composable("payment_detail_screen") {
-                        PaymentDetailContent(
-                            navController = navController,
-                            modifier = Modifier,
-                            navigateToPayment = { urlSnap ->
-                                navController.navigate("payment/$urlSnap")
-                            }
-                        )
-                    }
-
-                    composable("payment/{urlSnap}", listOf(navArgument("urlSnap") { type = NavType.StringType })) {
-                        val urlSnap = it.arguments?.getString("urlSnap") ?: ""
-                        PaymentScreen(
-                            context = context,
-                            url = urlSnap,
-                            backHandler = {
-                                navController.popBackStack()
-                            },
-                            navController = navController
-                        )
-                    }
-
                     composable(route = "camera_screen") {
                         CameraScreen(navController)
                     }
@@ -247,6 +185,112 @@ class MainActivity : ComponentActivity() {
                         ScanResultContent(
                             photoUri = photoUri,
                             uiState = uiState,
+                            navController = navController,
+                            onProductClick = { batikId ->
+                                navController.navigate("detail_product_screen/$batikId")
+                            }
+                        )
+                    }
+
+                    composable(
+                        route = "detail_product_screen/{batikId}",
+                        arguments = listOf(navArgument("batikId") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val batikId = backStackEntry.arguments?.getString("batikId")
+                        val viewModel: BatikViewModel = hiltViewModel()
+                        val productDetailList by viewModel.productDetailList.collectAsState()
+
+                        if (batikId != null) {
+                            ProductDetailScreen(
+                                productDetailList = productDetailList,
+                                productId = batikId,
+                                navController = navController
+                            )
+                        } else {
+                            Text(text = "Invalid batik ID", modifier = Modifier.fillMaxSize())
+                        }
+                    }
+
+                    composable("cart_screen") {
+                        CartContent(
+                            navController = navController,
+                            onPaymentProceed = {
+                                navController.navigate("payment_detail_screen")
+                            }
+//                            onItemCheckedChange = { _,_ -> },
+//                            onItemCountChange = {_,_ -> },
+                        )
+                    }
+
+                    composable("payment_detail_screen") {
+                        PaymentDetailContent(
+                            navController = navController,
+                            modifier = Modifier,
+                            navigateToPayment = { urlSnap ->
+                                navController.navigate("payment/$urlSnap")
+                            }
+                        )
+                    }
+
+                    composable("payment/{urlSnap}", listOf(navArgument("urlSnap") { type = NavType.StringType })) {
+                        val urlSnap = it.arguments?.getString("urlSnap") ?: ""
+                        PaymentScreen(
+                            context = context,
+                            url = urlSnap,
+                            backHandler = {
+                                navController.popBackStack()
+                            },
+                            navController = navController
+                        )
+                    }
+
+//                    composable(route = "scan_result_screen?photoUri={photoUri}") { backStackEntry ->
+//                        val photoUri = backStackEntry.arguments?.getString("photoUri")
+//                        // Ambil ViewModel
+//                        val batikViewModel: BatikViewModel = hiltViewModel()
+//
+//                        // Panggil scanBatik ketika layar ini dibuka
+//                        LaunchedEffect(photoUri) {
+//                            photoUri?.let {
+//                                val imageFile = File(Uri.parse(it).path ?: "")
+//                                val resizedimageFile = resizeImageFile(imageFile)
+//
+//                                batikViewModel.scanBatik(resizedimageFile)
+//                            }
+//                        }
+//
+//                        // Ambil uiState untuk disampaikan ke ScanResultContent
+//                        val uiState = batikViewModel.scanResultState.collectAsState().value
+//
+//                        ScanResultContent(
+//                            photoUri = photoUri,
+//                            uiState = uiState,
+//                            navController = navController,
+//                            onProductClick = { batikId ->
+//                                navController.navigate("detail_product_screen/$batikId") {
+//                                    popUpTo("toko_screen") {
+//                                        inclusive = true
+//                                    }
+//                                }
+//                            }
+//                        )
+//                    }
+
+//                    composable(route = "home_screen") {
+//                        HomeScreenContent(
+//                            navController = navController,
+//                            onProductClick = { batikId ->
+//                                navController.navigate("detail_product_screen/$batikId") {
+//                                    popUpTo("home_screen") {
+//                                        inclusive = true
+//                                    }
+//                                }
+//                            }
+//                        )
+//                    }
+
+                    composable(route = "toko_screen") {
+                        TokoContent(
                             navController = navController,
                             onProductClick = { batikId ->
                                 navController.navigate("detail_product_screen/$batikId") {

@@ -112,7 +112,10 @@ fun HomeScreenContent(
                     modifier = Modifier.padding(horizontal = 30.dp)
                 )
                 Spacer(Modifier.height(8.dp))
-                BatikScanCard(modifier = Modifier.padding(horizontal = 30.dp), navController = navController)
+                BatikScanCard(
+                    modifier = Modifier.padding(horizontal = 30.dp),
+                    navController = navController
+                )
             }
 
             item {

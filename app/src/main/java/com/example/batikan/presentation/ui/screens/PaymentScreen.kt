@@ -88,6 +88,8 @@ fun PaymentScreen(
                         inclusive = true
                     }
                 }
+                Log.e("PaymentScreen", "Order success: ${(addOrderState as AddOrderState.Success).data}")
+
             }
             is AddOrderState.Error -> {
                 Log.e("PaymentScreen", "Order failed: ${(addOrderState as AddOrderState.Error).message}")

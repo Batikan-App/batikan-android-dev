@@ -33,8 +33,7 @@ fun BottomNavBar(
     navController: NavController,
     items: List<BottomNavItem> = listOf(
         BottomNavItem("Home", Icons.Default.Home, "home_screen"),
-        BottomNavItem("Shop", Icons.Default.ShoppingCart, "toko_screen"),
-        BottomNavItem("Cart", Icons.Default.ShoppingBag, "cart_screen"),
+        BottomNavItem("Shop", Icons.Default.ShoppingBag, "toko_screen"),
         BottomNavItem("Profile", Icons.Default.Person, "profile_screen")
     )
 ) {

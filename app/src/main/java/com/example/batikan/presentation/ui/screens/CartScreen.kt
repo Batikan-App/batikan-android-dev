@@ -71,6 +71,7 @@ import com.example.batikan.presentation.viewmodel.UserState
 fun CartContent(
     modifier: Modifier = Modifier,
     navController: NavController,
+    onPaymentProceed: () -> Unit,
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
     val cartItems by cartViewModel.cartItemList.collectAsState()
@@ -92,6 +93,22 @@ fun CartContent(
                         style = TextMdSemiBold,
                         color = TextPrimary
                     )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate("home_screen") {
+                                popUpTo("cart_screen") {
+                                    inclusive = true
+                                }
+                            }
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            tint = TextPrimary
+                        )
+                    }
                 }
             )
         },
@@ -120,7 +137,7 @@ fun CartContent(
                         }
 
                         Button(
-                            onClick = { navController.navigate("payment_detail_screen") },
+                            onClick = onPaymentProceed,
                             modifier = modifier
                                 .width(110.dp)
                                 .height(40.dp),
