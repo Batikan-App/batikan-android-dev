@@ -9,14 +9,6 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
-//val localProperties = Properties()
-//val localPropertiesFile = rootProject.file("local.properties")
-//if (localPropertiesFile.exists()) {
-//    localPropertiesFile.inputStream().use { stream ->
-//        localProperties.load(stream)
-//    }
-//}
-
 android {
     namespace = "com.example.batikan"
     compileSdk = 34
