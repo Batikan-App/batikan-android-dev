@@ -101,7 +101,13 @@ fun PaymentDetailContent(
                             tint = TextPrimary
                         )
                     }
-                }
+                },
+                // Mengatur warna latar belakang menjadi putih
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = androidx.compose.ui.graphics.Color.White,
+                    navigationIconContentColor = TextPrimary,
+                    titleContentColor = TextPrimary
+                )
             )
         },
         bottomBar = {

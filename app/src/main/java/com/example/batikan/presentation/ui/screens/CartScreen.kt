@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -94,7 +95,13 @@ fun CartContent(
                             tint = TextPrimary
                         )
                     }
-                }
+                },
+                // Mengatur warna latar belakang menjadi putih
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = androidx.compose.ui.graphics.Color.White,
+                    navigationIconContentColor = TextPrimary,
+                    titleContentColor = TextPrimary
+                )
             )
         },
         bottomBar = {
@@ -136,11 +143,11 @@ fun CartContent(
                             )
                         }
                     }
-                    BottomNavBar(navController = navController)
+//                    BottomNavBar(navController = navController)
                 }
             } else {
                 // Tetap tampilkan BottomNavBar meskipun keranjang kosong
-                BottomNavBar(navController = navController)
+//                BottomNavBar(navController = navController)
             }
         }
     ) { innerPadding ->

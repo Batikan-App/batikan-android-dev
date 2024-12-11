@@ -428,9 +428,10 @@ fun AboutBatik(
     ) {
         Text(
             text = "Tentang Batik",
-            style = TextSmallMedium,
-            color = TextPrimary
+            style = TextMdSemiBold,
+            color = TextPrimary,
         )
+        Spacer(Modifier.height(20.dp))
         Text(
             text = description,
             style = TextSmallRegular,

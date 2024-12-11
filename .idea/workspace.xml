@@ -10,44 +10,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01752b98-0d86-4caf-a536-5a94dc39987b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/kotlin/errors/errors-1733932558285.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/composables/BottomNavigationBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/composables/BottomNavigationBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/composables/CardScanResult.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/composables/CardScanResult.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/AboutScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/AboutScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/CameraScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/CameraScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/composables/Section.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/composables/Section.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/CartScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/CartScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/LoginScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/LoginScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/LogoAnimationScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/LogoAnimationScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/DetailProductScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/DetailProductScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/PaymentDetailScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/PaymentDetailScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/PaymentScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/PaymentScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/PhotoResultScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/PhotoResultScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/ProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/ProfileScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/RegisterScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/RegisterScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/ScanResultScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/ScanResultScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/SearchResultScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/SearchResultScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/TokoScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/TokoScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/TrackingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/TrackingScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/UpdateProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/UpdateProfileScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/WelcomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/screens/WelcomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/util/parseStringToNewLine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/batikan/presentation/ui/util/parseStringToNewLine.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,28 +118,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.Batikan.executor": "Run",
-    "Android App.app.executor": "Run",
-    "Compose Preview.HomeScreenPreview.executor": "Run",
-    "PROJECT_TRUSTED_KEY": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "hotfix/scan-skeleton",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/pram/AndroidStudioProjects/batikan-android-dev",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "language.cpp.cling"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.Batikan.executor&quot;: &quot;Run&quot;,
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;Compose Preview.HomeScreenPreview.executor&quot;: &quot;Run&quot;,
+    &quot;PROJECT_TRUSTED_KEY&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;hotfix/scan-skeleton&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/pram/AndroidStudioProjects/batikan-android-dev&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;memory.settings&quot;
   }
-}]]></component>
+}</component>
   <component name="PsdUISettings">
     <option name="LAST_EDITED_BUILD_TYPE" value="release" />
   </component>

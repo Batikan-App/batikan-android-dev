@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -85,7 +86,13 @@ fun UpdateProfileContent(
                             tint = TextPrimary
                         )
                     }
-                }
+                },
+                // Mengatur warna latar belakang menjadi putih
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    navigationIconContentColor = TextPrimary,
+                    titleContentColor = TextPrimary
+                )
             )
         },
         bottomBar = {
