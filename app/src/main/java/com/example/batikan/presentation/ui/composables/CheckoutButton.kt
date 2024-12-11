@@ -1,5 +1,6 @@
 package com.example.batikan.presentation.ui.composables
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -105,11 +107,14 @@ fun CheckoutButton(
                 is AddCartState.Idle -> {}
                 is AddCartState.Loading -> {}
                 is AddCartState.Success -> {
+                    val context = LocalContext.current
                     LaunchedEffect(Unit) {
+                        Toast.makeText(context, "Produk berhasil ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
                         // Navigate to Cart
-                        navController.navigate("cart_screen") {
-                            launchSingleTop = true
-                        }
+                        navController.navigate("home_screen")
+//                        navController.navigate("cart_screen") {
+//                            launchSingleTop = true
+//                        }
                     }
                 }
                 is AddCartState.Error -> {

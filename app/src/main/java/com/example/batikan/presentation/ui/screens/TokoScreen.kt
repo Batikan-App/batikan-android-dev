@@ -6,11 +6,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +47,7 @@ import com.example.batikan.presentation.ui.composables.SearchBar
 import com.example.batikan.presentation.ui.composables.SectionTitle
 import com.example.batikan.presentation.ui.theme.BatikanTheme
 import com.example.batikan.presentation.ui.theme.TextMdSemiBold
+import com.example.batikan.presentation.ui.theme.TextPrimary
 import com.example.batikan.presentation.viewmodel.BatikOriginState
 import com.example.batikan.presentation.viewmodel.BatikState
 import com.example.batikan.presentation.viewmodel.BatikViewModel
@@ -82,11 +90,27 @@ fun TokoContent(
 
         ) {
             item {
-                PageTitle(
-                    title = "Koleksi Batik Kami",
-                    description = "Temukan batik kualitas terbaik dari kami",
-                    modifier = Modifier.padding(horizontal = 30.dp),
-                )
+                Row {
+                    PageTitle(
+                        title = "Koleksi Batik Kami",
+                        description = "Temukan batik kualitas terbaik dari kami",
+                        modifier = Modifier.padding(horizontal = 30.dp),
+                    )
+
+                    IconButton(
+                        onClick = {
+                            navController.navigate("cart_screen")
+//                                popUpTo("detail_product_screen") {
+//                                    inclusive = true
+//                                }
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = null,
+                            tint = TextPrimary
+                        )
+                    }
+                }
             }
 
             item {
