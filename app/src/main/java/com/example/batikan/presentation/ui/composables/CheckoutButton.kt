@@ -108,7 +108,7 @@ fun CheckoutButton(
                     LaunchedEffect(Unit) {
                         // Navigate to Cart
                         navController.navigate("cart_screen") {
-                            launchSingleTop = false
+                            launchSingleTop = true
                         }
                     }
                 }
